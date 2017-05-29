@@ -1,4 +1,4 @@
-package configuration;
+package fr.emse.opensensingcity.configuration;
 
 import java.util.List;
 
