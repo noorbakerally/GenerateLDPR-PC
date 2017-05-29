@@ -1,0 +1,8 @@
+@base <http://example.org/> .
+@prefix ldp:     <http://www.w3.org/ns/ldp#>.
+
+</parkings> a ldp:BasicContainer;
+    ldp:contains </parkings/p1>,</parkings/p2> .
+
+
+
