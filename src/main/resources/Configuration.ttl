@@ -1,16 +1,24 @@
 @base <http://example.org/> .
 @prefix ldp:     <http://www.w3.org/ns/ldp#>.
+@prefix on:     <http://opensensingcity.emse.fr/LDPDesign/> .
+@prefix data:     <http://opensensingcity.emse.fr/LDPDesign/data/> .
 
 <parkings> a ldp:BasicContainer;
-    ldp:contains <parkings/p1>,<parkings/p2> .
+    ldp:contains <parkings/p1> .
 
 
 <parkings/p1> a ldp:Member;
-    on:resourceSelectorDescription on:rs1
+    on:topicGenerator data:ContentGenerator1 .
 
- on:rs1 a on:ResourceSelectorDescription;
-    on:source
 
+data:ContentGenerator1 a on:ContentGenerator;
+    on:query "Select ?resource WHERE { ?resource a <http://opensensingcity.emse.fr/ontologies/parking/ParkingFacility> .} LIMIT 2";
+    on:topicTripleType  on:SubjectTriples;
+    on:dataSource   data:DataSource1 .
+
+ data:DataSource1 a on:DataSource;
+    on:location "http://opensensingcity.emse.fr/tuba/data/static-rdf/lyon/lyon.parking1.ttl";
+    on:DataSourceType on:RDFFile .
 
 
 

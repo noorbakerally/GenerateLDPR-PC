@@ -1,4 +1,7 @@
-import fr.emse.opensensingcity.configuration.ConfigurationFactory;;import java.io.File;
+import fr.emse.opensensingcity.configuration.Configuration;
+import fr.emse.opensensingcity.configuration.ConfigurationFactory;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.riot.RDFDataMgr;;import java.io.File;
 
 /**
  * Created by bakerally on 5/29/17.
@@ -9,7 +12,8 @@ public class main {
         File file = new File(classLoader.getResource("Configuration.ttl").getFile());
 
         //ConfigurationFactory.createConfiguration("main/resources/Configuration.ttl");
-        ConfigurationFactory.createConfiguration(file.getAbsolutePath());
+        Configuration configuration = ConfigurationFactory.createConfiguration(file.getAbsolutePath());
+
 
 
 

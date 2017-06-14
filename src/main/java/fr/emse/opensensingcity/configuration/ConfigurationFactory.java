@@ -12,15 +12,16 @@ import java.util.Map;
  */
 public class ConfigurationFactory {
     private static Model model;
-    private static String prefixes="PREFIX ldp: <http://www.w3.org/ns/ldp#>";
     private static Map <String,Container> containerMap = new HashMap<String, Container>();
+
     public  static Configuration createConfiguration(String confLocation){
-        Configuration configuration = null;
+        Configuration configuration = new Configuration();
 
         model = RDFDataMgr.loadModel(confLocation);
 
         loadBasicContainer();
         loadContainerMembers();
+        configuration.setContainerMap(containerMap);
         return configuration;
     }
 
@@ -29,7 +30,7 @@ public class ConfigurationFactory {
         String basicContainersRQ="SELECT DISTINCT ?container " +
                 "WHERE { ?container a ldp:BasicContainer .}";
 
-        basicContainersRQ = prefixes + basicContainersRQ;
+        basicContainersRQ = Global.prefixes + basicContainersRQ;
 
         Query query = QueryFactory.create(basicContainersRQ,Syntax.syntaxARQ);
         QueryExecution qexec = QueryExecutionFactory.create(query, model);
@@ -52,7 +53,7 @@ public class ConfigurationFactory {
                             "<"+containerIRI+">" + " ldp:contains ?member ." +
                     "}";
 
-            containerMembersRQ = prefixes + containerMembersRQ;
+            containerMembersRQ = Global.prefixes + containerMembersRQ;
 
             Query query = QueryFactory.create(containerMembersRQ,Syntax.syntaxARQ);
             QueryExecution qexec = QueryExecutionFactory.create(query, model);
@@ -60,8 +61,42 @@ public class ConfigurationFactory {
 
             while (rs.hasNext()){
                 String memberIRI = rs.next().get("?member").toString();
-                container.addMember(new Member(memberIRI));
+                container.addMember(getMember(memberIRI));
             }
         }
+    }
+
+
+    static Member getMember(String memberIRI){
+        Member member = new Member(memberIRI);
+        ContentGenerator topicGenerator = getContentGenerator(memberIRI,"topicGenerator");
+        member.setTopicGenerator(topicGenerator);
+        member.loadTopics();
+        return member;
+    }
+
+    static ContentGenerator getContentGenerator(String resourceIRI,String status){
+        ContentGenerator cg = new ContentGenerator();
+        String contentGeneratorRQ="SELECT DISTINCT * WHERE {" +
+                "    <"+resourceIRI+"> on:"+status+" ?contentGenerator ." +
+                "    ?contentGenerator on:query ?query;" +
+                "                      on:dataSource ?dataSource ." +
+                "    ?dataSource on:location ?location;" +
+                "                on:DataSourceType ?dataSourceType ." +
+                "}";
+
+        contentGeneratorRQ = Global.prefixes + contentGeneratorRQ;
+        Query query = QueryFactory.create(contentGeneratorRQ,Syntax.syntaxARQ);
+        QueryExecution qexec = QueryExecutionFactory.create(query, model);
+        ResultSet rs = qexec.execSelect() ;
+        while (rs.hasNext()){
+            QuerySolution qs = rs.next();
+            String cgQuery = qs.get("?query").toString();
+            cg.setQuery(cgQuery);
+            DataSource ds = new DataSource();
+            ds.setLocation(qs.get("?location").toString());
+            cg.setDataSource(ds);
+        }
+        return cg;
     }
 }
