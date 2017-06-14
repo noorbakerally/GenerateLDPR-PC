@@ -1,8 +1,17 @@
 @base <http://example.org/> .
 @prefix ldp:     <http://www.w3.org/ns/ldp#>.
 
-</parkings> a ldp:BasicContainer;
-    ldp:contains </parkings/p1>,</parkings/p2> .
+<parkings> a ldp:BasicContainer;
+    ldp:contains <parkings/p1>,<parkings/p2> .
+
+
+<parkings/p1> a ldp:Member;
+    on:resourceSelectorDescription on:rs1
+
+ on:rs1 a on:ResourceSelectorDescription;
+    on:source
+
+
 
 
 

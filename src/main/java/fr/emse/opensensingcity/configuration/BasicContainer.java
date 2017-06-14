@@ -5,4 +5,11 @@ package fr.emse.opensensingcity.configuration;
  */
 public class BasicContainer extends Container {
 
+    public BasicContainer(String containerIRI) {
+        super(containerIRI);
+    }
+
+    public void addMember(Member member) {
+        members.add(member);
+    }
 }
