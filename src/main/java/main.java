@@ -8,11 +8,8 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.riot.RDFDataMgr;
-import org.restlet.Client;
-import org.restlet.Request;
-import org.restlet.Response;
-import org.restlet.data.Method;
-import org.restlet.data.Protocol;;import java.io.File;
+
+import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
