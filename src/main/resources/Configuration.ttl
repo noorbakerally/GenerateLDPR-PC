@@ -3,17 +3,17 @@
 @prefix on:     <http://opensensingcity.emse.fr/LDPDesign/> .
 @prefix data:     <http://opensensingcity.emse.fr/LDPDesign/data/> .
 
-<parkings> a ldp:BasicContainer;
-    ldp:contains <parkings/p1> .
+<france-parkings> a ldp:BasicContainer;
+    ldp:contains <lyon/parkings> .
 
 
-<parkings/p1> a ldp:Member;
-    on:topicGenerator data:ContentGenerator1 .
+<lyon/parkings> a ldp:Member;
+    on:topicGenerator data:QueryResourceGenerator1;
+    on:topicTripleType  on:SubjectTriples .
 
 
-data:ContentGenerator1 a on:ContentGenerator;
+data:QueryResourceGenerator1 a on:QueryResourceGenerator;
     on:query "Select ?resource WHERE { ?resource a <http://opensensingcity.emse.fr/ontologies/parking/ParkingFacility> .} LIMIT 2";
-    on:topicTripleType  on:SubjectTriples;
     on:dataSource   data:DataSource1 .
 
  data:DataSource1 a on:DataSource;

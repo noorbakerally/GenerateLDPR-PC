@@ -4,6 +4,8 @@ import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.riot.RDFDataMgr;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,13 +13,16 @@ import java.util.List;
 /**
  * Created by bakerally on 5/29/17.
  */
-public class Member extends Resource {
+public class Member extends LDPResource {
     ContentGenerator topicGenerator;
     List<String> topics ;
+    Logger logger;
 
     public Member(String memberIRI) {
         super();
+        setIRI(memberIRI);
         topics = new ArrayList<String>();
+        logger = LoggerFactory.getLogger(getClass());
     }
 
     public ContentGenerator getTopicGenerator() {

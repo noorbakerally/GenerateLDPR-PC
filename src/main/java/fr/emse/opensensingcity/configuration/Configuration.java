@@ -10,11 +10,9 @@ import java.util.Map;
  */
 public class Configuration {
     String baseURI;
-    List<Container> containers;
-    private Map<String,Container> containerMap = new HashMap<String, Container>();
+    public Map<String,Container> containerMap = new HashMap<String, Container>();
 
     public Configuration(){
-        containers = new ArrayList<Container>();
         containerMap = new HashMap<String, Container>();
     }
 

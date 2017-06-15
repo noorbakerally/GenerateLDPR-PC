@@ -1,6 +1,7 @@
 
 import fr.emse.opensensingcity.configuration.Configuration;
 import fr.emse.opensensingcity.configuration.ConfigurationFactory;
+import fr.emse.opensensingcity.ldprgenerator.LDPRGenerator;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -26,19 +27,20 @@ public class main {
         ClassLoader classLoader = main.class.getClassLoader();
         File file = new File(classLoader.getResource("Configuration.ttl").getFile());
 
-        ConfigurationFactory.createConfiguration(file.getAbsolutePath());
-        Configuration configuration = ConfigurationFactory.createConfiguration(file.getAbsolutePath());
+        //Configuration configuration = ConfigurationFactory.createConfiguration(file.getAbsolutePath());
 
+        //LDPRGenerator.sendRequest(configuration.containerMap);
 
-        /*HttpClient client = HttpClientBuilder.create().build();
-        String content = "<> a <http://example.com/ParkingFacility>";
-        HttpPost httpPost = new HttpPost("http://localhost:8081/rest/");
+        HttpClient client = HttpClientBuilder.create().build();
+        String content = "<> a <http://example.com/ParkingFacility> .";
+        HttpPost httpPost = new HttpPost("http://localhost:8080/rest/");
         httpPost.addHeader("Content-Type","text/turtle");
-        httpPost.addHeader("Slug","noorparking17");
+        httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#Resource>; rel='type'");
+        httpPost.addHeader("Slug","newresource1");
         httpPost.setEntity(new StringEntity(content));
         HttpResponse response = client.execute(httpPost);
 
-        System.out.println(response.getStatusLine());*/
+        System.out.println(response.getStatusLine());
 
 
 
