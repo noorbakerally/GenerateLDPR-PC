@@ -13,10 +13,11 @@ import java.util.List;
  */
 public class Member extends Resource {
     ContentGenerator topicGenerator;
-    List<String> topics = new ArrayList<String>();
+    List<String> topics ;
 
     public Member(String memberIRI) {
         super();
+        topics = new ArrayList<String>();
     }
 
     public ContentGenerator getTopicGenerator() {
