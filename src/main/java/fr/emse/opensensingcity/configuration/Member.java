@@ -3,7 +3,6 @@ package fr.emse.opensensingcity.configuration;
 import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.riot.RDFDataMgr;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,16 +12,17 @@ import java.util.List;
 /**
  * Created by bakerally on 5/29/17.
  */
-public class Member extends LDPResource {
+public class Member extends LDPRS {
     ContentGenerator topicGenerator;
     List<String> topics ;
     Logger logger;
-
+    List <Container> containers;
     public Member(String memberIRI) {
         super();
         setIRI(memberIRI);
         topics = new ArrayList<String>();
         logger = LoggerFactory.getLogger(getClass());
+        containers = new ArrayList<Container>();
     }
 
     public ContentGenerator getTopicGenerator() {
@@ -58,10 +58,22 @@ public class Member extends LDPResource {
             qexec = QueryExecutionFactory.create(topicSGraphRQ, model);
             qexec.execConstruct(graph);
         }
-
-
-
     }
 
+    public void addContainer(Container container){
+        containers.add(container);
+    }
 
+    @Override
+    public Model generateGraph() {
+        return graph;
+    }
+
+    public List<Container> getContainers() {
+        return containers;
+    }
+
+    public void setContainers(List<Container> containers) {
+        this.containers = containers;
+    }
 }

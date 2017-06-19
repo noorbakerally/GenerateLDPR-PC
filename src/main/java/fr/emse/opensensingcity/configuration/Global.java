@@ -1,6 +1,7 @@
 package fr.emse.opensensingcity.configuration;
 
 import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 
 /**
@@ -15,5 +16,9 @@ public class Global {
 
     public static Property getLDPContains(){
         return ResourceFactory.createProperty("http://www.w3.org/ns/ldp#contains");
+    }
+
+    public static Resource getLDPBC(){
+        return ResourceFactory.createResource("http://www.w3.org/ns/ldp#BasicContainer");
     }
 }

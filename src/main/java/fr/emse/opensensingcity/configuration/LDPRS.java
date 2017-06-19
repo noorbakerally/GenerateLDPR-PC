@@ -6,11 +6,11 @@ import org.apache.jena.rdf.model.ModelFactory;
 /**
  * Created by bakerally on 5/29/17.
  */
-public abstract class LDPResource {
+public abstract class LDPRS {
     String iri;
     Model graph;
 
-    public LDPResource() {
+    public LDPRS() {
         graph = ModelFactory.createDefaultModel();
     }
 
@@ -21,4 +21,6 @@ public abstract class LDPResource {
     public void setIRI(String iri) {
         this.iri = iri;
     }
+
+    public abstract Model generateGraph();
 }

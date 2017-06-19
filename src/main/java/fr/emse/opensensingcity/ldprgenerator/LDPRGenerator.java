@@ -1,6 +1,8 @@
 package fr.emse.opensensingcity.ldprgenerator;
 
+import fr.emse.opensensingcity.configuration.BasicContainer;
 import fr.emse.opensensingcity.configuration.Container;
+import fr.emse.opensensingcity.configuration.Member;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
@@ -17,36 +19,74 @@ import java.util.Map;
  * Created by noor on 15/06/17.
  */
 public class LDPRGenerator {
-    public static void sendRequest(Map<String,Container> containerMap){
-        for (Map.Entry<String,Container> container:containerMap.entrySet()){
-            //System.out.println(container.getKey() + " " + container.getValue());
-            Model model = container.getValue().generateGraph();
-
-            StringWriter out = new StringWriter();
-            model.write(out, "TTL");
-
+    static String baseURI = "http://localhost:8888/";
+    public static void sendRequest(Map<String,Container> containerMap) throws IOException {
+        for (Map.Entry<String,Container> containerEntry:containerMap.entrySet()){
             HttpClient client = HttpClientBuilder.create().build();
 
-            //String content = out.toString();
-            String content = "<> a <http://example.com/ParkingFacility>";
-
-            HttpPost httpPost = new HttpPost("http://localhost:8080/rest/");
-            httpPost.addHeader("Content-Type","text/turtle");
-
-            //httpPost.addHeader("Slug",container.getValue().getIRI().replace("","http://example.org/"));
-            httpPost.addHeader("Slug","noortest");
-            try {
-                httpPost.setEntity(new StringEntity(content));
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
+            BasicContainer container = (BasicContainer) containerEntry.getValue();
+            HttpPost request = getResourceRequest(container);
             HttpResponse response = null;
-            try {
-                response = client.execute(httpPost);
-            } catch (IOException e) {
-                e.printStackTrace();
+            response = client.execute(request);
+            System.out.println(response);
+
+            for (Member member:container.getMembers()){
+                HttpPost memberRequest = getResourceRequest(member,container.getIRI());
+                response = client.execute(memberRequest);
+                System.out.println(response);
             }
-            System.out.println(response.getStatusLine());
+
+
+
+
         }
+    }
+
+    public static HttpPost getResourceRequest(BasicContainer container){
+        HttpPost httpPost = new HttpPost(baseURI);
+
+        httpPost.addHeader("Content-Type","text/turtle");
+        httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#Resource>; rel='type'");
+        httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#RDFSource>; rel='type'");
+        httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"");
+
+        System.out.println(container.getIRI().replace(baseURI,""));
+        httpPost.addHeader("Slug",container.getIRI().replace(baseURI,""));
+        System.out.println("creating "+container.getIRI());
+
+        Model model = container.generateGraph();
+        StringWriter out = new StringWriter();
+        model.write(out, "TTL");
+        try {
+            httpPost.setEntity(new StringEntity(out.toString()));
+            //System.out.println(out.toString());
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return httpPost;
+    }
+
+    public static HttpPost getResourceRequest(Member member,String containerIRI){
+
+
+        HttpPost httpPost = new HttpPost(containerIRI);
+        httpPost.addHeader("Content-Type","text/turtle");
+        httpPost.addHeader("Slug",member.getIRI().replace(baseURI,""));
+
+        System.out.println("creating "+member.getIRI());
+
+        Model model = member.generateGraph();
+        StringWriter out = new StringWriter();
+        model.write(out, "TTL");
+        try {
+            httpPost.setEntity(new StringEntity(out.toString()));
+            //System.out.println(out.toString());
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return httpPost;
+
+
+
     }
 }

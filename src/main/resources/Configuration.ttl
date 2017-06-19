@@ -1,13 +1,13 @@
-@base <http://example.org/> .
+@base <http://localhost:8888/> .
 @prefix ldp:     <http://www.w3.org/ns/ldp#>.
 @prefix on:     <http://opensensingcity.emse.fr/LDPDesign/> .
 @prefix data:     <http://opensensingcity.emse.fr/LDPDesign/data/> .
 
-<france-parkings> a ldp:BasicContainer;
-    ldp:contains <lyon/parkings> .
+<franceparkings> a ldp:BasicContainer;
+    ldp:contains <lyonparkings> .
 
 
-<lyon/parkings> a ldp:Member;
+<lyonparkings> a ldp:Member;
     on:topicGenerator data:QueryResourceGenerator1;
     on:topicTripleType  on:SubjectTriples .
 
