@@ -1,25 +1,27 @@
 @base <http://localhost:8888/> .
 @prefix ldp:     <http://www.w3.org/ns/ldp#>.
-@prefix on:     <http://opensensingcity.emse.fr/LDPDesign/> .
+@prefix :     <http://opensensingcity.emse.fr/LDPDesignVocabulary/> .
 @prefix data:     <http://opensensingcity.emse.fr/LDPDesign/data/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
 
-<franceparkings> a ldp:BasicContainer;
-    ldp:contains <lyonparkings> .
+data:CatalogMap a :ContainerMap;
+	:resourceSelector "Select * WHERE { ?x a dcat:Catalog .}";
+	:containerMap data:ContainerMapDataset;
+	:resourceMap data:ResourceMap;
+	:containerType ldp:BasicContainer .
 
+data:ContainerMapDataset a :ContainerMap;
+	:resourceSelector "Select * WHERE { ?_resource dcat:dataset  ?x . }";
+	:rdfSourceMap data:RDFSourceMapDistributions;
+	:containerType ldp:BasicContainer;
+    :containerType ldp:BasicContainer;
+    :resourceMap data:ResourceMap .
 
-<lyonparkings> a ldp:Member;
-    on:topicGenerator data:QueryResourceGenerator1;
-    on:topicTripleType  on:SubjectTriples .
+data:RDFSourceMapDistributions a :RDFSourceMap;
+	:resourceSelector "Select * WHERE { ?_resource dcat:distribution ?x .}";
+	:resourceMap data:DistributionResourceMap;
+	:resourceMap data:ResourceMap .
 
-
-data:QueryResourceGenerator1 a on:QueryResourceGenerator;
-    on:query "Select ?resource WHERE { ?resource a <http://opensensingcity.emse.fr/ontologies/parking/ParkingFacility> .} LIMIT 2";
-    on:dataSource   data:DataSource1 .
-
- data:DataSource1 a on:DataSource;
-    on:location "http://opensensingcity.emse.fr/tuba/data/static-rdf/lyon/lyon.parking1.ttl";
-    on:DataSourceType on:RDFFile .
-
-
-
-
+data:ResourceMap a :ResourceMap;
+    :graphTemplate :SubjectObjectGraph;
+    :linkToSource foaf:primaryTopic .

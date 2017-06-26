@@ -14,6 +14,8 @@ public class Global {
 
     public enum TripleType {SubjectTriples,ObjectTriples}
 
+    public enum ContainerType {Basic,Direct,Indirect}
+
     public static Property getLDPContains(){
         return ResourceFactory.createProperty("http://www.w3.org/ns/ldp#contains");
     }
