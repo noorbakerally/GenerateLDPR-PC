@@ -35,10 +35,6 @@ public class LDPRGenerator {
                 response = client.execute(memberRequest);
                 System.out.println(response);
             }
-
-
-
-
         }
     }
 
@@ -67,8 +63,6 @@ public class LDPRGenerator {
     }
 
     public static HttpPost getResourceRequest(Member member,String containerIRI){
-
-
         HttpPost httpPost = new HttpPost(containerIRI);
         httpPost.addHeader("Content-Type","text/turtle");
         httpPost.addHeader("Slug",member.getIRI().replace(baseURI,""));
@@ -85,8 +79,5 @@ public class LDPRGenerator {
             e.printStackTrace();
         }
         return httpPost;
-
-
-
     }
 }
