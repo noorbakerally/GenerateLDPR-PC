@@ -12,91 +12,176 @@ import java.util.Map;
  */
 public class ConfigurationFactory {
     private static Model model;
-    private static Map <String,Container> containerMap = new HashMap<String, Container>();
+    private static Map <String,ContainerMap> containerMaps = new HashMap<String, ContainerMap>();
 
     public  static Configuration createConfiguration(String confLocation){
         Configuration configuration = new Configuration();
 
         model = RDFDataMgr.loadModel(confLocation);
 
-        loadBasicContainer();
-        loadContainerMembers();
-        configuration.setContainerMap(containerMap);
+
+        //load initial container maps
+        String containerMapQuery="SELECT DISTINCT ?containerMap " +
+                "WHERE { ?containerMap a :ContainerMap .}";
+        ResultSet containerMapRs = Global.exeQuery(containerMapQuery, model);
+        while (containerMapRs.hasNext()){
+            String containerMapIRI = containerMapRs.next().get("?containerMap").toString();
+            ContainerMap containerMap = new ContainerMap(containerMapIRI);
+            containerMaps.put(containerMapIRI,containerMap);
+        }
+
+        for (Map.Entry <String,ContainerMap> containerMapEntry:containerMaps.entrySet()){
+            String containerMapIRI = containerMapEntry.getKey();
+            ContainerMap containerMap = containerMapEntry.getValue();
+            loadContainerMap(containerMap);
+        }
+
+        //load initial container maps
+        String containerParentMapQuery="SELECT DISTINCT ?childContainerMap ?parentContainerMap " +
+                "WHERE { ?parentContainerMap a :ContainerMap; :containerMap ?childContainerMap . }";
+        ResultSet hierarchicalContainerMap = Global.exeQuery(containerParentMapQuery, model);
+        while (hierarchicalContainerMap.hasNext()){
+            QuerySolution qs = hierarchicalContainerMap.next();
+            String parent = qs.get("?parentContainerMap").toString();
+            String child = qs.get("?childContainerMap").toString();
+
+            ContainerMap parentContainerMap = containerMaps.get(parent);
+            ContainerMap childContainerMap = containerMaps.get(child);
+            parentContainerMap.addChildContainerMap(childContainerMap);
+        }
+
+
+
+
+
+        configuration.setContainerMap(containerMaps);
         return configuration;
     }
 
-    static void loadBasicContainer(){
-        //Get all containers
-        String basicContainersRQ="SELECT DISTINCT ?container " +
-                "WHERE { ?container a ldp:BasicContainer .}";
+    static void loadContainerMap(ContainerMap containerMap){
 
-        basicContainersRQ = Global.prefixes + basicContainersRQ;
+        //get container type
+        processContainerType(containerMap.getIRI());
 
-        Query query = QueryFactory.create(basicContainersRQ,Syntax.syntaxARQ);
-        QueryExecution qexec = QueryExecutionFactory.create(query, model);
-        ResultSet rs = qexec.execSelect() ;
+        //get RDFSourceMaps
+        processContainerRDFSourceMaps(containerMap.getIRI());
 
-        while (rs.hasNext()){
-            String containerIRI = rs.next().get("?container").toString();
-            Container newContainer = new BasicContainer(containerIRI);
-            containerMap.put(containerIRI,newContainer);
-        }
+        //load as RDFSourceMap
+        loadRDFSourceMaps(containerMap);
+
+
+
     }
 
-    static void loadContainerMembers() {
-        for (String containerIRI:containerMap.keySet()){
-
-            Container container = containerMap.get(containerIRI);
-
-            String containerMembersRQ="SELECT DISTINCT ?member " +
-                    "WHERE { " +
-                            "<"+containerIRI+">" + " ldp:contains ?member ." +
-                    "}";
-
-            containerMembersRQ = Global.prefixes + containerMembersRQ;
-
-            Query query = QueryFactory.create(containerMembersRQ,Syntax.syntaxARQ);
-            QueryExecution qexec = QueryExecutionFactory.create(query, model);
-            ResultSet rs = qexec.execSelect() ;
-
-            while (rs.hasNext()){
-                String memberIRI = rs.next().get("?member").toString();
-                container.addMember(getMember(memberIRI));
+    private static void processContainerType(String containerIRI) {
+        ContainerMap containerMap = containerMaps.get(containerIRI);
+        String containerTypeQuery="SELECT DISTINCT * \n" +
+                "WHERE { " +
+                "<containerMapIRI> :containerType ?containerType ." +
+                "}";
+        containerTypeQuery = containerTypeQuery.replace("containerMapIRI",containerIRI);
+        ResultSet rs = Global.exeQuery(containerTypeQuery, model);
+        while (rs.hasNext()){
+            String containerType = rs.next().get("?containerType").toString();
+            if (containerType.equals(" http://www.w3.org/ns/ldp#BasicContainer")){
+                containerMap.setContainerType(Global.ContainerType.Basic);
+            } else if (containerType.equals(" http://www.w3.org/ns/ldp#DirectContainer")){
+                containerMap.setContainerType(Global.ContainerType.Direct);
+            } else {
+                containerMap.setContainerType(Global.ContainerType.Indirect);
             }
         }
     }
 
+    private static void processContainerRDFSourceMaps(String containerIRI) {
+        ContainerMap containerMap = containerMaps.get(containerIRI);
 
-    static Member getMember(String memberIRI){
-        Member member = new Member(memberIRI);
-        ContentGenerator topicGenerator = getContentGenerator(memberIRI,"topicGenerator");
-        member.setTopicGenerator(topicGenerator);
-        member.loadTopics();
-        return member;
+        //get RDFSource Maps
+        String RDFSourceMapQuery="SELECT DISTINCT * \n" +
+                "WHERE { " +
+                "<containerMapIRI> :rdfSourceMap ?rdfSourceMap ." +
+                "}";
+        RDFSourceMapQuery = RDFSourceMapQuery.replace("containerMapIRI",containerIRI);
+        ResultSet rs = Global.exeQuery(RDFSourceMapQuery, model);
+        while (rs.hasNext()){
+            String rdfSourceMapIRI = rs.next().get("?rdfSourceMap").toString();
+            containerMap.addRDFSourceMap(rdfSourceMapIRI);
+        }
+        for (Map.Entry <String,RDFSourceMap> rdfSourceMap:containerMap.getRdfSourceMaps().entrySet()){
+            String rdfSourceMapIRI = rdfSourceMap.getKey();
+            RDFSourceMap currentRDFSourceMap = containerMap.getRdfSourceMaps().get(rdfSourceMapIRI);
+            loadRDFSourceMaps(currentRDFSourceMap);
+        }
+
     }
 
-    static ContentGenerator getContentGenerator(String resourceIRI,String status){
-        ContentGenerator cg = new ContentGenerator();
-        String contentGeneratorRQ="SELECT DISTINCT * WHERE {" +
-                "    <"+resourceIRI+"> on:"+status+" ?contentGenerator ." +
-                "    ?contentGenerator on:query ?query;" +
-                "                      on:dataSource ?dataSource ." +
-                "    ?dataSource on:location ?location;" +
-                "                on:DataSourceType ?dataSourceType ." +
+    private static void loadRDFSourceMaps(RDFSourceMap rdfSourceMap){
+        //load all RDFSourceMap
+
+            String rdfSourceMapIRI = rdfSourceMap.getIRI();
+
+            String RDFSourceMapQuery="SELECT DISTINCT * \n" +
+                    "WHERE { " +
+                    "<rdfSourceMapIRI> ?p ?o ." +
+                    "}";
+
+            RDFSourceMapQuery = RDFSourceMapQuery.replace("rdfSourceMapIRI",rdfSourceMapIRI);
+
+        ResultSet rs = Global.exeQuery(RDFSourceMapQuery, model);
+            while (rs.hasNext()){
+                QuerySolution qs = rs.next();
+                String p = qs.get("?p").toString();
+                String o = qs.get("?o").toString();
+
+                if (Global.getVTerm("resourceSelector").equals(p)){
+                    processResourceSelector(rdfSourceMap,o);
+                }
+
+                if (Global.getVTerm("resourceMap").equals(p)){
+                    processResourceMap(rdfSourceMap,o);
+                }
+            }
+    }
+
+
+    private static void processResourceMap(RDFSourceMap currentRDFSourceMap, String resourceMapIRI) {
+        ResourceMap resourceMap = currentRDFSourceMap.addResourceMap(resourceMapIRI);
+
+        String ResourceMapQuery="SELECT DISTINCT * \n" +
+                "WHERE { " +
+                "<resourceMapIRI> ?p ?o ." +
                 "}";
 
-        contentGeneratorRQ = Global.prefixes + contentGeneratorRQ;
-        Query query = QueryFactory.create(contentGeneratorRQ,Syntax.syntaxARQ);
-        QueryExecution qexec = QueryExecutionFactory.create(query, model);
-        ResultSet rs = qexec.execSelect() ;
+        ResourceMapQuery = ResourceMapQuery.replace("resourceMapIRI",resourceMapIRI);
+        ResultSet rs = Global.exeQuery(ResourceMapQuery, model);
         while (rs.hasNext()){
             QuerySolution qs = rs.next();
-            String cgQuery = qs.get("?query").toString();
-            cg.setQuery(cgQuery);
-            DataSource ds = new DataSource();
-            ds.setLocation(qs.get("?location").toString());
-            cg.setDataSource(ds);
+            String p = qs.get("?p").toString();
+            String o = qs.get("?o").toString();
+
+            if (Global.getVTerm("graphTemplate").equals(p)){
+                processGraphTemplate(resourceMap,o);
+            }
+
+            if (Global.getVTerm("linkToSource").equals(p)){
+                processLinkToSource(resourceMap,o);
+            }
         }
-        return cg;
     }
+
+    private static void processLinkToSource(ResourceMap resourceMap, String o) {
+        resourceMap.setLinkToSource(o);
+    }
+
+    private static void processGraphTemplate(ResourceMap resourceMap, String o) {
+        resourceMap.setGraphTemplate(o);
+    }
+
+    private static void processResourceSelector(RDFSourceMap rdfSourceMap, String resourceSelectorQuery) {
+        rdfSourceMap.setResourceSelector(resourceSelectorQuery);
+    }
+
+
+
+
 }

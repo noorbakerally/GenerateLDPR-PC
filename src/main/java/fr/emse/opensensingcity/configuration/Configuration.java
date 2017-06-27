@@ -10,10 +10,10 @@ import java.util.Map;
  */
 public class Configuration {
     String baseURI;
-    public Map<String,Container> containerMap = new HashMap<String, Container>();
+    public Map<String,ContainerMap> containerMaps = new HashMap<String, ContainerMap>();
 
     public Configuration(){
-        containerMap = new HashMap<String, Container>();
+        containerMaps = new HashMap<String, ContainerMap>();
     }
 
     public String getBaseURI() {
@@ -24,11 +24,19 @@ public class Configuration {
         this.baseURI = baseURI;
     }
 
-    public Map<String, Container> getContainerMap() {
-        return containerMap;
+    public Map<String, ContainerMap> getContainerMap() {
+        return containerMaps;
     }
 
-    public void setContainerMap(Map<String, Container> containerMap) {
-        this.containerMap = containerMap;
+    public void setContainerMap(Map<String, ContainerMap> containerMap) {
+        this.containerMaps = containerMap;
+    }
+
+    public void print() {
+        for (Map.Entry <String,ContainerMap> entry :containerMaps.entrySet()){
+            ContainerMap containerMap = entry.getValue();
+            if (containerMap.getParentContainerMap() !=null) continue;
+            System.out.println(containerMap.toString(0));
+        }
     }
 }
