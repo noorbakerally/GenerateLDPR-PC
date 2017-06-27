@@ -7,29 +7,33 @@
 data:CatalogMap a :ContainerMap;
 	:containerMap data:ContainerMapDataset;
 	:containerType ldp:BasicContainer;
-	:resourceMap [
-        	    :resourceQuery "Select * WHERE { ?x a dcat:Catalog .}";
-        	    :graphTemplate :SubjectObjectGraph;
-                :linkToSource foaf:primaryTopic;
-                :dataSource data:DataSource1;
-        	] .
+	:resourceMap data:CatalogResourceMap .
+
+data:CatalogResourceMap a :ResourceMap;
+    :resourceQuery "Select * WHERE { ?x a dcat:Catalog .}";
+    :graphTemplate :SubjectObjectGraph;
+    :linkToSource foaf:primaryTopic;
+    :dataSource data:DataSource1 .
 
 data:ContainerMapDataset a :ContainerMap;
 	:rdfSourceMap data:RDFSourceMapDistributions;
 	:containerType ldp:BasicContainer;
-    :resourceMap [
-    	    :resourceQuery "Select * WHERE { ?_resource dcat:dataset  ?x . }";
-    	    :graphTemplate :SubjectObjectGraph;
-            :linkToSource foaf:primaryTopic;
-            :dataSource data:DataSource1;
-    	] .
+	:resourceMap data:DataSetResourceMap .
+
+
+data:DataSetResourceMap a :ResourceMap;
+    :resourceQuery "Select * WHERE { ?_resource dcat:dataset  ?x . }";
+    :graphTemplate :SubjectObjectGraph;
+    :linkToSource foaf:primaryTopic;
+    :dataSource data:DataSource1 .
+
 
 
 data:RDFSourceMapDistributions a :RDFSourceMap;
-	:resourceMap [
-	    :resourceQuery "Select * WHERE { ?_resource dcat:distribution ?x .}";
-	    :graphTemplate :SubjectObjectGraph;
-        :linkToSource foaf:primaryTopic;
-        :dataSource data:DataSource1;
-	] .
+	:resourceMap data:DistributionResourceMap .
 
+data:DistributionResourceMap a :ResourceMap;
+    :resourceQuery "Select * WHERE { ?_resource dcat:distribution ?x .}";
+    :graphTemplate :SubjectObjectGraph;
+    :linkToSource foaf:primaryTopic;
+    :dataSource data:DataSource1 .
