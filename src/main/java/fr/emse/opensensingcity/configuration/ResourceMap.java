@@ -8,7 +8,7 @@ import java.util.Map;
  * Created by noor on 26/06/17.
  */
 public class ResourceMap {
-    String resourceSelector;
+    String resourceQuery;
     String graphTemplate;
     String linkToSource;
     String linkFromSource;
@@ -26,13 +26,6 @@ public class ResourceMap {
         this.IRI = IRI;
     }
 
-    public String getResourceSelector() {
-        return resourceSelector;
-    }
-
-    public void setResourceSelector(String resourceSelector) {
-        this.resourceSelector = resourceSelector;
-    }
 
     public String getGraphTemplate() {
         return graphTemplate;
@@ -64,6 +57,14 @@ public class ResourceMap {
 
     public void setConstant(String constant) {
         this.constant = constant;
+    }
+
+    public String getResourceQuery() {
+        return resourceQuery;
+    }
+
+    public void setResourceQuery(String resourceQuery) {
+        this.resourceQuery = resourceQuery;
     }
 
     public String toString(int level) {

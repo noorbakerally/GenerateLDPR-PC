@@ -133,9 +133,6 @@ public class ConfigurationFactory {
                 String p = qs.get("?p").toString();
                 String o = qs.get("?o").toString();
 
-                if (Global.getVTerm("resourceSelector").equals(p)){
-                    processResourceSelector(rdfSourceMap,o);
-                }
 
                 if (Global.getVTerm("resourceMap").equals(p)){
                     processResourceMap(rdfSourceMap,o);
@@ -147,41 +144,29 @@ public class ConfigurationFactory {
     private static void processResourceMap(RDFSourceMap currentRDFSourceMap, String resourceMapIRI) {
         ResourceMap resourceMap = currentRDFSourceMap.addResourceMap(resourceMapIRI);
 
-        String ResourceMapQuery="SELECT DISTINCT * \n" +
+        String ResourceMapQuery = "SELECT DISTINCT * \n" +
                 "WHERE { " +
                 "<resourceMapIRI> ?p ?o ." +
                 "}";
 
-        ResourceMapQuery = ResourceMapQuery.replace("resourceMapIRI",resourceMapIRI);
+        ResourceMapQuery = ResourceMapQuery.replace("resourceMapIRI", resourceMapIRI);
         ResultSet rs = Global.exeQuery(ResourceMapQuery, model);
-        while (rs.hasNext()){
+        while (rs.hasNext()) {
             QuerySolution qs = rs.next();
             String p = qs.get("?p").toString();
             String o = qs.get("?o").toString();
 
-            if (Global.getVTerm("graphTemplate").equals(p)){
-                processGraphTemplate(resourceMap,o);
+            if (Global.getVTerm("graphTemplate").equals(p)) {
+                resourceMap.setGraphTemplate(o);
             }
 
-            if (Global.getVTerm("linkToSource").equals(p)){
-                processLinkToSource(resourceMap,o);
+            if (Global.getVTerm("linkToSource").equals(p)) {
+                resourceMap.setLinkToSource(o);
+            }
+
+            if (Global.getVTerm("resourceQuery").equals(p)) {
+                resourceMap.setResourceQuery(o);
             }
         }
     }
-
-    private static void processLinkToSource(ResourceMap resourceMap, String o) {
-        resourceMap.setLinkToSource(o);
-    }
-
-    private static void processGraphTemplate(ResourceMap resourceMap, String o) {
-        resourceMap.setGraphTemplate(o);
-    }
-
-    private static void processResourceSelector(RDFSourceMap rdfSourceMap, String resourceSelectorQuery) {
-        rdfSourceMap.setResourceSelector(resourceSelectorQuery);
-    }
-
-
-
-
 }

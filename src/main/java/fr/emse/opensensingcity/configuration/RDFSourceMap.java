@@ -10,7 +10,6 @@ import java.util.Map;
  */
 public class RDFSourceMap {
     String IRI;
-    String resourceSelector;
     String iriTemplate;
     String constant;
     Map<String,ResourceMap> resourceMaps = new HashMap<String, ResourceMap>();
@@ -27,13 +26,6 @@ public class RDFSourceMap {
         this.IRI = iri;
     }
 
-    public String getResourceSelector() {
-        return resourceSelector;
-    }
-
-    public void setResourceSelector(String resourceSelector) {
-        this.resourceSelector = resourceSelector;
-    }
 
     public String getIriTemplate() {
         return iriTemplate;
@@ -73,7 +65,6 @@ public class RDFSourceMap {
         str = tab+title + "\n";
 
         str += tab+"\t\tIRI: "+getIRI()+"\n";
-        str += tab+"\t\tResourceSelector: "+getResourceSelector();
 
         for (Map.Entry <String,ResourceMap> resourceMapEntry:resourceMaps.entrySet()){
             str = str + "\n"+resourceMapEntry.getValue().toString(level+2);
