@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * Created by bakerally on 5/29/17.
  */
-public abstract class Container extends LDPRS {
+public class Container extends LDPRS {
 
     Map<String,RDFSourceMap> rdfSourceMaps = new HashMap<String, RDFSourceMap>();
     Map<String,ContainerMap> containerMaps = new HashMap<String, ContainerMap>();
@@ -25,7 +25,10 @@ public abstract class Container extends LDPRS {
         rdfSourceMaps.put(rdfSourceMap.getIRI(),rdfSourceMap);
     }
 
-
+    @Override
+    public Model generateGraph() {
+        return super.generateGraph();
+    }
 
 
 

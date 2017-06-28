@@ -1,11 +1,22 @@
 package fr.emse.opensensingcity.configuration;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.jena.rdf.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -22,6 +33,7 @@ public class RDFSourceMap {
     Map<String,ResourceMap> resourceMaps = new HashMap<String, ResourceMap>();
 
     Map <String,RelatedResource> relatedResources = new HashMap<>();
+    List<LDPRS> rdfSources = new ArrayList<>();
 
     public RDFSourceMap(String RDFSourceMapIRI) {
         this.IRI = RDFSourceMapIRI;
@@ -114,12 +126,12 @@ public class RDFSourceMap {
         //System.out.println("Class:RDFSourceMap RelatedResources:"+relatedResources);
     }
 
-   /* public void generateRelatedResourcesGraph(){
+    public void generateRelatedResourcesGraph(){
         for (Map.Entry<String,RelatedResource> relatedResourceEntry:relatedResources.entrySet()){
             RelatedResource cRelatedResource = relatedResourceEntry.getValue();
-            cRelatedResource.getGraph();
+            cRelatedResource.getFinalGraph();
         }
-    }*/
+    }
 
     public void generate(){
 
@@ -128,7 +140,7 @@ public class RDFSourceMap {
         //System.out.println("Class:RDFSourceMap:"+relatedResources);
 
         //generate graph of all related resources
-        //generateRelatedResourcesGraph();
+        generateRelatedResourcesGraph();
 
     }
 
@@ -146,5 +158,56 @@ public class RDFSourceMap {
 
     public void setRelatedResources(Map<String, RelatedResource> relatedResources) {
         this.relatedResources = relatedResources;
+    }
+
+    public void generateResources(){
+        generate();
+
+        for (Map.Entry <String,RelatedResource> rrEntry:getRelatedResources().entrySet()){
+            RelatedResource rr = rrEntry.getValue();
+
+            String uri = IRIGenerator.getSlug(rr);
+
+            LDPRS rdfSource = null;
+
+            rdfSource = new LDPRS(uri);
+
+            rdfSource.setRelatedResource(rr);
+            rdfSource.generateGraph();
+
+            rdfSources.add(rdfSource);
+        }
+    }
+
+    public void sendRequest() throws IOException {
+        for (LDPRS ldprs:rdfSources){
+            HttpClient client = HttpClientBuilder.create().build();
+            HttpPost request = getResourceRequest((BasicContainer) ldprs);
+            HttpResponse response = null;
+            response = client.execute(request);
+            System.out.println(response);
+        }
+    }
+
+    public static HttpPost getResourceRequest(LDPRS ldprs){
+        String baseURI = "http://localhost:8888/";
+        HttpPost httpPost = new HttpPost(baseURI);
+
+        httpPost.addHeader("Content-Type","text/turtle");
+        httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#Resource>; rel='type'");
+        httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#RDFSource>; rel='type'");
+
+        httpPost.addHeader("Slug",ldprs.getIRI());
+
+        Model model = ldprs.generateGraph();
+        StringWriter out = new StringWriter();
+        model.write(out, "TTL");
+        try {
+            httpPost.setEntity(new StringEntity(out.toString()));
+            //System.out.println(out.toString());
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return httpPost;
     }
 }

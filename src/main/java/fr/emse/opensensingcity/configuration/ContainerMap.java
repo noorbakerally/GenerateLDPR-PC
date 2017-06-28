@@ -1,8 +1,19 @@
 package fr.emse.opensensingcity.configuration;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.jena.rdf.model.Model;
 
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -98,8 +109,61 @@ public class ContainerMap extends RDFSourceMap{
         return str;
     }
 
+    @Override
     public void generate(){
         super.generate();
+    }
+
+    public void generateResources(){
+        generate();
+        for (Map.Entry <String,RelatedResource> rrEntry:getRelatedResources().entrySet()){
+            RelatedResource rr = rrEntry.getValue();
+
+            String uri = IRIGenerator.getSlug(rr);
+
+            LDPRS rdfSource = null;
+
+            rdfSource = new BasicContainer(uri);
+
+            rdfSource.setRelatedResource(rr);
+            rdfSource.generateGraph();
+
+            rdfSources.add(rdfSource);
+
+        }
+    }
+
+    public void sendRequest() throws IOException {
+       for (LDPRS ldprs:rdfSources){
+           HttpClient client = HttpClientBuilder.create().build();
+           HttpPost request = getResourceRequest((BasicContainer) ldprs);
+           HttpResponse response = null;
+           response = client.execute(request);
+           System.out.println(response);
+       }
+    }
+
+    public static HttpPost getResourceRequest(BasicContainer container){
+        String baseURI = "http://localhost:8888/";
+        HttpPost httpPost = new HttpPost(baseURI);
+
+        httpPost.addHeader("Content-Type","text/turtle");
+        httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#Resource>; rel='type'");
+        httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#RDFSource>; rel='type'");
+        httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"");
+
+
+        httpPost.addHeader("Slug",container.getIRI());
+        Model model = container.generateGraph();
+        StringWriter out = new StringWriter();
+        model.write(out, "TTL");
+        try {
+            httpPost.setEntity(new StringEntity(out.toString()));
+            //System.out.println(out.toString());
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return httpPost;
     }
 
 }

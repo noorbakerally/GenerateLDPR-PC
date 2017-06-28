@@ -2,6 +2,8 @@ package fr.emse.opensensingcity;
 
 import fr.emse.opensensingcity.configuration.Configuration;
 import fr.emse.opensensingcity.configuration.ConfigurationFactory;
+import fr.emse.opensensingcity.configuration.IRIGenerator;
+import fr.emse.opensensingcity.configuration.RelatedResource;
 import fr.emse.opensensingcity.ldprgenerator.LDPRGenerator;
 
 import java.io.File;
@@ -17,7 +19,7 @@ public class main {
         Configuration configuration = ConfigurationFactory.createConfiguration(file.getAbsolutePath());
         //configuration.print();
         configuration.execute();
-        LDPRGenerator.sendRequest(configuration.topContainers);
+        //LDPRGenerator.sendRequest(configuration);
 
 
         /*HttpClient client = HttpClientBuilder.create().build();

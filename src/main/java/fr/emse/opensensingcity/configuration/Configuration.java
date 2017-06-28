@@ -1,8 +1,13 @@
 package fr.emse.opensensingcity.configuration;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -55,31 +60,17 @@ public class Configuration {
     }
 
 
-    public void execute(){
+    public void execute() throws IOException {
         for (Map.Entry <String,ContainerMap> entry :containerMaps.entrySet()){
             ContainerMap containerMap = entry.getValue();
             if (containerMap.getParentContainerMap() !=null) continue;
-
-            containerMap.generate();
-
-            for (Map.Entry <String,RelatedResource> rrEntry:containerMap.getRelatedResources().entrySet()){
-                RelatedResource rr = rrEntry.getValue();
-
-                String cURI = getFragmentURI(rr.getIRI());
-                Container c = new BasicContainer(cURI);
-                c.setRelatedResource(rr);
-                c.generateGraph();
-                topContainers.add(c);
-            }
+            containerMap.generateResources();
+            containerMap.sendRequest();
         }
-
-        //System.out.println();
-        //System.out.println("Class:Configuration Print Model");
-        //topContainers.get(0).getGraph().write(System.out,"TTL");
     }
 
-    String getFragmentURI(String fragmentPart){
-        return baseURI+"#"+fragmentPart;
-    }
+
+
+
 
 }

@@ -14,18 +14,8 @@ public class BasicContainer extends Container {
         super(containerIRI);
     }
 
-
     @Override
     public Model generateGraph() {
-        Resource container = graph.createResource("");
-
-        //create a resource for the related resource
-        Resource rResource = graph.createResource(relatedResource.getIRI());
-
-
-        graph.add(relatedResource.getFinalGraph());
-        graph.createResource("").addProperty(FOAF.primaryTopic,rResource);
-
-        return graph;
+        return super.generateGraph();
     }
 }

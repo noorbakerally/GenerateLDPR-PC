@@ -5,7 +5,6 @@ package fr.emse.opensensingcity.configuration;
  */
 public abstract class LDPR extends Resource {
     String relatedResourceIRI;
-
     public LDPR(String iri) {
         super(iri);
     }

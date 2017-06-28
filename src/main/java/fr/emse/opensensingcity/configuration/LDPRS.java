@@ -1,12 +1,12 @@
 package fr.emse.opensensingcity.configuration;
 
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.*;
+import org.apache.jena.sparql.vocabulary.FOAF;
 
 /**
  * Created by bakerally on 5/29/17.
  */
-public abstract class LDPRS extends LDPR {
+public class LDPRS extends LDPR {
 
     Model graph;
     RelatedResource relatedResource;
@@ -17,7 +17,18 @@ public abstract class LDPRS extends LDPR {
     }
 
 
-    public abstract Model generateGraph();
+    public Model generateGraph(){
+        org.apache.jena.rdf.model.Resource container = graph.createResource("");
+
+        //create a resource for the related resource
+        org.apache.jena.rdf.model.Resource rResource = graph.createResource(relatedResource.getIRI());
+
+
+        graph.add(relatedResource.getFinalGraph());
+        graph.createResource("").addProperty(FOAF.primaryTopic,rResource);
+
+        return graph;
+    }
 
     public Model getGraph() {
         return graph;
@@ -34,4 +45,5 @@ public abstract class LDPRS extends LDPR {
     public void setRelatedResource(RelatedResource relatedResource) {
         this.relatedResource = relatedResource;
     }
+
 }
