@@ -121,14 +121,14 @@ public class ContainerMap extends RDFSourceMap{
 
             String uri = IRIGenerator.getSlug(rr);
 
-            LDPRS rdfSource = null;
+            LDPRS container = null;
 
-            rdfSource = new BasicContainer(uri);
+            container = new BasicContainer(uri);
 
-            rdfSource.setRelatedResource(rr);
-            rdfSource.generateGraph();
+            container.setRelatedResource(rr);
+            container.generateGraph();
 
-            resources.add(rdfSource);
+            resources.add(container);
 
         }
     }
