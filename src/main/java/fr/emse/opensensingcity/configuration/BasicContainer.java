@@ -1,6 +1,8 @@
 package fr.emse.opensensingcity.configuration;
 
 import org.apache.jena.rdf.model.*;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.sparql.vocabulary.FOAF;
 import org.apache.jena.vocabulary.RDF;
 
 /**
@@ -15,12 +17,15 @@ public class BasicContainer extends Container {
 
     @Override
     public Model generateGraph() {
-        Resource container =graph.createResource("");
-        /*for (Member member:members){
-            Resource memberResource = ResourceFactory.createResource(member.getIRI());
-            container.addProperty(Global.getLDPContains(),memberResource);
-        }*/
-        container.addProperty(RDF.type,Global.getLDPBC());
+        Resource container = graph.createResource("");
+
+        //create a resource for the related resource
+        Resource rResource = graph.createResource(relatedResource.getIRI());
+
+
+        graph.add(relatedResource.getGraph());
+        graph.createResource("").addProperty(FOAF.primaryTopic,rResource);
+
         return graph;
     }
 }

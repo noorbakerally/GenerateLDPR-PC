@@ -4,32 +4,32 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by bakerally on 5/29/17.
  */
 public abstract class Container extends LDPRS {
 
-    List<Member> members;
+    Map<String,RDFSourceMap> rdfSourceMaps = new HashMap<String, RDFSourceMap>();
+    Map<String,ContainerMap> containerMaps = new HashMap<String, ContainerMap>();
+
     public Container(String containerIRI) {
-        setIRI(containerIRI);
-        members = new ArrayList<Member>();
+        super(containerIRI);
         graph = ModelFactory.createDefaultModel();
     }
 
-    public void  addMember(Member member){
-        members.add(member);
-        member.addContainer(this);
+    public void addResourceMap(RDFSourceMap rdfSourceMap){
+        rdfSourceMaps.put(rdfSourceMap.getIRI(),rdfSourceMap);
     }
 
-    public List<Member> getMembers() {
-        return members;
-    }
 
-    public void setMembers(List<Member> members) {
-        this.members = members;
-    }
+
+
+
+
 
 
 }

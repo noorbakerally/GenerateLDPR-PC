@@ -42,4 +42,13 @@ public class Global {
         ResultSet rs = qexec.execSelect() ;
         return rs;
     }
+
+    public static Model exeGraphQuery(String queryStr, Model model){
+        queryStr = Global.prefixes + queryStr;
+        //System.out.println(queryStr);
+        Query query = QueryFactory.create(queryStr, Syntax.syntaxARQ);
+        QueryExecution qexec = QueryExecutionFactory.create(query, model);
+        return qexec.execConstruct();
+
+    }
 }

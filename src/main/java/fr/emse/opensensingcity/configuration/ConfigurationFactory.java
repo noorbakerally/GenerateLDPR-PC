@@ -13,9 +13,9 @@ import java.util.Map;
 public class ConfigurationFactory {
     private static Model model;
     private static Map <String,ContainerMap> containerMaps = new HashMap<String, ContainerMap>();
-
+    static Configuration configuration;
     public  static Configuration createConfiguration(String confLocation){
-        Configuration configuration = new Configuration();
+        configuration = new Configuration();
 
         model = RDFDataMgr.loadModel(confLocation);
 
@@ -176,7 +176,9 @@ public class ConfigurationFactory {
     }
 
     private static DataSource loadDataSource(String dataSourceIRI) {
-        DataSource ds= new DataSource(dataSourceIRI);
+
+        String location = null;
+
         String dataSourceQuery = "SELECT DISTINCT * \n" +
                 "WHERE { " +
                 "<dataSourceIRI> ?p ?o ." +
@@ -190,9 +192,16 @@ public class ConfigurationFactory {
             String o = qs.get("?o").toString();
 
             if (Global.getVTerm("location").equals(p)) {
-                ds.setLocation(o);
+                location = o;
             }
         }
+        DataSource ds = null;
+        //for content negotiation
+        if (location != null){
+            ds = new RDFContentDataSource(dataSourceIRI,location);
+        }
+        configuration.addDataSource(ds);
         return ds;
+
     }
 }

@@ -65,6 +65,19 @@ public class ContainerMap extends RDFSourceMap{
         this.rdfSourceMaps = rdfSourceMaps;
     }
 
+    public void addChildContainerMap(ContainerMap containerMap){
+        containerMaps.put(containerMap.getIRI(),containerMap);
+        containerMap.setParentContainerMap(this);
+    }
+
+    public void setParentContainerMap(ContainerMap parentContainerMap) {
+        this.parentContainerMap = parentContainerMap;
+    }
+
+    public ContainerMap getParentContainerMap() {
+        return parentContainerMap;
+    }
+
     public String toString(int level){
         String str = "";
         String tab= StringUtils.repeat("\t", level);
@@ -82,20 +95,11 @@ public class ContainerMap extends RDFSourceMap{
                 str+=containerMapEntry.getValue().toString(level+4);
             }
         }
-
         return str;
     }
 
-    public void addChildContainerMap(ContainerMap containerMap){
-        containerMaps.put(containerMap.getIRI(),containerMap);
-        containerMap.setParentContainerMap(this);
+    public void generate(){
+
     }
 
-    public void setParentContainerMap(ContainerMap parentContainerMap) {
-        this.parentContainerMap = parentContainerMap;
-    }
-
-    public ContainerMap getParentContainerMap() {
-        return parentContainerMap;
-    }
 }

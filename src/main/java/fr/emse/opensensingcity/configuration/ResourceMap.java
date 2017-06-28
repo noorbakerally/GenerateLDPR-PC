@@ -1,9 +1,13 @@
 package fr.emse.opensensingcity.configuration;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.jena.query.QuerySolution;
+import org.apache.jena.query.ResultSet;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
 
-import java.util.HashMap;
-import java.util.Map;
+import javax.xml.crypto.Data;
+import java.util.*;
 
 /**
  * Created by noor on 26/06/17.
@@ -101,5 +105,69 @@ public class ResourceMap {
 
     public void addDataSource(DataSource dataSource) {
         dataSources.put(dataSource.getIRI(),dataSource);
+    }
+
+    public List<String> getResources(){
+        List<String> resources = new ArrayList<>();
+
+        //iterating through all the datasoure and execute the resourceQuery
+        //to get all the resources for which the corresponding LDPR has to be created
+        for (Map.Entry <String,DataSource> dataSourceEntry:dataSources.entrySet()){
+            DataSource ds = dataSourceEntry.getValue();
+
+            //parent bindings will need to be added here
+            ResultSet rs = ds.executeResourceQuery(resourceQuery);
+
+            //iterating through all the solutions and
+            //get the resourse
+            while (rs.hasNext()){
+                QuerySolution qs = rs.next();
+
+                //verify the number of variables obtained
+                //if more than one then error
+                Iterator<String> vars = qs.varNames();
+                String varName = "";
+                int numVariables = 0;
+                while (vars.hasNext()){
+                    varName = vars.next();
+                    numVariables++;
+                }
+                if (numVariables > 1){
+                    //throw exception here
+                }
+
+                String resourceIRI = qs.get(varName).toString();
+
+                if (!resources.contains(resourceIRI)){
+                    resources.add(resourceIRI);
+                }
+            }
+        }
+        return resources;
+    }
+
+    public Model getResourceGraph(String resourceIRI) {
+        Model model = ModelFactory.createDefaultModel();
+        for (Map.Entry <String,DataSource> dataSourceEntry:dataSources.entrySet()){
+            DataSource ds = dataSourceEntry.getValue();
+
+            String resourceGraphQuery = getResourceGraphQuery(resourceIRI);
+            model.add(ds.executeGraphQuery(resourceGraphQuery));
+        }
+        return model;
+    }
+
+    public String getResourceGraphQuery(String resourceIRI){
+
+        //for now only subject object triple
+        String query = "CONSTRUCT {\n" +
+                "  <resourceIRI> ?p ?o.\n" +
+                "  ?s ?p1 <resourceIRI> .\n" +
+                "} WHERE {\n" +
+                "<resourceIRI> ?p ?o.\n" +
+                "  ?s ?p1 <resourceIRI> .\n" +
+                "} ";
+        query = query.replace("resourceIRI",resourceIRI);
+        return query;
     }
 }

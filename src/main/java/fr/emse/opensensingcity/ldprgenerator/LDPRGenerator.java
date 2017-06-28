@@ -2,7 +2,6 @@ package fr.emse.opensensingcity.ldprgenerator;
 
 import fr.emse.opensensingcity.configuration.BasicContainer;
 import fr.emse.opensensingcity.configuration.Container;
-import fr.emse.opensensingcity.configuration.Member;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
@@ -20,7 +19,8 @@ import java.util.Map;
  */
 public class LDPRGenerator {
     static String baseURI = "http://localhost:8888/";
-    public static void sendRequest(Map<String,Container> containerMap) throws IOException {
+
+    /*public static void sendRequest(Map<String,Container> containerMap) throws IOException {
         for (Map.Entry<String,Container> containerEntry:containerMap.entrySet()){
             HttpClient client = HttpClientBuilder.create().build();
 
@@ -36,7 +36,7 @@ public class LDPRGenerator {
                 System.out.println(response);
             }
         }
-    }
+    }*/
 
     public static HttpPost getResourceRequest(BasicContainer container){
         HttpPost httpPost = new HttpPost(baseURI);
@@ -62,7 +62,7 @@ public class LDPRGenerator {
         return httpPost;
     }
 
-    public static HttpPost getResourceRequest(Member member,String containerIRI){
+    /*public static HttpPost getResourceRequest(Member member,String containerIRI){
         HttpPost httpPost = new HttpPost(containerIRI);
         httpPost.addHeader("Content-Type","text/turtle");
         httpPost.addHeader("Slug",member.getIRI().replace(baseURI,""));
@@ -79,5 +79,5 @@ public class LDPRGenerator {
             e.printStackTrace();
         }
         return httpPost;
-    }
+    }*/
 }

@@ -6,21 +6,32 @@ import org.apache.jena.rdf.model.ModelFactory;
 /**
  * Created by bakerally on 5/29/17.
  */
-public abstract class LDPRS {
-    String iri;
-    Model graph;
+public abstract class LDPRS extends LDPR {
 
-    public LDPRS() {
+    Model graph;
+    RelatedResource relatedResource;
+
+    public LDPRS(String iri) {
+        super(iri);
         graph = ModelFactory.createDefaultModel();
     }
 
-    public String getIRI() {
-        return iri;
-    }
-
-    public void setIRI(String iri) {
-        this.iri = iri;
-    }
 
     public abstract Model generateGraph();
+
+    public Model getGraph() {
+        return graph;
+    }
+
+    public void setGraph(Model graph) {
+        this.graph = graph;
+    }
+
+    public RelatedResource getRelatedResource() {
+        return relatedResource;
+    }
+
+    public void setRelatedResource(RelatedResource relatedResource) {
+        this.relatedResource = relatedResource;
+    }
 }
