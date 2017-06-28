@@ -33,7 +33,7 @@ public class RDFSourceMap {
     Map<String,ResourceMap> resourceMaps = new HashMap<String, ResourceMap>();
 
     Map <String,RelatedResource> relatedResources = new HashMap<>();
-    List<LDPRS> rdfSources = new ArrayList<>();
+    List<LDPRS> resources = new ArrayList<>();
 
     public RDFSourceMap(String RDFSourceMapIRI) {
         this.IRI = RDFSourceMapIRI;
@@ -175,12 +175,12 @@ public class RDFSourceMap {
             rdfSource.setRelatedResource(rr);
             rdfSource.generateGraph();
 
-            rdfSources.add(rdfSource);
+            resources.add(rdfSource);
         }
     }
 
     public void sendRequest() throws IOException {
-        for (LDPRS ldprs:rdfSources){
+        for (LDPRS ldprs:resources){
             HttpClient client = HttpClientBuilder.create().build();
             HttpPost request = getResourceRequest((BasicContainer) ldprs);
             HttpResponse response = null;

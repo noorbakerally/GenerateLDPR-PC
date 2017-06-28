@@ -128,13 +128,13 @@ public class ContainerMap extends RDFSourceMap{
             rdfSource.setRelatedResource(rr);
             rdfSource.generateGraph();
 
-            rdfSources.add(rdfSource);
+            resources.add(rdfSource);
 
         }
     }
 
     public void sendRequest() throws IOException {
-       for (LDPRS ldprs:rdfSources){
+       for (LDPRS ldprs:resources){
            HttpClient client = HttpClientBuilder.create().build();
            HttpPost request = getResourceRequest((BasicContainer) ldprs);
            HttpResponse response = null;
