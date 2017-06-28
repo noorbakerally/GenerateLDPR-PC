@@ -1,14 +1,21 @@
 package fr.emse.opensensingcity.configuration;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 import java.util.HashMap;
 import java.util.Map;
+
 
 /**
  * Created by noor on 26/06/17.
  */
 public class RDFSourceMap {
+
+
+
     String IRI;
     String iriTemplate;
     String constant;
@@ -104,21 +111,24 @@ public class RDFSourceMap {
                 }
             }
         }
+        //System.out.println("Class:RDFSourceMap RelatedResources:"+relatedResources);
     }
 
-    public void generateRelatedResourcesGraph(){
+   /* public void generateRelatedResourcesGraph(){
         for (Map.Entry<String,RelatedResource> relatedResourceEntry:relatedResources.entrySet()){
             RelatedResource cRelatedResource = relatedResourceEntry.getValue();
             cRelatedResource.getGraph();
         }
-    }
+    }*/
 
     public void generate(){
+
         //generate all the list of related resources
         generateListOfRelatedResources();
+        //System.out.println("Class:RDFSourceMap:"+relatedResources);
 
         //generate graph of all related resources
-        generateRelatedResourcesGraph();
+        //generateRelatedResourcesGraph();
 
     }
 

@@ -1,5 +1,8 @@
 package fr.emse.opensensingcity.configuration;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,11 +12,13 @@ import java.util.Map;
  * Created by bakerally on 5/29/17.
  */
 public class Configuration {
+    //private static final Logger logger = LoggerFactory.getLogger(Configuration.class);
     String baseURI;
     public Map<String,ContainerMap> containerMaps = new HashMap<String, ContainerMap>();
     public Map<String,DataSource> dataSources = new HashMap<String, DataSource>();
 
-   List <String> topContainers = new ArrayList<>();
+
+   public List <Container> topContainers = new ArrayList<>();
 
     public Configuration(){
         containerMaps = new HashMap<String, ContainerMap>();
@@ -55,6 +60,8 @@ public class Configuration {
             ContainerMap containerMap = entry.getValue();
             if (containerMap.getParentContainerMap() !=null) continue;
 
+            containerMap.generate();
+
             for (Map.Entry <String,RelatedResource> rrEntry:containerMap.getRelatedResources().entrySet()){
                 RelatedResource rr = rrEntry.getValue();
 
@@ -62,8 +69,13 @@ public class Configuration {
                 Container c = new BasicContainer(cURI);
                 c.setRelatedResource(rr);
                 c.generateGraph();
+                topContainers.add(c);
             }
         }
+
+        //System.out.println();
+        //System.out.println("Class:Configuration Print Model");
+        //topContainers.get(0).getGraph().write(System.out,"TTL");
     }
 
     String getFragmentURI(String fragmentPart){

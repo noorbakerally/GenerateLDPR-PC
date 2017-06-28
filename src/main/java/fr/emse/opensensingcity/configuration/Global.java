@@ -20,7 +20,8 @@ public class Global {
     public static String prefixes = "PREFIX ldp: <http://www.w3.org/ns/ldp#> \n" +
             "PREFIX :     <http://opensensingcity.emse.fr/LDPDesignVocabulary/> \n" +
             "PREFIX data:     <http://opensensingcity.emse.fr/LDPDesign/data/> \n" +
-            "PREFIX foaf: <http://xmlns.com/foaf/0.1/> ";
+            "PREFIX foaf: <http://xmlns.com/foaf/0.1/> \n"  +
+            "PREFIX dcat: <http://www.w3.org/ns/dcat#>\n";
 
     public enum TripleType {SubjectTriples,ObjectTriples}
 

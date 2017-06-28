@@ -12,31 +12,28 @@ import org.apache.jena.rdf.model.Model;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 import java.util.Map;
 
 /**
  * Created by noor on 15/06/17.
  */
 public class LDPRGenerator {
-    static String baseURI = "http://localhost:8888/";
+    static String baseURI = "http://localhost:8080/";
 
-    /*public static void sendRequest(Map<String,Container> containerMap) throws IOException {
-        for (Map.Entry<String,Container> containerEntry:containerMap.entrySet()){
+    public static void sendRequest(List<Container> containers) throws IOException {
+        for (Container ccontainer:containers){
+
+
             HttpClient client = HttpClientBuilder.create().build();
-
-            BasicContainer container = (BasicContainer) containerEntry.getValue();
+            BasicContainer container = (BasicContainer) ccontainer;
             HttpPost request = getResourceRequest(container);
             HttpResponse response = null;
             response = client.execute(request);
             System.out.println(response);
-
-            for (Member member:container.getMembers()){
-                HttpPost memberRequest = getResourceRequest(member,container.getIRI());
-                response = client.execute(memberRequest);
-                System.out.println(response);
-            }
+            //create corresponding LDPRs here*/
         }
-    }*/
+    }
 
     public static HttpPost getResourceRequest(BasicContainer container){
         HttpPost httpPost = new HttpPost(baseURI);
@@ -47,7 +44,7 @@ public class LDPRGenerator {
         httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"");
 
         System.out.println(container.getIRI().replace(baseURI,""));
-        httpPost.addHeader("Slug",container.getIRI().replace(baseURI,""));
+        httpPost.addHeader("Slug","test1");
         System.out.println("creating "+container.getIRI());
 
         Model model = container.generateGraph();

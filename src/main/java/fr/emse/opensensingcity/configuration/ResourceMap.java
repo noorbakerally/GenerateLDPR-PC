@@ -152,8 +152,11 @@ public class ResourceMap {
             DataSource ds = dataSourceEntry.getValue();
 
             String resourceGraphQuery = getResourceGraphQuery(resourceIRI);
+            //System.out.println("ResourceMap.java getResourceGraph "+resourceGraphQuery);
+
             model.add(ds.executeGraphQuery(resourceGraphQuery));
         }
+        //model.write(System.out,"TTL");
         return model;
     }
 
@@ -162,10 +165,10 @@ public class ResourceMap {
         //for now only subject object triple
         String query = "CONSTRUCT {\n" +
                 "  <resourceIRI> ?p ?o.\n" +
-                "  ?s ?p1 <resourceIRI> .\n" +
+                "  ?s ?p1 <resourceIRI>\n" +
                 "} WHERE {\n" +
-                "<resourceIRI> ?p ?o.\n" +
-                "  ?s ?p1 <resourceIRI> .\n" +
+                "  {<resourceIRI> ?p ?o.} UNION \n" +
+                "  {?s ?p1 <resourceIRI> .}\n" +
                 "} ";
         query = query.replace("resourceIRI",resourceIRI);
         return query;

@@ -31,7 +31,12 @@ public class RelatedResource extends Resource{
         resourceMaps.put(rs.getIRI(),rs);
     }
 
-    public Model getGraph(){
+    public Model getFinalGraph(){
+        loadGraph();
+        return model;
+    }
+    public Model loadGraph(){
+        //System.out.println("RelatedResource.java loadGraph"+resourceMaps.size());
         for (Map.Entry <String,ResourceMap>resourceMapEntry:resourceMaps.entrySet()){
             ResourceMap cResourceMap = resourceMapEntry.getValue();
             Model newModel = cResourceMap.getResourceGraph(getIRI());

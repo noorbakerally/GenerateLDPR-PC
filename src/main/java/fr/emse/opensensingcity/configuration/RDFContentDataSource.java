@@ -12,6 +12,7 @@ public class RDFContentDataSource extends DataSource {
     public RDFContentDataSource(String dataSourceIRI, String location) {
         super(dataSourceIRI);
         setLocation(location);
+        loadModel();
     }
 
     public void loadModel(){
@@ -29,6 +30,7 @@ public class RDFContentDataSource extends DataSource {
 
     @Override
     public Model executeGraphQuery(String query) {
-       return Global.exeGraphQuery(query,model);
+        Model results = Global.exeGraphQuery(query,model);
+       return results;
     }
 }

@@ -99,7 +99,7 @@ public class ContainerMap extends RDFSourceMap{
     }
 
     public void generate(){
-
+        super.generate();
     }
 
 }

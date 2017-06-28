@@ -23,7 +23,7 @@ public class BasicContainer extends Container {
         Resource rResource = graph.createResource(relatedResource.getIRI());
 
 
-        graph.add(relatedResource.getGraph());
+        graph.add(relatedResource.getFinalGraph());
         graph.createResource("").addProperty(FOAF.primaryTopic,rResource);
 
         return graph;
