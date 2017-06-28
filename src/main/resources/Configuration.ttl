@@ -18,8 +18,13 @@ data:CatalogResourceMap a :ResourceMap;
 data:ContainerMapDataset a :ContainerMap;
 	:rdfSourceMap data:RDFSourceMapDistributions;
 	:containerType ldp:BasicContainer;
+	:containerMap data:ContainerMapDataset1;
 	:resourceMap data:DataSetResourceMap .
 
+data:ContainerMapDataset1 a :ContainerMap;
+	:rdfSourceMap data:RDFSourceMapDistributions;
+	:containerType ldp:BasicContainer;
+	:resourceMap data:DataSetResourceMap .
 
 data:DataSetResourceMap a :ResourceMap;
     :resourceQuery "Select * WHERE { ?_resource dcat:dataset  ?x . }";
@@ -37,3 +42,6 @@ data:DistributionResourceMap a :ResourceMap;
     :graphTemplate :SubjectObjectGraph;
     :linkToSource foaf:primaryTopic;
     :dataSource data:DataSource1 .
+
+data:DataSource1 a :DataSource;
+    :location "https://opendata.paris.fr/api/v2/catalog/exports/ttl";

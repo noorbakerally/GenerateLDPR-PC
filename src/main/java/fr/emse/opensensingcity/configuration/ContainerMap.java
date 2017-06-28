@@ -79,7 +79,7 @@ public class ContainerMap extends RDFSourceMap{
         if (containerMaps.size() > 0){
             str += tab+"\t\tChild Containers: \n";
             for (Map.Entry <String,ContainerMap> containerMapEntry:containerMaps.entrySet()){
-                str+=containerMapEntry.getValue().toString(4);
+                str+=containerMapEntry.getValue().toString(level+4);
             }
         }
 

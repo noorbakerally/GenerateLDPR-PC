@@ -167,6 +167,32 @@ public class ConfigurationFactory {
             if (Global.getVTerm("resourceQuery").equals(p)) {
                 resourceMap.setResourceQuery(o);
             }
+
+            if (Global.getVTerm("dataSource").equals(p)) {
+                resourceMap.addDataSource(loadDataSource(o));
+            }
+
         }
+    }
+
+    private static DataSource loadDataSource(String dataSourceIRI) {
+        DataSource ds= new DataSource(dataSourceIRI);
+        String dataSourceQuery = "SELECT DISTINCT * \n" +
+                "WHERE { " +
+                "<dataSourceIRI> ?p ?o ." +
+                "}";
+
+        dataSourceQuery = dataSourceQuery.replace("dataSourceIRI", dataSourceIRI);
+        ResultSet rs = Global.exeQuery(dataSourceQuery, model);
+        while (rs.hasNext()) {
+            QuerySolution qs = rs.next();
+            String p = qs.get("?p").toString();
+            String o = qs.get("?o").toString();
+
+            if (Global.getVTerm("location").equals(p)) {
+                ds.setLocation(o);
+            }
+        }
+        return ds;
     }
 }

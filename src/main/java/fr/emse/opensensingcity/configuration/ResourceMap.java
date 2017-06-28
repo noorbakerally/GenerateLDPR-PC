@@ -2,6 +2,7 @@ package fr.emse.opensensingcity.configuration;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -14,6 +15,9 @@ public class ResourceMap {
     String linkFromSource;
     String constant;
     String IRI;
+    Map <String,DataSource> dataSources = new HashMap<String,DataSource>();
+
+
     public ResourceMap(String iri) {
         this.IRI = iri;
     }
@@ -72,6 +76,7 @@ public class ResourceMap {
 
         String tab= StringUtils.repeat("\t", level);
 
+
         String title = "ResourceMap:";
 
        String titleUnderline = StringUtils.repeat("", title.length());
@@ -81,7 +86,20 @@ public class ResourceMap {
         str += tab+"\t\tIRI: "+getIRI()+"\n";
         str += tab+"\t\tGraphTemplate: "+getGraphTemplate()+"\n";
         str += tab+"\t\tLinkToSource: "+getLinkToSource()+"\n";
+        str += tab+"\t\tResourceQuery: "+getResourceQuery()+"\n";
+
+        //print child container map
+        if (dataSources.size() > 0){
+            str += tab+"\t\tDataSources: \n";
+            for (Map.Entry <String,DataSource> dataSourceEntry:dataSources.entrySet()){
+                str+=dataSourceEntry.getValue().toString(level);
+            }
+        }
 
         return str;
+    }
+
+    public void addDataSource(DataSource dataSource) {
+        dataSources.put(dataSource.getIRI(),dataSource);
     }
 }
