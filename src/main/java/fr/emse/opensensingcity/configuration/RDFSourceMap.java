@@ -26,7 +26,7 @@ import java.util.Map;
 public class RDFSourceMap {
 
 
-
+    Container container;
     String IRI;
     String iriTemplate;
     String constant;
@@ -103,12 +103,14 @@ public class RDFSourceMap {
 
             //get the related resource from the ResourceMap
             //add it to the relatedResources for the RDFSourceMap
-            for (String relatedResource:cResourceMap.getResources()){
+            for (String relatedResource:cResourceMap.getResources(container)){
 
                 //if relatedResources already contain the relatedResource
                 //check if the relatedResource has a link to the cResourceMap
                 //if not add it
+
                 if (relatedResources.containsKey(relatedResource)){
+
                     Map <String, ResourceMap> rResouceMaps = relatedResources.get(relatedResources).
                             getResourceMaps();
                     if (!rResouceMaps.containsKey(cResourceMap.getIRI())){
@@ -139,10 +141,13 @@ public class RDFSourceMap {
         generateListOfRelatedResources();
         //System.out.println("Class:RDFSourceMap:"+relatedResources);
 
+
         //generate graph of all related resources
         generateRelatedResourcesGraph();
-
     }
+
+
+
 
     public Map<String, ResourceMap> getResourceMaps() {
         return resourceMaps;
@@ -185,7 +190,7 @@ public class RDFSourceMap {
             HttpPost request = getResourceRequest((BasicContainer) ldprs);
             HttpResponse response = null;
             response = client.execute(request);
-            System.out.println(response);
+            System.out.println("RDFSourceMap.java:"+response);
         }
     }
 
@@ -209,5 +214,21 @@ public class RDFSourceMap {
             e.printStackTrace();
         }
         return httpPost;
+    }
+
+    public Container getContainer() {
+        return container;
+    }
+
+    public void setContainer(Container container) {
+        this.container = container;
+    }
+
+    public List<LDPRS> getResources() {
+        return resources;
+    }
+
+    public void setResources(List<LDPRS> resources) {
+        this.resources = resources;
     }
 }

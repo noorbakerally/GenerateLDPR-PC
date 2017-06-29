@@ -30,9 +30,28 @@ public class Container extends LDPRS {
         return super.generateGraph();
     }
 
+    public Map<String, RDFSourceMap> getRdfSourceMaps() {
+        return rdfSourceMaps;
+    }
 
+    public void setRdfSourceMaps(Map<String, RDFSourceMap> rdfSourceMaps) {
+        this.rdfSourceMaps = rdfSourceMaps;
+    }
 
+    public Map<String, ContainerMap> getContainerMaps() {
+        return containerMaps;
+    }
 
+    public void setContainerMaps(Map<String, ContainerMap> containerMaps) {
+        this.containerMaps = containerMaps;
+    }
 
+    public void processRDFSourceMaps() {
+        for (Map.Entry <String,RDFSourceMap> rdfSourceMapEntry:rdfSourceMaps.entrySet()){
+            RDFSourceMap rdfSourceMap = rdfSourceMapEntry.getValue();
+            rdfSourceMap.setContainer(this);
+            rdfSourceMap.generateResources();
+        }
 
+    }
 }

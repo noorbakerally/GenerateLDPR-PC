@@ -121,14 +121,19 @@ public class ContainerMap extends RDFSourceMap{
 
             String uri = IRIGenerator.getSlug(rr);
 
-            LDPRS container = null;
+            Container c = null;
 
-            container = new BasicContainer(uri);
+            c = new BasicContainer(uri);
 
-            container.setRelatedResource(rr);
-            container.generateGraph();
+            c.setRelatedResource(rr);
+            c.generateGraph();
 
-            resources.add(container);
+            c.setRdfSourceMaps(rdfSourceMaps);
+            c.setContainerMaps(containerMaps);
+
+            c.processRDFSourceMaps();
+
+            resources.add(c);
 
         }
     }
@@ -139,7 +144,6 @@ public class ContainerMap extends RDFSourceMap{
            HttpPost request = getResourceRequest((BasicContainer) ldprs);
            HttpResponse response = null;
            response = client.execute(request);
-           System.out.println(response);
        }
     }
 

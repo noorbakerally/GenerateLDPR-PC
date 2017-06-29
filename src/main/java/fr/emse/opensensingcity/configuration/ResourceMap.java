@@ -1,5 +1,6 @@
 package fr.emse.opensensingcity.configuration;
 
+import fr.emse.opensensingcity.Exceptions.VariableException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
@@ -7,6 +8,7 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 
 import javax.xml.crypto.Data;
+import java.beans.ExceptionListener;
 import java.util.*;
 
 /**
@@ -107,13 +109,17 @@ public class ResourceMap {
         dataSources.put(dataSource.getIRI(),dataSource);
     }
 
-    public List<String> getResources(){
+    public List<String> getResources(Container parent){
         List<String> resources = new ArrayList<>();
 
         //iterating through all the datasoure and execute the resourceQuery
         //to get all the resources for which the corresponding LDPR has to be created
         for (Map.Entry <String,DataSource> dataSourceEntry:dataSources.entrySet()){
             DataSource ds = dataSourceEntry.getValue();
+
+            if (resourceQuery.contains("?_resource")){
+                resourceQuery = resourceQuery.replace("?_resource","<"+parent.getRelatedResource().getIRI()+">");
+            }
 
             //parent bindings will need to be added here
             ResultSet rs = ds.executeResourceQuery(resourceQuery);
@@ -134,6 +140,11 @@ public class ResourceMap {
                 }
                 if (numVariables > 1){
                     //throw exception here
+                    try {
+                        throw new VariableException("More than one variable Error");
+                    } catch (VariableException e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 String resourceIRI = qs.get(varName).toString();
@@ -170,7 +181,7 @@ public class ResourceMap {
                 "  {<resourceIRI> ?p ?o.} UNION \n" +
                 "  {?s ?p1 <resourceIRI> .}\n" +
                 "} ";
-        query = query.replace("resourceIRI",resourceIRI);
+        //query = query.replace("resourceIRI",resourceIRI);
         return query;
     }
 }
