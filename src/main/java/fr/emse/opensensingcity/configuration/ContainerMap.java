@@ -115,6 +115,10 @@ public class ContainerMap extends RDFSourceMap{
     }
 
     public void generateResources(){
+        //generate containers for the container maps
+        //for each container
+            //associate with it all the RDFSourceMaps and ContainerMaps for the current ContainerMap
+
         generate();
         for (Map.Entry <String,RelatedResource> rrEntry:getRelatedResources().entrySet()){
             RelatedResource rr = rrEntry.getValue();
@@ -128,5 +132,13 @@ public class ContainerMap extends RDFSourceMap{
             c.processRDFSourceMaps();
             resources.add(c);
         }
+    }
+
+    public Map<String, ContainerMap> getContainerMaps() {
+        return containerMaps;
+    }
+
+    public void setContainerMaps(Map<String, ContainerMap> containerMaps) {
+        this.containerMaps = containerMaps;
     }
 }

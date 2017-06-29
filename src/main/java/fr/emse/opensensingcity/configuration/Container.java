@@ -70,7 +70,6 @@ public class Container extends LDPRS {
     }
 
     public HttpPost getResourceRequest(){
-        System.out.println("Container.java generating from Container");
         String baseIRI = Global.baseURI;
         if (container != null){
             baseIRI = container.getIRI();
@@ -94,5 +93,26 @@ public class Container extends LDPRS {
         }
         return httpPost;
     }
-    
+
+
+    public void processContainerMaps() throws IOException {
+
+        for (Map.Entry <String,ContainerMap> containerMapEntry:containerMaps.entrySet()){
+            ContainerMap containerMap = containerMapEntry.getValue();
+            containerMap.setContainer(this);
+            containerMap.generateResources();
+            for (LDPRS container:containerMap.getResources()){
+
+                ((Container)container).setContainer(this);
+
+                ((Container)container).processRDFSourceMaps();
+                ((Container)container).sendRequestForRDFSourceMaps();
+                ((Container)container).processContainerMaps();
+
+                ((Container)container).sendRequest();
+            }
+        }
+    }
+
+
 }
