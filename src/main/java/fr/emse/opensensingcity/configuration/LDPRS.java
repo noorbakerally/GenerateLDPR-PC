@@ -62,8 +62,8 @@ public class LDPRS extends LDPR {
         HttpPost httpPost = new HttpPost(baseURI);
 
         httpPost.addHeader("Content-Type","text/turtle");
-        httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#Resource>; rel='type'");
-        httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#RDFSource>; rel='type'");
+        httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#Resource>; rel=\"type\"");
+        httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#RDFSource>; rel=\"type\"");
 
 
         httpPost.addHeader("Slug",getSlug());

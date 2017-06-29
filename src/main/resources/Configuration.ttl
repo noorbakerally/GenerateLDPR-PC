@@ -5,7 +5,7 @@
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 
 data:CatalogMap a :ContainerMap;
-	:rdfSourceMap data:ResourceMapDataset;
+	:containerMap data:ContainerMapDataset;
 	:containerType ldp:BasicContainer;
 	:resourceMap data:CatalogResourceMap .
 
@@ -15,7 +15,7 @@ data:CatalogResourceMap a :ResourceMap;
     :linkToSource foaf:primaryTopic;
     :dataSource data:DataSource1 .
 
-data:ResourceMapDataset a :ResourceMap;
+data:ContainerMapDataset a :ContainerMap;
 	:resourceMap data:DataSetResourceMap .
 
 data:DataSetResourceMap a :ResourceMap;
