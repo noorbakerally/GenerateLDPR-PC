@@ -161,27 +161,41 @@ public class ResourceMap {
         Model model = ModelFactory.createDefaultModel();
         for (Map.Entry <String,DataSource> dataSourceEntry:dataSources.entrySet()){
             DataSource ds = dataSourceEntry.getValue();
-
             String resourceGraphQuery = getResourceGraphQuery(resourceIRI);
-            //System.out.println("ResourceMap.java getResourceGraph "+resourceGraphQuery);
-
             model.add(ds.executeGraphQuery(resourceGraphQuery));
         }
-        //model.write(System.out,"TTL");
         return model;
     }
 
     public String getResourceGraphQuery(String resourceIRI){
 
-        //for now only subject object triple
-        String query = "CONSTRUCT {\n" +
-                "  <resourceIRI> ?p ?o.\n" +
-                "  ?s ?p1 <resourceIRI>\n" +
-                "} WHERE {\n" +
-                "  {<resourceIRI> ?p ?o.} UNION \n" +
-                "  {?s ?p1 <resourceIRI> .}\n" +
-                "} ";
-        //query = query.replace("resourceIRI",resourceIRI);
+        String query = "";
+        if (graphTemplate.equals(Global.getVTerm("SubjectObjectGraph"))){
+            query = "CONSTRUCT {\n" +
+                    "  <resourceIRI> ?p ?o.\n" +
+                    "  ?s ?p1 <resourceIRI>\n" +
+                    "} WHERE {\n" +
+                    "  {<resourceIRI> ?p ?o.} UNION \n" +
+                    "  {?s ?p1 <resourceIRI> .}\n" +
+                    "} ";
+            query = query.replace("resourceIRI",resourceIRI);
+
+        } else if (graphTemplate.equals(Global.getVTerm("SubjectGraph"))){
+            query = "CONSTRUCT {\n" +
+                    "  <resourceIRI> ?p ?o.\n" +
+                    "} WHERE {<resourceIRI> ?p ?o. } ";
+            query = query.replace("resourceIRI",resourceIRI);
+
+        } else if (graphTemplate.equals(Global.getVTerm("ObjectGraph"))){
+            query = "CONSTRUCT {\n" +
+                    "  ?s ?p1 <resourceIRI>\n" +
+                    "} WHERE { ?s ?p1 <resourceIRI> .} ";
+            query = query.replace("resourceIRI",resourceIRI);
+        } else {
+            query = graphTemplate;
+            query = query.replace("?_resource","<"+resourceIRI+">");
+        }
+        System.out.println(query);
         return query;
     }
 }
