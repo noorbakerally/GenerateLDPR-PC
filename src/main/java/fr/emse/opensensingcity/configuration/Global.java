@@ -10,6 +10,7 @@ import org.apache.jena.rdf.model.ResourceFactory;
  * Created by bakerally on 6/14/17.
  */
 public class Global {
+    static String  baseURI = "http://localhost:8888";
     public static String vocabularyPrefix = "http://opensensingcity.emse.fr/LDPDesignVocabulary/";
 
     public static String getVTerm(String lname){
@@ -50,7 +51,10 @@ public class Global {
         Query query = QueryFactory.create(queryStr, Syntax.syntaxARQ);
         QueryExecution qexec = QueryExecutionFactory.create(query, model);
         return qexec.execConstruct();
+    }
 
+    public static String getBaseURI(){
+        return baseURI;
     }
 
 }

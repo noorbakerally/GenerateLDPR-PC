@@ -1,7 +1,16 @@
 package fr.emse.opensensingcity.configuration;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.sparql.vocabulary.FOAF;
+
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 
 /**
  * Created by bakerally on 5/29/17.
@@ -44,6 +53,40 @@ public class LDPRS extends LDPR {
 
     public void setRelatedResource(RelatedResource relatedResource) {
         this.relatedResource = relatedResource;
+    }
+
+    public HttpPost getResourceRequest(){
+        System.out.println("LDPRS.java getResourceRequest test");
+        String baseURI = container.getIRI();
+
+        HttpPost httpPost = new HttpPost(baseURI);
+
+        httpPost.addHeader("Content-Type","text/turtle");
+        httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#Resource>; rel='type'");
+        httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#RDFSource>; rel='type'");
+
+
+        httpPost.addHeader("Slug",getSlug());
+        Model model = generateGraph();
+        StringWriter out = new StringWriter();
+        model.write(out, "TTL");
+        try {
+            httpPost.setEntity(new StringEntity(out.toString()));
+            //System.out.println(out.toString());
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return httpPost;
+    }
+
+    public void sendRequest() throws IOException {
+
+        HttpClient client = HttpClientBuilder.create().build();
+        HttpPost request = getResourceRequest();
+        System.out.println("LDPRS.java request "+request);
+        HttpResponse response = null;
+        response = client.execute(request);
+        System.out.println("LDPRS.java response "+response);
     }
 
 }

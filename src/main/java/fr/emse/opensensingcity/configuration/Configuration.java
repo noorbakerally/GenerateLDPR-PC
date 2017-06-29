@@ -65,12 +65,13 @@ public class Configuration {
             ContainerMap containerMap = entry.getValue();
             if (containerMap.getParentContainerMap() !=null) continue;
             containerMap.generateResources();
-            containerMap.sendRequest();
+
+            for (LDPRS container:containerMap.getResources()){
+                container = (Container)container;
+                container.sendRequest();
+                System.out.println("Configuration.java test");
+            }
+
         }
     }
-
-
-
-
-
 }

@@ -118,56 +118,15 @@ public class ContainerMap extends RDFSourceMap{
         generate();
         for (Map.Entry <String,RelatedResource> rrEntry:getRelatedResources().entrySet()){
             RelatedResource rr = rrEntry.getValue();
-
             String uri = IRIGenerator.getSlug(rr);
-
             Container c = null;
-
             c = new BasicContainer(uri);
-
             c.setRelatedResource(rr);
             c.generateGraph();
-
             c.setRdfSourceMaps(rdfSourceMaps);
             c.setContainerMaps(containerMaps);
-
             c.processRDFSourceMaps();
-
             resources.add(c);
-
         }
     }
-
-    public void sendRequest() throws IOException {
-       for (LDPRS ldprs:resources){
-           HttpClient client = HttpClientBuilder.create().build();
-           HttpPost request = getResourceRequest((BasicContainer) ldprs);
-           HttpResponse response = null;
-           response = client.execute(request);
-       }
-    }
-
-    public static HttpPost getResourceRequest(BasicContainer container){
-        String baseURI = "http://localhost:8888/";
-        HttpPost httpPost = new HttpPost(baseURI);
-
-        httpPost.addHeader("Content-Type","text/turtle");
-        httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#Resource>; rel='type'");
-        httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#RDFSource>; rel='type'");
-        httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"");
-
-
-        httpPost.addHeader("Slug",container.getIRI());
-        Model model = container.generateGraph();
-        StringWriter out = new StringWriter();
-        model.write(out, "TTL");
-        try {
-            httpPost.setEntity(new StringEntity(out.toString()));
-            //System.out.println(out.toString());
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return httpPost;
-    }
-
 }

@@ -1,8 +1,12 @@
 package fr.emse.opensensingcity.configuration;
 
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 
+import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -52,6 +56,55 @@ public class Container extends LDPRS {
             rdfSourceMap.setContainer(this);
             rdfSourceMap.generateResources();
         }
+    }
 
+    public HttpPost getResourceRequest(){
+        System.out.println("Container.java test");
+        String baseIRI = Global.baseURI;
+        if (container != null){
+            baseIRI = container.getIRI();
+        }
+        HttpPost httpPost = new HttpPost(baseIRI);
+
+        httpPost.addHeader("Content-Type","text/turtle");
+        httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#Resource>; rel='type'");
+        httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#RDFSource>; rel='type'");
+        httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#BasicContainer>; rel='type'");
+
+        httpPost.addHeader("Slug","test"+Math.random());
+        System.out.println("Container.java SLUG "+getSlug());
+
+        Model model = generateGraph();
+        StringWriter out = new StringWriter();
+        model.write(out,"TTL");
+        try {
+            httpPost.setEntity(new StringEntity(out.toString()));
+            //System.out.println(out.toString());
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return httpPost;
+    }
+
+    public HttpPost getResourceRequests() {
+        HttpPost httpPost = new HttpPost(Global.baseURI);
+
+        String content = "@prefix dcterms: <http://purl.org/dc/terms/> . @prefix ex: <http://example.com/> ." +
+                "@prefix ldp:<http://www.w3.org/ns/ldp#> .";
+        content = content + "<> dcterms:title 'Photos of Alice' .";
+        content = content + "<> ex:shows ex:Alice .";
+
+        httpPost.addHeader("Content-Type","text/turtle");
+        httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#Resource>; rel='type'");
+        httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#RDFSource>; rel='type'");
+        httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#BasicContainer>; rel='type'");
+        httpPost.addHeader("Slug","tests");
+
+        try {
+            httpPost.setEntity(new StringEntity(content));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return httpPost;
     }
 }
