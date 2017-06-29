@@ -44,12 +44,6 @@ public abstract class LDPR extends Resource {
 
     @Override
     public String getIRI(){
-        String baseURI = Global.baseURI;
-        if (container != null){
-            iri = container.getIRI()+iri+"";
-        } else {
-            iri = Global.baseURI+iri+"";
-        }
         return iri;
     }
 

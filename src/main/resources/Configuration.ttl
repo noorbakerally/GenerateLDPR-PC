@@ -19,7 +19,7 @@ data:ResourceMapDataset a :ResourceMap;
 	:resourceMap data:DataSetResourceMap .
 
 data:DataSetResourceMap a :ResourceMap;
-    :resourceQuery "Select * WHERE { ?_resource dcat:dataset  ?x . }";
+    :resourceQuery "Select * WHERE { ?_resource dcat:dataset  ?x . } LIMIT 5";
     :graphTemplate :SubjectObjectGraph;
     :linkToSource foaf:primaryTopic;
     :dataSource data:DataSource1 .

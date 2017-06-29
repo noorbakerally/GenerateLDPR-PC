@@ -5,6 +5,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 
+import java.io.IOException;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -58,7 +59,18 @@ public class Container extends LDPRS {
         }
     }
 
+    public void sendRequestForRDFSourceMaps() throws IOException {
+        for (Map.Entry <String,RDFSourceMap> rdfSourceMapEntry:rdfSourceMaps.entrySet()){
+            RDFSourceMap rdfSourceMap = rdfSourceMapEntry.getValue();
+            for (LDPRS ldprs:rdfSourceMap.getResources()){
+                ldprs.setContainer(this);
+                ldprs.sendRequest();
+            }
+        }
+    }
+
     public HttpPost getResourceRequest(){
+        System.out.println("Container.java generating from Container");
         String baseIRI = Global.baseURI;
         if (container != null){
             baseIRI = container.getIRI();
@@ -66,9 +78,8 @@ public class Container extends LDPRS {
         HttpPost httpPost = new HttpPost(baseIRI);
 
         httpPost.addHeader("Content-Type","text/turtle");
-        httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#Resource>; rel='type'");
-        httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#RDFSource>; rel='type'");
-        httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#BasicContainer>; rel='type'");
+
+        httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"");
 
         httpPost.addHeader("Slug",getSlug());
 

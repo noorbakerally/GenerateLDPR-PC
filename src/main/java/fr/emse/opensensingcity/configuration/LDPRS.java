@@ -58,7 +58,7 @@ public class LDPRS extends LDPR {
 
     public HttpPost getResourceRequest(){
         String baseURI = container.getIRI();
-
+        System.out.println("LDPRS.java baseIRI:"+baseURI);
         HttpPost httpPost = new HttpPost(baseURI);
 
         httpPost.addHeader("Content-Type","text/turtle");
@@ -80,13 +80,17 @@ public class LDPRS extends LDPR {
     }
 
     public void sendRequest() throws IOException {
+
         HttpClient client = HttpClientBuilder.create().build();
         HttpPost request = getResourceRequest();
+        if (this instanceof Container){
+
+        }
         HttpResponse response = null;
         response = client.execute(request);
+        System.out.println("LDPRS.java Request:"+request+" Reply:"+response);
         String location = response.getHeaders("Location")[0].getValue();
         setIRI(location);
-
     }
 
 }

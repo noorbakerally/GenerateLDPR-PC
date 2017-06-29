@@ -99,6 +99,7 @@ public class RDFSourceMap {
         //and generate the resources for each resource maps
         for (Map.Entry <String,ResourceMap> resourceMap:resourceMaps.entrySet()){
             String resourceMapIRI = resourceMap.getKey();
+
             ResourceMap cResourceMap = resourceMap.getValue();
 
             //get the related resource from the ResourceMap
@@ -110,9 +111,7 @@ public class RDFSourceMap {
                 //if not add it
 
                 if (relatedResources.containsKey(relatedResource)){
-
-                    Map <String, ResourceMap> rResouceMaps = relatedResources.get(relatedResources).
-                            getResourceMaps();
+                    Map <String, ResourceMap> rResouceMaps = relatedResources.get(relatedResource).getResourceMaps();
                     if (!rResouceMaps.containsKey(cResourceMap.getIRI())){
                         relatedResources.get(relatedResource).addResourceMap(cResourceMap);
                     }
