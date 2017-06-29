@@ -69,7 +69,6 @@ public class Configuration {
             for (LDPRS container:containerMap.getResources()){
                 container = (Container)container;
                 container.sendRequest();
-                System.out.println("Configuration.java test");
             }
 
         }

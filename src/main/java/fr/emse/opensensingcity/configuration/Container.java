@@ -59,7 +59,6 @@ public class Container extends LDPRS {
     }
 
     public HttpPost getResourceRequest(){
-        System.out.println("Container.java test");
         String baseIRI = Global.baseURI;
         if (container != null){
             baseIRI = container.getIRI();
@@ -84,26 +83,5 @@ public class Container extends LDPRS {
         }
         return httpPost;
     }
-
-    public HttpPost getResourceRequests() {
-        HttpPost httpPost = new HttpPost(Global.baseURI);
-
-        String content = "@prefix dcterms: <http://purl.org/dc/terms/> . @prefix ex: <http://example.com/> ." +
-                "@prefix ldp:<http://www.w3.org/ns/ldp#> .";
-        content = content + "<> dcterms:title 'Photos of Alice' .";
-        content = content + "<> ex:shows ex:Alice .";
-
-        httpPost.addHeader("Content-Type","text/turtle");
-        httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#Resource>; rel='type'");
-        httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#RDFSource>; rel='type'");
-        httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#BasicContainer>; rel='type'");
-        httpPost.addHeader("Slug","tests");
-
-        try {
-            httpPost.setEntity(new StringEntity(content));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return httpPost;
-    }
+    
 }

@@ -57,7 +57,6 @@ public class LDPRS extends LDPR {
     }
 
     public HttpPost getResourceRequest(){
-        System.out.println("LDPRS.java getResourceRequest test");
         String baseURI = container.getIRI();
 
         HttpPost httpPost = new HttpPost(baseURI);
