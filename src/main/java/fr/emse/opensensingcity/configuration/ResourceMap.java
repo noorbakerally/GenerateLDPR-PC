@@ -195,7 +195,7 @@ public class ResourceMap {
             query = graphTemplate;
             query = query.replace("?_resource","<"+resourceIRI+">");
         }
-        System.out.println(query);
+        //System.out.println("ResourceMap.java"+query);
         return query;
     }
 }

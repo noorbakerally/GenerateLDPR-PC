@@ -14,7 +14,7 @@ public class RelatedResource extends Resource{
     Model model;
     public RelatedResource(String iri){
         super(iri);
-        model = ModelFactory.createDefaultModel();
+
     }
 
     Map<String,ResourceMap> resourceMaps = new HashMap<>();
@@ -32,11 +32,14 @@ public class RelatedResource extends Resource{
     }
 
     public Model getFinalGraph(){
-        loadGraph();
+        if (model == null){
+            loadGraph();
+        }
         return model;
     }
+
     public Model loadGraph(){
-        //System.out.println("RelatedResource.java loadGraph"+resourceMaps.size());
+        model = ModelFactory.createDefaultModel();
         for (Map.Entry <String,ResourceMap>resourceMapEntry:resourceMaps.entrySet()){
             ResourceMap cResourceMap = resourceMapEntry.getValue();
             Model newModel = cResourceMap.getResourceGraph(getIRI());
