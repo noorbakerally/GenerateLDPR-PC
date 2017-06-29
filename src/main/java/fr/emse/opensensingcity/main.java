@@ -20,5 +20,11 @@ public class main {
         //configuration.print();
         configuration.execute();
         //LDPRGenerator.sendRequest(configuration);
+
+       /* String slugTemplate = "{_rr.path[2]}-ans";
+        String iri = "https://opendata.paris.fr/api/v2/catalog/exports/ttl";
+        System.out.println(IRIGenerator.getSlug(new RelatedResource(iri),slugTemplate));*/
+
+
     }
 }

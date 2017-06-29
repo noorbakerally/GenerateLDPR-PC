@@ -83,10 +83,6 @@ public class LDPRS extends LDPR {
 
         HttpClient client = HttpClientBuilder.create().build();
         HttpPost request = getResourceRequest();
-        if (!getSlug().equals("catalog")){
-            System.out.println("LDPRS.java "+ container.getIRI()+" Slug:"+getSlug());
-
-        }
         HttpResponse response = null;
         response = client.execute(request);
         System.out.println("LDPRS.java Request:"+request+" Reply:"+response);

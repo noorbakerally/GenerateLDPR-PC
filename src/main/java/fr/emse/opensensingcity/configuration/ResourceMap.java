@@ -15,7 +15,6 @@ import java.util.*;
  * Created by noor on 26/06/17.
  */
 public class ResourceMap {
-    String slugTemplate;
     String resourceQuery;
     String graphTemplate;
     String linkToSource;
@@ -198,13 +197,5 @@ public class ResourceMap {
         }
         //System.out.println("ResourceMap.java"+query);
         return query;
-    }
-
-    public String getSlugTemplate() {
-        return slugTemplate;
-    }
-
-    public void setSlugTemplate(String slugTemplate) {
-        this.slugTemplate = slugTemplate;
     }
 }

@@ -7,8 +7,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.jena.rdf.model.Model;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 import java.io.IOException;
@@ -28,7 +26,7 @@ public class RDFSourceMap {
 
     Container container;
     String IRI;
-    String iriTemplate;
+    String slugTemplate;;
     String constant;
     Map<String,ResourceMap> resourceMaps = new HashMap<String, ResourceMap>();
 
@@ -45,15 +43,6 @@ public class RDFSourceMap {
 
     public void setIRI(String iri) {
         this.IRI = iri;
-    }
-
-
-    public String getIriTemplate() {
-        return iriTemplate;
-    }
-
-    public void setIriTemplate(String iriTemplate) {
-        this.iriTemplate = iriTemplate;
     }
 
     public String getConstant() {
@@ -119,6 +108,9 @@ public class RDFSourceMap {
                     //create the relatedResource
                     //add it to the relatedResources of the RDFSourceMap
                     RelatedResource rr1 = new RelatedResource(relatedResource);
+
+
+
                     rr1.addResourceMap(cResourceMap);
                     relatedResources.put(relatedResource,rr1);
                 }
@@ -170,7 +162,7 @@ public class RDFSourceMap {
         for (Map.Entry <String,RelatedResource> rrEntry:getRelatedResources().entrySet()){
             RelatedResource rr = rrEntry.getValue();
 
-            String uri = IRIGenerator.getSlug(rr);
+            String uri = IRIGenerator.getSlug(rr, getSlugTemplate());
 
             LDPRS rdfSource = null;
 
@@ -230,5 +222,13 @@ public class RDFSourceMap {
 
     public void setResources(List<LDPRS> resources) {
         this.resources = resources;
+    }
+
+    public String getSlugTemplate() {
+        return slugTemplate;
+    }
+
+    public void setSlugTemplate(String slugTemplate) {
+        this.slugTemplate = slugTemplate;
     }
 }

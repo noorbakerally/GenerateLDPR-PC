@@ -122,7 +122,7 @@ public class ContainerMap extends RDFSourceMap{
         generate();
         for (Map.Entry <String,RelatedResource> rrEntry:getRelatedResources().entrySet()){
             RelatedResource rr = rrEntry.getValue();
-            String uri = IRIGenerator.getSlug(rr);
+            String uri = IRIGenerator.getSlug(rr,getSlugTemplate());
             Container c = null;
             c = new BasicContainer(uri);
             c.setRelatedResource(rr);

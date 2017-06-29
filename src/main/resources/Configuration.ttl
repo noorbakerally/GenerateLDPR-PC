@@ -5,34 +5,13 @@
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 
 data:CatalogMap a :ContainerMap;
-	:containerMap data:ContainerMapDataset;
+    :slugTemplate "{_rr.path[2]}";
 	:containerType ldp:BasicContainer;
 	:resourceMap data:CatalogResourceMap .
 
 data:CatalogResourceMap a :ResourceMap;
-    :slugTemplate "{_rr.path[3]}";
     :resourceQuery "Select * WHERE { ?x a dcat:Catalog .}";
     :graphTemplate "CONSTRUCT { ?_resource ?p ?o . } WHERE {  ?_resource ?p ?o . FILTER (?p not in (dcat:dataset)) }";
-    :linkToSource foaf:primaryTopic;
-    :dataSource data:DataSource1 .
-
-data:ContainerMapDataset a :ContainerMap;
-	:resourceMap data:DataSetResourceMap;
-	:containerMap data:ContainerMapDistribution .
-
-data:DataSetResourceMap a :ResourceMap;
-    :resourceQuery "Select * WHERE { ?_resource dcat:dataset  ?x . } LIMIT 5";
-    :graphTemplate "CONSTRUCT { ?_resource ?p ?o . } WHERE {  ?_resource ?p ?o . FILTER (?p not in (dcat:distribution)) }";
-    :linkToSource foaf:primaryTopic;
-    :dataSource data:DataSource1 .
-
-
-data:ContainerMapDistribution a :ContainerMap;
-    :resourceMap data:DistributionResourceMap .
-
-data:DistributionResourceMap a :ResourceMap;
-    :resourceQuery "Select * WHERE { ?_resource dcat:distribution  ?x . } LIMIT 5";
-    :graphTemplate "CONSTRUCT { ?_resource ?p ?o . } WHERE {  ?_resource ?p ?o . }";
     :linkToSource foaf:primaryTopic;
     :dataSource data:DataSource1 .
 

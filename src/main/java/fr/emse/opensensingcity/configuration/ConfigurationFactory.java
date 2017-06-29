@@ -137,6 +137,10 @@ public class ConfigurationFactory {
                 if (Global.getVTerm("resourceMap").equals(p)){
                     processResourceMap(rdfSourceMap,o);
                 }
+
+                if (Global.getVTerm("slugTemplate").equals(p)) {
+                    rdfSourceMap.setSlugTemplate(o);
+                }
             }
     }
 
@@ -171,11 +175,6 @@ public class ConfigurationFactory {
             if (Global.getVTerm("dataSource").equals(p)) {
                 resourceMap.addDataSource(loadDataSource(o));
             }
-
-            if (Global.getVTerm("slugTemplate").equals(p)) {
-                resourceMap.setSlugTemplate(o);
-            }
-
         }
     }
 
