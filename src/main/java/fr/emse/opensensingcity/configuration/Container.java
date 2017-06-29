@@ -103,10 +103,10 @@ public class Container extends LDPRS {
             containerMap.generateResources();
             for (LDPRS container:containerMap.getResources()){
                 ((Container)container).setContainer(this);
+                ((Container)container).sendRequest();
                 ((Container)container).processRDFSourceMaps();
                 ((Container)container).sendRequestForRDFSourceMaps();
                 ((Container)container).processContainerMaps();
-                ((Container)container).sendRequest();
             }
         }
     }
