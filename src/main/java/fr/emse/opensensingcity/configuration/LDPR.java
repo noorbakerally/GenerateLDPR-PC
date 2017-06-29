@@ -27,7 +27,7 @@ public abstract class LDPR extends Resource {
     }
 
     public String getSlug() {
-        return getIRI();
+        return slug;
     }
 
     public void setSlug(String slug) {

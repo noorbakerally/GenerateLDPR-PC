@@ -177,6 +177,7 @@ public class RDFSourceMap {
 
             rdfSource = new LDPRS(uri);
 
+
             rdfSource.setRelatedResource(rr);
             rdfSource.generateGraph();
 

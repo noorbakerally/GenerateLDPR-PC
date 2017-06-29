@@ -71,8 +71,7 @@ public class Container extends LDPRS {
         httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#RDFSource>; rel='type'");
         httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#BasicContainer>; rel='type'");
 
-        httpPost.addHeader("Slug","test"+Math.random());
-        System.out.println("Container.java SLUG "+getSlug());
+        httpPost.addHeader("Slug",getSlug());
 
         Model model = generateGraph();
         StringWriter out = new StringWriter();

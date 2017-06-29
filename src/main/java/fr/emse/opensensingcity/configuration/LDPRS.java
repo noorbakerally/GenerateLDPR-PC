@@ -22,6 +22,7 @@ public class LDPRS extends LDPR {
 
     public LDPRS(String iri) {
         super(iri);
+        setSlug(iri);
         graph = ModelFactory.createDefaultModel();
     }
 
@@ -80,13 +81,13 @@ public class LDPRS extends LDPR {
     }
 
     public void sendRequest() throws IOException {
-
         HttpClient client = HttpClientBuilder.create().build();
         HttpPost request = getResourceRequest();
-        System.out.println("LDPRS.java request "+request);
         HttpResponse response = null;
         response = client.execute(request);
-        System.out.println("LDPRS.java response "+response);
+        String location = response.getHeaders("Location")[0].getValue();
+        setIRI(location);
+
     }
 
 }
