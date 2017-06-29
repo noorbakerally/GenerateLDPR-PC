@@ -172,6 +172,10 @@ public class ConfigurationFactory {
                 resourceMap.addDataSource(loadDataSource(o));
             }
 
+            if (Global.getVTerm("slugTemplate").equals(p)) {
+                resourceMap.setSlugTemplate(o);
+            }
+
         }
     }
 

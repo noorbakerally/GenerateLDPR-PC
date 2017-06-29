@@ -10,6 +10,7 @@ data:CatalogMap a :ContainerMap;
 	:resourceMap data:CatalogResourceMap .
 
 data:CatalogResourceMap a :ResourceMap;
+    :slugTemplate "{_rr.path[3]}";
     :resourceQuery "Select * WHERE { ?x a dcat:Catalog .}";
     :graphTemplate "CONSTRUCT { ?_resource ?p ?o . } WHERE {  ?_resource ?p ?o . FILTER (?p not in (dcat:dataset)) }";
     :linkToSource foaf:primaryTopic;
