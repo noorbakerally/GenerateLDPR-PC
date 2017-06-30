@@ -162,15 +162,16 @@ public class RDFSourceMap {
         for (Map.Entry <String,RelatedResource> rrEntry:getRelatedResources().entrySet()){
             RelatedResource rr = rrEntry.getValue();
 
-            String uri = IRIGenerator.getSlug(rr, getSlugTemplate());
+
 
             LDPRS rdfSource = null;
 
-            rdfSource = new LDPRS(uri);
-
-
+            rdfSource = new LDPRS("temp");
             rdfSource.setRelatedResource(rr);
             rdfSource.generateGraph();
+
+            String slug = IRIGenerator.getSlug(rr, getSlugTemplate());
+            rdfSource.setSlug(slug);
 
             resources.add(rdfSource);
         }

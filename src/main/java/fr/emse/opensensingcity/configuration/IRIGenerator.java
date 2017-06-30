@@ -27,6 +27,8 @@ public class IRIGenerator {
     }
 
     private static String processVarTemplate(String varTemplate, RelatedResource rr) {
+        //rr.getFinalGraph().write(System.out,"TTL");
+
         URI uri = URI.create(rr.getIRI());
         if (varTemplate.contains("_rr.path[")){
             String pathStr = varTemplate.replace("_rr.path[","").replace("]","");
@@ -35,6 +37,7 @@ public class IRIGenerator {
             return String.valueOf(pathParts[path]);
         }
         return varTemplate;
+
     }
 
 
