@@ -25,6 +25,7 @@ public class IRIGenerator {
                     if (slugTemplate.charAt(j)=='}'){
                         String varTemplate = slugTemplate.substring(i+1,j);
                         String varValue = processVarTemplate(varTemplate,r);
+                        System.out.println("VarTemplate:"+varTemplate);
                         System.out.println("VarValue:"+varValue);
                         slugTemplate = slugTemplate.replace("{"+varTemplate+"}",varValue);
                         break;
@@ -192,7 +193,10 @@ public class IRIGenerator {
         for (ParseNode node:nodes.getChildren()){
             if (node.getToken().equals("_r.iri")){
                 result = iriR;
-            } else if (node.getToken().equals("<rFunPart>")){
+            } if (node.getToken().equals("_r.ppath")){
+                result = "test";
+            }
+            else if (node.getToken().equals("<rFunPart>")){
                 result = handleResourceFuncPart(iriR,node);
 
             }
@@ -292,7 +296,7 @@ public class IRIGenerator {
                 str = handleExp(node);
             } else if (node.getToken().equals("<num>")){
                 num = handleNumber(node);
-            } else if (node.getToken().equals("<delimeter>")){
+            } else if (node.getToken().equals("<string>")){
                 delimeter = node.getChildren().get(0).getToken();
                 delimeter = delimeter.substring(1,delimeter.length()-1);
             }
