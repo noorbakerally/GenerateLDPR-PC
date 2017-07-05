@@ -14,8 +14,9 @@ import java.net.URL;
  * Created by noor on 28/06/17.
  */
 public class IRIGenerator {
+    static LDPR r;
     public static String getSlug(LDPR r, String slugTemplate){
-
+        IRIGenerator.r = r;
         int i=0;
         while (i<slugTemplate.length()){
             if (slugTemplate.charAt(i)=='{'){
@@ -182,7 +183,8 @@ public class IRIGenerator {
     }
 
     private static String handleResourceFunc(ParseNode nodes) {
-        String iriR = "http://example.com/test?k1=v1&k2=v2";
+        String iriR = r.getRelatedResource().getIRI();
+
         String result = null;
         System.out.println("Function:handleResourceFunc");
 
