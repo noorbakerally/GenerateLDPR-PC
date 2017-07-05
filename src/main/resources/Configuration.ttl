@@ -3,9 +3,10 @@
 @prefix :     <http://opensensingcity.emse.fr/LDPDesignVocabulary/> .
 @prefix data:     <http://opensensingcity.emse.fr/LDPDesign/data/> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix dct: <http://purl.org/dc/terms/> .
 
 data:CatalogMap a :ContainerMap;
-    :slugTemplate "test";
+    :slugTemplate "{_r.ppath('dct:description')}";
 	:containerType ldp:BasicContainer;
 	:resourceMap data:CatalogResourceMap .
 

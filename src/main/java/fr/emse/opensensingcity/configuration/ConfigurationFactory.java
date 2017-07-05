@@ -3,6 +3,10 @@ package fr.emse.opensensingcity.configuration;
 import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.riot.RDFDataMgr;
+import org.apache.jena.riot.system.PrefixMap;
+import org.apache.jena.riot.system.PrefixMapFactory;
+import org.apache.jena.shared.PrefixMapping;
+import org.apache.jena.shared.impl.PrefixMappingImpl;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,13 +15,19 @@ import java.util.Map;
  * Created by bakerally on 5/29/17.
  */
 public class ConfigurationFactory {
-    private static Model model;
+    public static Model model;
     private static Map <String,ContainerMap> containerMaps = new HashMap<String, ContainerMap>();
     static Configuration configuration;
+    public static PrefixMapping prefixMap;
     public  static Configuration createConfiguration(String confLocation){
         configuration = new Configuration();
 
         model = RDFDataMgr.loadModel(confLocation);
+
+        prefixMap = PrefixMapping.Factory.create();
+        prefixMap.setNsPrefixes(model.getNsPrefixMap());
+
+
 
 
         //load initial container maps

@@ -1,8 +1,21 @@
 package fr.emse.opensensingcity.slugtemplate;
 import ca.uqac.lif.bullwinkle.BnfParser;
 import ca.uqac.lif.bullwinkle.ParseNode;
+import fr.emse.opensensingcity.configuration.ConfigurationFactory;
+import fr.emse.opensensingcity.configuration.Global;
 import fr.emse.opensensingcity.configuration.LDPR;
 import fr.emse.opensensingcity.configuration.RelatedResource;
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.NodeFactory;
+import org.apache.jena.query.Query;
+import org.apache.jena.query.ResultSet;
+import org.apache.jena.shared.PrefixMapping;
+import org.apache.jena.sparql.core.TriplePath;
+import org.apache.jena.sparql.path.Path;
+import org.apache.jena.sparql.path.PathFactory;
+import org.apache.jena.sparql.path.PathParser;
+import org.apache.jena.sparql.syntax.ElementPathBlock;
+import org.apache.jena.sparql.syntax.ElementTriplesBlock;
 
 import java.io.File;
 import java.io.IOException;
@@ -194,7 +207,26 @@ public class IRIGenerator {
             if (node.getToken().equals("_r.iri")){
                 result = iriR;
             } if (node.getToken().equals("_r.ppath")){
-                result = "test";
+                String ppath = nodes.getChildren().get(2).getChildren().get(0).getToken();
+                ppath = ppath.substring(1,ppath.length()-1);
+
+                Path p = PathParser.parse(ppath, ConfigurationFactory.prefixMap);
+                Query query = new Query();
+                query.setQuerySelectType();
+
+                Node oResource = NodeFactory.createURI(r.getRelatedResource().getIRI());
+                Node res = NodeFactory.createVariable("result");
+                TriplePath triplePattern = new TriplePath(oResource,p,res);
+                ElementPathBlock tp = new ElementPathBlock();
+                tp.addTriplePath(triplePattern);
+                query.setQueryPattern(tp);
+                query.setQueryResultStar(true);
+
+                ResultSet rs = Global.exeQuery(query.serialize(), r.getRelatedResource().getFinalGraph());
+                while (rs.hasNext()){
+                    String varResult = rs.next().get("?result").toString();
+                    return varResult;
+                }
             }
             else if (node.getToken().equals("<rFunPart>")){
                 result = handleResourceFuncPart(iriR,node);

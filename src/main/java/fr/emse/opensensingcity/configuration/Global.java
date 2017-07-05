@@ -5,6 +5,7 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
+import org.apache.jena.riot.system.PrefixMap;
 
 /**
  * Created by bakerally on 6/14/17.
@@ -56,5 +57,6 @@ public class Global {
     public static String getBaseURI(){
         return baseURI;
     }
+
 
 }
