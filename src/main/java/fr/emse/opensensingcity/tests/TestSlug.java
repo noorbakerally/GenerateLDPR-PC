@@ -20,7 +20,7 @@ public class TestSlug {
     }
 
     public static void test2(){
-        String slugTemplate = "{_r.iri.host}-ans";
+        String slugTemplate = "{_r.iri.path[2]}-ans";
         String iri = "";
 
         iri = "https://opendata.paris.fr/api/v2/catalog/exports/ttl";

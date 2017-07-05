@@ -261,8 +261,13 @@ public class IRIGenerator {
             }
             else if (flag.equals("host[")){
                 result = handleResourceHostPart(iri,nodes);
-
-            } else if (flag.equals("fragment")) {
+            } else if (flag.equals("path")){
+                result = iri.getPath();
+            }
+            else if (flag.equals("path[")){
+                result = handleResourcePathPart(iri,nodes);
+            }
+            else if (flag.equals("fragment")) {
                 result = iri.getFragment();
             }
         }
@@ -280,6 +285,25 @@ public class IRIGenerator {
         }
         result = getHostPart(iri.getHost(),num);
         return result;
+    }
+    private static String handleResourcePathPart(URI iri,ParseNode nodes){
+        String result = null;
+        int num = -1;
+        for (ParseNode node:nodes.getChildren()){
+            if (node.getToken().equals("<num>")){
+                num = handleNumber(node);
+            }
+        }
+        result = getPathPart(iri.getPath(),num);
+        return result;
+    }
+
+    private static String getPathPart(String path, int num) {
+        if (path.charAt(0) == '/'){
+            path = path.substring(1);
+        }
+        String pathParts [] = path.split("/");
+        return pathParts[num];
     }
 
     private static String handleResourceQueryPart(URI iri,ParseNode nodes){
