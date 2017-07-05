@@ -14,6 +14,7 @@ public abstract class LDPR extends Resource {
     String relatedResourceIRI;
     String slug;
     Container container;
+    RelatedResource relatedResource;
     public LDPR(String iri) {
         super(iri);
     }
@@ -47,4 +48,11 @@ public abstract class LDPR extends Resource {
         return iri;
     }
 
+    public RelatedResource getRelatedResource() {
+        return relatedResource;
+    }
+
+    public void setRelatedResource(RelatedResource relatedResource) {
+        this.relatedResource = relatedResource;
+    }
 }

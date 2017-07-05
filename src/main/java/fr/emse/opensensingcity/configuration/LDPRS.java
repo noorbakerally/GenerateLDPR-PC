@@ -18,7 +18,7 @@ import java.io.UnsupportedEncodingException;
 public class LDPRS extends LDPR {
 
     Model graph;
-    RelatedResource relatedResource;
+
 
     public LDPRS(String iri) {
         super(iri);

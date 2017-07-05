@@ -1,10 +1,8 @@
 package fr.emse.opensensingcity;
 
-import fr.emse.opensensingcity.configuration.Configuration;
-import fr.emse.opensensingcity.configuration.ConfigurationFactory;
-import fr.emse.opensensingcity.configuration.IRIGenerator;
-import fr.emse.opensensingcity.configuration.RelatedResource;
-import fr.emse.opensensingcity.ldprgenerator.LDPRGenerator;
+import fr.emse.opensensingcity.configuration.*;
+import fr.emse.opensensingcity.slugtemplate.IRIGenerator;
+import fr.emse.opensensingcity.tests.TestSlug;
 
 import java.io.File;
 
@@ -16,14 +14,12 @@ public class main {
         ClassLoader classLoader = main.class.getClassLoader();
         File file = new File(classLoader.getResource("Configuration.ttl").getFile());
 
-        Configuration configuration = ConfigurationFactory.createConfiguration(file.getAbsolutePath());
+        //Configuration configuration = ConfigurationFactory.createConfiguration(file.getAbsolutePath());
         //configuration.print();
-        configuration.execute();
+        //configuration.execute();
         //LDPRGenerator.sendRequest(configuration);
 
-       /* String slugTemplate = "{_rr.path[2]}-ans";
-        String iri = "https://opendata.paris.fr/api/v2/catalog/exports/ttl";
-        System.out.println(IRIGenerator.getSlug(new RelatedResource(iri),slugTemplate));*/
+        TestSlug.test2();
 
 
     }

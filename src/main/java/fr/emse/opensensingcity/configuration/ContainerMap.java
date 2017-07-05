@@ -1,19 +1,9 @@
 package fr.emse.opensensingcity.configuration;
 
+import fr.emse.opensensingcity.slugtemplate.IRIGenerator;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.jena.rdf.model.Model;
 
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -122,14 +112,16 @@ public class ContainerMap extends RDFSourceMap{
         generate();
         for (Map.Entry <String,RelatedResource> rrEntry:getRelatedResources().entrySet()){
             RelatedResource rr = rrEntry.getValue();
-            String uri = IRIGenerator.getSlug(rr,getSlugTemplate());
+
             Container c = null;
-            c = new BasicContainer(uri);
+            c = new BasicContainer("");
             c.setRelatedResource(rr);
             c.generateGraph();
             c.setRdfSourceMaps(rdfSourceMaps);
             c.setContainerMaps(containerMaps);
             c.processRDFSourceMaps();
+            String uri = IRIGenerator.getSlug(c,getSlugTemplate());
+
             resources.add(c);
         }
     }

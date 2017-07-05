@@ -1,5 +1,6 @@
 package fr.emse.opensensingcity.configuration;
 
+import fr.emse.opensensingcity.slugtemplate.IRIGenerator;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -170,7 +171,7 @@ public class RDFSourceMap {
             rdfSource.setRelatedResource(rr);
             rdfSource.generateGraph();
 
-            String slug = IRIGenerator.getSlug(rr, getSlugTemplate());
+            String slug = IRIGenerator.getSlug(rdfSource, getSlugTemplate());
             rdfSource.setSlug(slug);
 
             resources.add(rdfSource);
