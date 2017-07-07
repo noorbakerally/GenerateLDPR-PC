@@ -5,13 +5,24 @@
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 
 data:CatalogMap a :ContainerMap;
+    :containerMap data:ContainerMapDataset;
     :slugTemplate "{_r.iri.path[2]}";
 	:containerType ldp:BasicContainer;
 	:resourceMap data:CatalogResourceMap .
 
 data:CatalogResourceMap a :ResourceMap;
     :resourceQuery "Select * WHERE { ?x a dcat:Catalog .}";
-    :graphTemplate :SubjectObjectGraph;
+    :graphTemplate "CONSTRUCT { ?_resource ?p ?o . } WHERE {  ?_resource ?p ?o . FILTER (?p not in (dcat:dataset)) }";;
+    :linkToSource foaf:primaryTopic;
+    :dataSource data:DataSource1 .
+
+data:ContainerMapDataset a :ContainerMap;
+    :slugTemplate "{_r.iri.path[4]}";
+	:resourceMap data:DataSetResourceMap .
+
+data:DataSetResourceMap a :ResourceMap;
+    :resourceQuery "Select * WHERE { ?_resource dcat:dataset  ?x . } LIMIT 5";
+    :graphTemplate "CONSTRUCT { ?_resource ?p ?o . } WHERE {  ?_resource ?p ?o . FILTER (?p not in (dcat:distribution)) }";
     :linkToSource foaf:primaryTopic;
     :dataSource data:DataSource1 .
 
