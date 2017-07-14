@@ -115,7 +115,7 @@ public class Container extends LDPRS {
                 //zombie container
                 System.out.println("enters here");
                 Container c = null;
-                System.out.println("Current Container:"+getSlug());
+
                 c = new BasicContainer("");
                 String uri = IRIGenerator.getSlug(c,containerMap.getSlugTemplate());
                 c.setSlug(uri);
@@ -123,7 +123,7 @@ public class Container extends LDPRS {
                 c.setRdfSourceMaps(containerMap.getRdfSourceMaps());
                 c.setContainerMaps(containerMap.getContainerMaps());
                 c.processContainerMaps();
-                c.processRDFSourceMaps();
+                //c.processRDFSourceMaps();
                 c.sendRequest();
             }
         }

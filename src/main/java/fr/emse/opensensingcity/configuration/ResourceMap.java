@@ -10,6 +10,8 @@ import org.apache.jena.rdf.model.ModelFactory;
 import javax.xml.crypto.Data;
 import java.beans.ExceptionListener;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by noor on 26/06/17.
@@ -109,17 +111,36 @@ public class ResourceMap {
         dataSources.put(dataSource.getIRI(),dataSource);
     }
 
-    public List<String> getResources(Container parent){
+    public List<String> getResources(Container container){
         List<String> resources = new ArrayList<>();
+
 
         //iterating through all the datasoure and execute the resourceQuery
         //to get all the resources for which the corresponding LDPR has to be created
         for (Map.Entry <String,DataSource> dataSourceEntry:dataSources.entrySet()){
             DataSource ds = dataSourceEntry.getValue();
 
-            if (resourceQuery.contains("?_resource")){
-                resourceQuery = resourceQuery.replace("?_resource","<"+parent.getRelatedResource().getIRI()+">");
+            Pattern p = Pattern.compile("_+resource");
+            Matcher m = p.matcher (resourceQuery);
+            while (m.find()){
+                String rRef = m.group();
+                String iri = null;
+                int numUnderScore = rRef.lastIndexOf("_")+1;
+
+                if (numUnderScore == 1){
+                    iri = container.getRelatedResource().getIRI();
+                } else if (numUnderScore > 1) {
+                    Container r = container;
+                    while (numUnderScore > 1){
+                        r = r.getContainer();
+                        numUnderScore--;
+                    }
+                    iri = r.getRelatedResource().getIRI();
+                }
+                resourceQuery = resourceQuery.replace("?"+rRef,"<"+iri+">");
+                System.out.println(resourceQuery);
             }
+
 
             //parent bindings will need to be added here
             ResultSet rs = ds.executeResourceQuery(resourceQuery);

@@ -25,7 +25,7 @@ data:ContainerMapDatasets a :ContainerMap;
 	:resourceMap data:DataSetResourceMap .
 
 data:DataSetResourceMap a :ResourceMap;
-    :resourceQuery "Select * WHERE { ?___resource dcat:dataset  ?x . } LIMIT 5";
+    :resourceQuery "Select * WHERE { ?__resource dcat:dataset  ?x . } LIMIT 5";
     :graphTemplate "CONSTRUCT { ?_resource ?p ?o . } WHERE {  ?_resource ?p ?o . FILTER (?p not in (dcat:distribution)) }";
     :linkToSource foaf:primaryTopic;
     :dataSource data:DataSource1 .
