@@ -116,13 +116,13 @@ public class Container extends LDPRS {
                 System.out.println("enters here");
                 Container c = null;
                 c = new BasicContainer("");
+                String uri = IRIGenerator.getSlug(c,containerMap.getSlugTemplate());
+                c.setSlug(uri);
+                c.setContainer(this);
                 c.setRdfSourceMaps(containerMap.getRdfSourceMaps());
                 c.setContainerMaps(containerMap.getContainerMaps());
                 c.processContainerMaps();
                 c.processRDFSourceMaps();
-                String uri = IRIGenerator.getSlug(c,containerMap.getSlugTemplate());
-                c.setSlug(uri);
-                c.setContainer(this);
                 c.sendRequest();
             }
         }
