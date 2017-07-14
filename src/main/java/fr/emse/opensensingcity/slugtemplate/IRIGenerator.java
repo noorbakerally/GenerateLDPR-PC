@@ -28,8 +28,9 @@ import java.net.URL;
  */
 public class IRIGenerator {
     static LDPR r;
+    static int level = 0;
+
     public static String getSlug(LDPR r, String slugTemplate){
-        System.out.println(slugTemplate);
         IRIGenerator.r = r;
         int i=0;
         while (i<slugTemplate.length()){

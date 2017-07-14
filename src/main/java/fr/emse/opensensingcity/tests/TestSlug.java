@@ -1,9 +1,16 @@
 package fr.emse.opensensingcity.tests;
 
+import ca.uqac.lif.bullwinkle.BnfParser;
+import ca.uqac.lif.bullwinkle.ParseNode;
 import fr.emse.opensensingcity.configuration.Container;
 import fr.emse.opensensingcity.configuration.LDPRS;
 import fr.emse.opensensingcity.configuration.RelatedResource;
 import fr.emse.opensensingcity.slugtemplate.IRIGenerator;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 /**
  * Created by noor on 05/07/17.
@@ -40,5 +47,32 @@ public class TestSlug {
 
         String slug = IRIGenerator.getSlug(ldprs,slugTemplate);
         System.out.println(slug);
+    }
+
+    public static void test3(String varTemplate){
+        String result = null;
+        //URL bnfURL = IRIGenerator.class.getResource("/TestSlugTemplate.bnf");
+        URL bnfURL = IRIGenerator.class.getResource("/SlugTemplate.bnf");
+        File bnffile = null;
+        try {
+            bnffile = new File(bnfURL.toURI());
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        BnfParser parser = null;
+        try {
+            parser = new BnfParser(bnffile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (BnfParser.InvalidGrammarException e) {
+            e.printStackTrace();
+        }
+        try {
+            ParseNode rootNode = parser.parse(varTemplate);
+            System.out.println(rootNode);
+
+        } catch (BnfParser.ParseException e) {
+            e.printStackTrace();
+        }
     }
 }
