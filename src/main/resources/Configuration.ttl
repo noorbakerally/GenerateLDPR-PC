@@ -17,18 +17,7 @@ data:CatalogResourceMap a :ResourceMap;
     :dataSource data:DataSource1 .
 
 data:ContainerMapDataset a :ContainerMap;
-    :slugTemplate "datasets";
-    :containerMap data:ContainerMapDatasets .
-
-data:ContainerMapDatasets a :ContainerMap;
-    :slugTemplate "{_r.iri.path[4]}";
-	:resourceMap data:DataSetResourceMap .
-
-data:DataSetResourceMap a :ResourceMap;
-    :resourceQuery "Select * WHERE { ?_resource dcat:dataset  ?x . } LIMIT 5";
-    :graphTemplate "CONSTRUCT { ?_resource ?p ?o . } WHERE {  ?_resource ?p ?o . FILTER (?p not in (dcat:distribution)) }";
-    :linkToSource foaf:primaryTopic;
-    :dataSource data:DataSource1 .
+    :slugTemplate "datasets" .
 
 data:DataSource1 a :DataSource;
     :location "/home/noor/Downloads/paris.ttl";

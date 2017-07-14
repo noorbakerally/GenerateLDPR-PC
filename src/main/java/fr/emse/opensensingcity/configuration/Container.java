@@ -1,5 +1,6 @@
 package fr.emse.opensensingcity.configuration;
 
+import fr.emse.opensensingcity.slugtemplate.IRIGenerator;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.jena.rdf.model.Model;
@@ -100,13 +101,29 @@ public class Container extends LDPRS {
         for (Map.Entry <String,ContainerMap> containerMapEntry:containerMaps.entrySet()){
             ContainerMap containerMap = containerMapEntry.getValue();
             containerMap.setContainer(this);
-            containerMap.generateResources();
-            for (LDPRS container:containerMap.getResources()){
-                ((Container)container).setContainer(this);
-                ((Container)container).sendRequest();
-                ((Container)container).processRDFSourceMaps();
-                ((Container)container).sendRequestForRDFSourceMaps();
-                ((Container)container).processContainerMaps();
+
+            if (containerMap.getResourceMaps().size() > 0){
+                containerMap.generateResources();
+                for (LDPRS container:containerMap.getResources()){
+                    ((Container)container).setContainer(this);
+                    ((Container)container).sendRequest();
+                    ((Container)container).processRDFSourceMaps();
+                    ((Container)container).sendRequestForRDFSourceMaps();
+                    ((Container)container).processContainerMaps();
+                }
+            } else {
+                //zombie container
+                System.out.println("enters here");
+                Container c = null;
+                c = new BasicContainer("");
+                c.setRdfSourceMaps(containerMap.getRdfSourceMaps());
+                c.setContainerMaps(containerMap.getContainerMaps());
+                c.processContainerMaps();
+                c.processRDFSourceMaps();
+                String uri = IRIGenerator.getSlug(c,containerMap.getSlugTemplate());
+                c.setSlug(uri);
+                c.setContainer(this);
+                c.sendRequest();
             }
         }
     }

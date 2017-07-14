@@ -18,6 +18,8 @@ public class main {
         //configuration.print();
         configuration.execute();
 
+
+
         //LDPRGenerator.sendRequest(configuration);
 
         //TestSlug.test3("__r.iri");

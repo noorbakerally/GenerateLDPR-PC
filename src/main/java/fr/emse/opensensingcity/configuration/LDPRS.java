@@ -31,12 +31,12 @@ public class LDPRS extends LDPR {
         org.apache.jena.rdf.model.Resource container = graph.createResource("");
 
         //create a resource for the related resource
+        if (relatedResource == null){
+            return graph;
+        }
         org.apache.jena.rdf.model.Resource rResource = graph.createResource(relatedResource.getIRI());
-
-
         graph.add(relatedResource.getFinalGraph());
         graph.createResource("").addProperty(FOAF.primaryTopic,rResource);
-
         return graph;
     }
 
