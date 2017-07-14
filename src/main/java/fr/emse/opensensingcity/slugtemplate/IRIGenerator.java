@@ -88,7 +88,7 @@ public class IRIGenerator {
     }
 
     private static String handleQueryPart(ParseNode nodes) {
-        System.out.println("Function:handleQueryPart");
+        //System.out.println("Function:handleQueryPart");
 
         String iriStr = null;
         int num = -1;
@@ -99,7 +99,7 @@ public class IRIGenerator {
         for (ParseNode node:nodes.getChildren()){
             if (node.getToken().equals("<exp>")){
                 iriStr = handleExp(node);
-                System.out.println("IRI:"+iriStr);
+                //System.out.println("IRI:"+iriStr);
             } else if (node.getToken().equals("<num>")){
                 num = handleNumber(node);
             } else if (node.getToken().equals("<queryFuncPart>")){
@@ -136,7 +136,7 @@ public class IRIGenerator {
         return result;
     }
     private static String handleURIFunc(ParseNode nodes) {
-        System.out.println("Function:handleURIFunc");
+        //System.out.println("Function:handleURIFunc");
 
         String iriStr = null;
         String result = null;
@@ -146,7 +146,7 @@ public class IRIGenerator {
         for (ParseNode node:nodes.getChildren()){
             if (node.getToken().equals("<exp>")){
                 iriStr = handleExp(node);
-                System.out.println("IRI:"+iriStr);
+                //System.out.println("IRI:"+iriStr);
             } else if (node.getToken().equals("<URIFlag>")){
                 flag = node.getChildren().get(0).getToken();
             }
@@ -168,7 +168,7 @@ public class IRIGenerator {
         } else if (flag.equals("FRAGMENT")){
             result = iri.getFragment();
         }
-        System.out.println("handleURIFunc result:"+result);
+        //System.out.println("handleURIFunc result:"+result);
         return result;
     }
 
@@ -181,7 +181,7 @@ public class IRIGenerator {
     }
 
     private static String handleExp(ParseNode node) {
-        System.out.println("Function:handleExp");
+        //System.out.println("Function:handleExp");
         String result = null;
         //System.out.println(node.toString());
         ParseNode rootChild = node.getChildren().get(0);
@@ -200,7 +200,7 @@ public class IRIGenerator {
         String iriR = null;
 
         String result = null;
-        System.out.println("Function:handleResourceFunc");
+        //System.out.println("Function:handleResourceFunc");
 
         for (ParseNode node:nodes.getChildren()){
 
@@ -247,12 +247,12 @@ public class IRIGenerator {
 
             }
         }
-        System.out.println("handleResourceFunc:"+result);
+        //System.out.println("handleResourceFunc:"+result);
         return result;
     }
 
     private static String handleResourceFuncPart(String resource,ParseNode nodes) {
-        System.out.println("Function:handleResourceFuncPart");
+        //System.out.println("Function:handleResourceFuncPart");
         String result = null;
         URI iri = URI.create(resource);
         for (ParseNode node:nodes.getChildren()){
@@ -285,7 +285,7 @@ public class IRIGenerator {
                 result = iri.getFragment();
             }
         }
-        System.out.println("handleResourceFuncPart:"+result);
+        //System.out.println("handleResourceFuncPart:"+result);
         return result;
     }
 
@@ -336,11 +336,11 @@ public class IRIGenerator {
     }
 
     private static String handleBuiltInCall(ParseNode node) {
-        System.out.println("Function:handleBuiltInCall");
+        //System.out.println("Function:handleBuiltInCall");
 
         String result = null;
         ParseNode rootChild = node.getChildren().get(0);
-        System.out.println(rootChild.getToken());
+        //System.out.println(rootChild.getToken());
         if (rootChild.getToken().equals("QueryPart")){
             result = handleQueryPart(node);
         } else if (rootChild.getToken().equals("URIPart")){
@@ -376,7 +376,7 @@ public class IRIGenerator {
     }
 
     private static String handlePathPart(ParseNode nodes) {
-        System.out.println("Function:handlePathPart");
+        //System.out.println("Function:handlePathPart");
 
         String iriStr = null;
         String result = null;
@@ -385,21 +385,21 @@ public class IRIGenerator {
         for (ParseNode node:nodes.getChildren()){
             if (node.getToken().equals("<exp>")){
                 iriStr = handleExp(node);
-                System.out.println("IRI:"+iriStr);
+                //System.out.println("IRI:"+iriStr);
             } else if (node.getToken().equals("<num>")){
                 num = handleNumber(node);
-                System.out.println("Num:"+num);
+                //System.out.println("Num:"+num);
             }
         }
         URI iri = URI.create(iriStr);
         String pathParts[] = iri.getPath().split("/");
         result = pathParts[num];
-        System.out.println("handlePathPart result:"+result);
+        //System.out.println("handlePathPart result:"+result);
         return result;
     }
 
     private static String handleHostPart(ParseNode nodes) {
-        System.out.println("Function:handleHostPart");
+        //System.out.println("Function:handleHostPart");
 
         String iriStr = null;
         String result = null;
@@ -408,22 +408,22 @@ public class IRIGenerator {
         for (ParseNode node:nodes.getChildren()){
             if (node.getToken().equals("<exp>")){
                 iriStr = handleExp(node);
-                System.out.println("IRI:"+iriStr);
+                //System.out.println("IRI:"+iriStr);
             } else if (node.getToken().equals("<num>")){
                 num = handleNumber(node);
-                System.out.println("Num:"+num);
+                //System.out.println("Num:"+num);
             }
         }
         URI iri = URI.create(iriStr);
         result = getHostPart(iri.getHost(),num);
-        System.out.println("handleHostPart result:"+result);
+        //System.out.println("handleHostPart result:"+result);
         return result;
     }
 
     static String getHostPart(String host, int num){
         String hostParts[] = host.split("\\.");
         String result = hostParts[hostParts.length - 1 - num];
-        return result;
+        return result;  
     }
 
 

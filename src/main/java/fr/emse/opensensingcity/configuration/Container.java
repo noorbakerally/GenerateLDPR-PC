@@ -115,6 +115,7 @@ public class Container extends LDPRS {
                 //zombie container
                 System.out.println("enters here");
                 Container c = null;
+                System.out.println("Current Container:"+getSlug());
                 c = new BasicContainer("");
                 String uri = IRIGenerator.getSlug(c,containerMap.getSlugTemplate());
                 c.setSlug(uri);
