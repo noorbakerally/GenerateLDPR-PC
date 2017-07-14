@@ -49,6 +49,7 @@ public class TestSlug {
         System.out.println(slug);
     }
 
+
     public static void test3(String varTemplate){
         String result = null;
         //URL bnfURL = IRIGenerator.class.getResource("/TestSlugTemplate.bnf");
@@ -74,5 +75,28 @@ public class TestSlug {
         } catch (BnfParser.ParseException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void testHierarchicalSlug(){
+        String slugTemplate = "{__r.iri}";
+        String iri = "";
+
+        iri = "https://opendata.paris.fr/api/v2/catalog1/exports/ttl";
+        Container c1 = new Container("");
+        c1.setRelatedResource(new RelatedResource(iri));
+
+        iri = "https://opendata.paris.fr/api/v2/catalog2/datasets/adresse_paris";
+        Container c2 = new Container("");
+        c2.setRelatedResource(new RelatedResource(iri));
+        c2.setContainer(c1);
+
+        iri = "https://opendata.paris.fr/api/v2/catalog3/datasets/adresse_paris-csv";
+        LDPRS ldprs = new LDPRS("");
+        ldprs.setRelatedResource(new RelatedResource(iri));
+        ldprs.setContainer(c2);
+
+
+        String slug = IRIGenerator.getSlug(ldprs,slugTemplate);
+        System.out.println("Slug Answer:"+slug);
     }
 }

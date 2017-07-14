@@ -20,8 +20,8 @@ public class main {
 
         //LDPRGenerator.sendRequest(configuration);
 
-        TestSlug.test3("__r.ppath('test')");
-
+        TestSlug.test3("__r.iri");
+        //TestSlug.testHierarchicalSlug();
 
     }
 }

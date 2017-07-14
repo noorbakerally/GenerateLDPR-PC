@@ -72,6 +72,7 @@ public class IRIGenerator {
         }
         try {
             ParseNode rootNode = parser.parse(varTemplate);
+            System.out.println("VarTemplate:"+varTemplate);
             result = handleRootNode(rootNode);
         } catch (BnfParser.ParseException e) {
             e.printStackTrace();
