@@ -87,6 +87,7 @@ public class LDPRS extends LDPR {
         response = client.execute(request);
         System.out.println("LDPRS.java Request:"+request+" Reply:"+response);
         String location = response.getHeaders("Location")[0].getValue();
+        System.out.println("LDPRS.java location:"+location);
         setIRI(location);
     }
 
