@@ -58,23 +58,4 @@ public class LDPRGenerator {
         }
         return httpPost;
     }
-
-    /*public static HttpPost getResourceRequest(Member member,String containerIRI){
-        HttpPost httpPost = new HttpPost(containerIRI);
-        httpPost.addHeader("Content-Type","text/turtle");
-        httpPost.addHeader("Slug",member.getIRI().replace(baseURI,""));
-
-        System.out.println("creating "+member.getIRI());
-
-        Model model = member.generateGraph();
-        StringWriter out = new StringWriter();
-        model.write(out, "TTL");
-        try {
-            httpPost.setEntity(new StringEntity(out.toString()));
-            //System.out.println(out.toString());
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return httpPost;
-    }*/
 }
