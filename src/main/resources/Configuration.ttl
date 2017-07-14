@@ -6,7 +6,7 @@
 
 data:CatalogMap a :ContainerMap;
     :containerMap data:ContainerMapDataset;
-    :slugTemplate "{_r.iri.path[2]}";
+    :slugTemplate "paris-{_r.iri.path[2]}";
 	:containerType ldp:BasicContainer;
 	:resourceMap data:CatalogResourceMap .
 
@@ -17,6 +17,10 @@ data:CatalogResourceMap a :ResourceMap;
     :dataSource data:DataSource1 .
 
 data:ContainerMapDataset a :ContainerMap;
+    :slugTemplate "datasets";
+    :containerMap data:ContainerMapDatasets .
+
+data:ContainerMapDatasets a :ContainerMap;
     :slugTemplate "{_r.iri.path[4]}";
 	:resourceMap data:DataSetResourceMap .
 

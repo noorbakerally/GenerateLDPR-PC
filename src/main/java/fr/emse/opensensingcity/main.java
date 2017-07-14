@@ -14,14 +14,14 @@ public class main {
         ClassLoader classLoader = main.class.getClassLoader();
         File file = new File(classLoader.getResource("Configuration.ttl").getFile());
 
-        //Configuration configuration = ConfigurationFactory.createConfiguration(file.getAbsolutePath());
+        Configuration configuration = ConfigurationFactory.createConfiguration(file.getAbsolutePath());
         //configuration.print();
-        //configuration.execute();
+        configuration.execute();
 
         //LDPRGenerator.sendRequest(configuration);
 
         //TestSlug.test3("__r.iri");
-        TestSlug.testHierarchicalSlug("{_r.iri.path[4]}");
+        //TestSlug.testHierarchicalSlug("{_r.iri.path[4]}");
 
     }
 }
