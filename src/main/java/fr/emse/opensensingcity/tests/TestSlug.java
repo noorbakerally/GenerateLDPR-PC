@@ -77,8 +77,8 @@ public class TestSlug {
         }
     }
 
-    public static void testHierarchicalSlug(){
-        String slugTemplate = "{__r.iri}";
+    public static void testHierarchicalSlug(String slugTemplate){
+
         String iri = "";
 
         iri = "https://opendata.paris.fr/api/v2/catalog1/exports/ttl";

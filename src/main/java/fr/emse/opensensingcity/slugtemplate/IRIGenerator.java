@@ -40,8 +40,6 @@ public class IRIGenerator {
                     if (slugTemplate.charAt(j)=='}'){
                         String varTemplate = slugTemplate.substring(i+1,j);
                         String varValue = processVarTemplate(varTemplate,r);
-                        System.out.println("VarTemplate:"+varTemplate);
-                        System.out.println("VarValue:"+varValue);
                         slugTemplate = slugTemplate.replace("{"+varTemplate+"}",varValue);
                         break;
                     }
@@ -72,7 +70,6 @@ public class IRIGenerator {
         }
         try {
             ParseNode rootNode = parser.parse(varTemplate);
-            System.out.println("VarTemplate:"+varTemplate);
             result = handleRootNode(rootNode);
         } catch (BnfParser.ParseException e) {
             e.printStackTrace();
@@ -200,16 +197,30 @@ public class IRIGenerator {
     }
 
     private static String handleResourceFunc(ParseNode nodes) {
-        String iriR = r.getRelatedResource().getIRI();
+        String iriR = null;
 
         String result = null;
         System.out.println("Function:handleResourceFunc");
 
-
         for (ParseNode node:nodes.getChildren()){
-            if (node.getToken().equals("_r.iri")){
+
+            if (node.getToken().contains("<r>")){
+                String rStr = node.getChildren().get(0).getToken();
+                int numUnder = rStr.lastIndexOf("_") -1 ;
+                while (numUnder>=0){
+                    r = r.getContainer();
+                    numUnder--;
+                }
+                iriR = r.getRelatedResource().getIRI();
+            }
+
+            if (node.getToken().contains("iri")){
                 result = iriR;
-            } if (node.getToken().equals("_r.ppath")){
+
+            }
+
+            if (node.getToken().equals("ppath")){
+
                 String ppath = nodes.getChildren().get(2).getChildren().get(0).getToken();
                 ppath = ppath.substring(1,ppath.length()-1);
 

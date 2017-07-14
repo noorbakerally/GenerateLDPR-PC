@@ -20,8 +20,8 @@ public class main {
 
         //LDPRGenerator.sendRequest(configuration);
 
-        TestSlug.test3("__r.iri");
-        //TestSlug.testHierarchicalSlug();
+        //TestSlug.test3("__r.iri");
+        TestSlug.testHierarchicalSlug("{_r.iri.path[4]}");
 
     }
 }
