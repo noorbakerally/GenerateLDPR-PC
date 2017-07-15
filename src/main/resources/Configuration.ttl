@@ -5,35 +5,23 @@
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 
 data:CatalogMap a :ContainerMap;
-    :containerMap data:ContainerMapDataset;
-    :slugTemplate "paris-{_r.iri.path[2]}";
+    :slugTemplate "{_r.iri.path[4]}";
 	:containerType ldp:BasicContainer;
+	:nonRDFSourceMap data:distributionMap;
 	:resourceMap data:CatalogResourceMap .
 
 data:CatalogResourceMap a :ResourceMap;
-    :resourceQuery "Select * WHERE { ?x a dcat:Catalog .}";
+    :resourceQuery "Select * WHERE { ?x a dcat:Distribution .} LIMIT 2";
     :graphTemplate "CONSTRUCT { ?_resource ?p ?o . } WHERE {  ?_resource ?p ?o . FILTER (?p not in (dcat:dataset)) }";;
     :linkToSource foaf:primaryTopic;
     :dataSource data:DataSource1 .
 
-data:ContainerMapDataset a :ContainerMap;
-    :slugTemplate "datasets";
-    :containerMap data:ContainerMapDatasets .
+data:distributionMap a :NonRDFSourceMap;
+    :resourceMap data:distributionResourceMap .
 
-data:ContainerMapDatasets a :ContainerMap;
-    :slugTemplate "{_r.iri.path[4]}";
-    :containerMap data:ContainerMapDistribution;
-	:resourceMap data:DataSetResourceMap .
-
-data:ContainerMapDistribution a :ContainerMap;
-    :slugTemplate "distributions" .
-
-data:DataSetResourceMap a :ResourceMap;
-    :resourceQuery "Select * WHERE { ?__resource dcat:dataset  ?x . } LIMIT 5";
-    :graphTemplate "CONSTRUCT { ?_resource ?p ?o . } WHERE {  ?_resource ?p ?o . FILTER (?p not in (dcat:distribution)) }";
-    :linkToSource foaf:primaryTopic;
+data:distributionResourceMap a :ResourceMap;
+    :resourceQuery "Select * WHERE { ?_resource dcat:accessURL ?x .}";
     :dataSource data:DataSource1 .
-
 
 data:DataSource1 a :DataSource;
     :location "/home/noor/Downloads/paris.ttl";
