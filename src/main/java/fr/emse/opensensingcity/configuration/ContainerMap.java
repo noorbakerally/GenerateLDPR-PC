@@ -127,15 +127,18 @@ public class ContainerMap extends RDFSourceMap{
             c.generateGraph();
 
             c.setRdfSourceMaps(rdfSourceMaps);
-            
+            c.setContainerMaps(containerMaps);
+            c.processRDFSourceMaps();
+
+            //adding nonRDFSourceMaps
             for (Map.Entry <String,NonRDFSourceMap> cNonRDFSourceMap:nonrdfSourceMaps.entrySet()){
                 NonRDFSourceMap nonRDFSourceMap = cNonRDFSourceMap.getValue();
                 NonRDFSourceMap newNonRDFSourceMap = (NonRDFSourceMap)nonRDFSourceMap.copy();
                 c.addNonRDFSourceMap(newNonRDFSourceMap);
             }
 
-            c.setContainerMaps(containerMaps);
-            c.processRDFSourceMaps();
+
+
 
             String uri = IRIGenerator.getSlug(c,getSlugTemplate());
             c.setSlug(uri);

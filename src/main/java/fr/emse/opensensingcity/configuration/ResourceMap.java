@@ -111,8 +111,12 @@ public class ResourceMap {
         dataSources.put(dataSource.getIRI(),dataSource);
     }
 
+
     public List<String> getResources(Container container){
         List<String> resources = new ArrayList<>();
+        String finalQuery = resourceQuery;
+
+
 
 
         //iterating through all the datasoure and execute the resourceQuery
@@ -137,15 +141,17 @@ public class ResourceMap {
                     }
                     iri = r.getRelatedResource().getIRI();
                 }
-                resourceQuery = resourceQuery.replace("?"+rRef,"<"+iri+">");
+
+
+                finalQuery = resourceQuery.replace("?"+rRef,"<"+iri+">");
             }
 
-            if (container !=null && container.getSlug() != null){
-                System.out.println("ResourceMap.java Container: "+container.getSlug()+"Query:"+resourceQuery);
-            }
+            /*if (container !=null && container.getSlug() != null){
+                System.out.println("==> ResourceMap.java Container: "+container.getRelatedResource().getIRI()+" Query:"+finalQuery);
+            }*/
 
             //parent bindings will need to be added here
-            ResultSet rs = ds.executeResourceQuery(resourceQuery);
+            ResultSet rs = ds.executeResourceQuery(finalQuery);
 
             //iterating through all the solutions and
             //get the resourse
