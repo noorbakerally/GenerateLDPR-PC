@@ -28,4 +28,10 @@ public abstract class SourceMap {
     public void setResources(List<LDPR> resources) {
         this.resources = resources;
     }
+
+    public ResourceMap addResourceMap(String iri) {
+        ResourceMap newResourceMap = new ResourceMap(iri);
+        resourceMaps.put(iri,newResourceMap);
+        return newResourceMap;
+    }
 }

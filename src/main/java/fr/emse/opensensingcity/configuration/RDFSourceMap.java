@@ -47,11 +47,7 @@ public class RDFSourceMap extends SourceMap {
         this.constant = constant;
     }
 
-    public ResourceMap addResourceMap(String iri) {
-        ResourceMap newResourceMap = new ResourceMap(iri);
-        resourceMaps.put(iri,newResourceMap);
-        return newResourceMap;
-    }
+
 
     public String toString(int level) {
 

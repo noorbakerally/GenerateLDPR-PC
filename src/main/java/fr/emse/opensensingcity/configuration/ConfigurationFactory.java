@@ -165,7 +165,7 @@ public class ConfigurationFactory {
 
 
             if (Global.getVTerm("resourceMap").equals(p)){
-                //processResourceMap(NonRDFSourceMap,o);
+                processResourceMap(NonRDFSourceMap,o);
             }
 
             if (Global.getVTerm("slugTemplate").equals(p)) {
@@ -176,7 +176,7 @@ public class ConfigurationFactory {
 
 
     private static void loadRDFSourceMaps(RDFSourceMap rdfSourceMap){
-        //load all RDFSourceMap
+            //load all RDFSourceMap
 
             String rdfSourceMapIRI = rdfSourceMap.getIRI();
 
@@ -205,8 +205,8 @@ public class ConfigurationFactory {
     }
 
 
-    private static void processResourceMap(RDFSourceMap currentRDFSourceMap, String resourceMapIRI) {
-        ResourceMap resourceMap = currentRDFSourceMap.addResourceMap(resourceMapIRI);
+    private static void processResourceMap(SourceMap sourceMap, String resourceMapIRI) {
+        ResourceMap resourceMap = sourceMap.addResourceMap(resourceMapIRI);
 
         String ResourceMapQuery = "SELECT DISTINCT * \n" +
                 "WHERE { " +
