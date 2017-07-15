@@ -1,4 +1,4 @@
-@base <http://localhost:8888/> .
+@base <http://localhost:8080/marmotta/ldp> .
 @prefix ldp:     <http://www.w3.org/ns/ldp#>.
 @prefix :     <http://opensensingcity.emse.fr/LDPDesignVocabulary/> .
 @prefix data:     <http://opensensingcity.emse.fr/LDPDesign/data/> .
@@ -17,6 +17,7 @@ data:CatalogResourceMap a :ResourceMap;
     :dataSource data:DataSource1 .
 
 data:distributionMap a :NonRDFSourceMap;
+    :slugTemplate "file";
     :resourceMap data:distributionResourceMap .
 
 data:distributionResourceMap a :ResourceMap;

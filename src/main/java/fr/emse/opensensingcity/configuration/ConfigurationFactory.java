@@ -76,8 +76,13 @@ public class ConfigurationFactory {
         //get RDFSourceMaps
         processContainerRDFSourceMaps(containerMap.getIRI());
 
+        //get NonRDFSourceMaps
+        processContainerNonRDFSourceMaps(containerMap.getIRI());
+
         //load as RDFSourceMap
         loadRDFSourceMaps(containerMap);
+
+
 
 
 
@@ -137,7 +142,7 @@ public class ConfigurationFactory {
         ResultSet rs = Global.exeQuery(NonRDFSourceMapQuery, model);
         while (rs.hasNext()){
             String NonRdfSourceMapIRI = rs.next().get("?nonrdfSourceMap").toString();
-            containerMap.addRDFSourceMap(NonRdfSourceMapIRI);
+            containerMap.addNonRDFSourceMap(NonRdfSourceMapIRI);
         }
         for (Map.Entry <String,NonRDFSourceMap> nonRDFSourceMap:containerMap.getNonRdfSourceMaps().entrySet()){
             String nonRdfSourceMapIRI = nonRDFSourceMap.getKey();

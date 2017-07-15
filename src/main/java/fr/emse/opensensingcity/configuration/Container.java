@@ -21,7 +21,7 @@ public class Container extends LDPRS {
 
     Map<String,RDFSourceMap> rdfSourceMaps = new HashMap<String, RDFSourceMap>();
     Map<String,ContainerMap> containerMaps = new HashMap<String, ContainerMap>();
-    Map<String,RDFSourceMap> nonrdfSourceMaps = new HashMap<String, RDFSourceMap>();
+    Map<String,NonRDFSourceMap> nonrdfSourceMaps = new HashMap<String, NonRDFSourceMap>();
 
     public Container(String containerIRI) {
         super(containerIRI);
@@ -61,6 +61,14 @@ public class Container extends LDPRS {
         }
     }
 
+    public void processNonRDFSourceMaps() {
+        for (Map.Entry <String,NonRDFSourceMap> nonRdfSourceMapEntry:nonrdfSourceMaps.entrySet()){
+            NonRDFSourceMap nonRdfSourceMap = nonRdfSourceMapEntry.getValue();
+            nonRdfSourceMap.setContainer(this);
+            nonRdfSourceMap.generateResources();
+        }
+    }
+
     public void sendRequestForRDFSourceMaps() throws IOException {
         for (Map.Entry <String,RDFSourceMap> rdfSourceMapEntry:rdfSourceMaps.entrySet()){
             RDFSourceMap rdfSourceMap = rdfSourceMapEntry.getValue();
@@ -68,6 +76,18 @@ public class Container extends LDPRS {
                 ldprs = (LDPRS)ldprs;
                 ldprs.setContainer(this);
                 ((LDPRS)ldprs).sendRequest();
+            }
+        }
+    }
+
+    public void sendRequestForNonRDFSourceMaps() throws IOException {
+        System.out.println("enters here:"+nonrdfSourceMaps.size());
+        for (Map.Entry <String,NonRDFSourceMap> nonRdfSourceMapEntry:nonrdfSourceMaps.entrySet()){
+            NonRDFSourceMap nonRdfSourceMap = nonRdfSourceMapEntry.getValue();
+            for (LDPR ldpnr:nonRdfSourceMap.getResources()){
+                ldpnr = (LDPNR)ldpnr;
+                ldpnr.setContainer(this);
+                ((LDPNR)ldpnr).sendRequest();
             }
         }
     }
@@ -110,7 +130,9 @@ public class Container extends LDPRS {
                     ((Container)container).setContainer(this);
                     ((Container)container).sendRequest();
                     ((Container)container).processRDFSourceMaps();
+                    ((Container)container).processNonRDFSourceMaps();
                     ((Container)container).sendRequestForRDFSourceMaps();
+                    ((Container)container).sendRequestForNonRDFSourceMaps();
                     ((Container)container).processContainerMaps();
                 }
             } else {
@@ -132,5 +154,11 @@ public class Container extends LDPRS {
         }
     }
 
+    public Map<String, NonRDFSourceMap> getNonrdfSourceMaps() {
+        return nonrdfSourceMaps;
+    }
 
+    public void setNonrdfSourceMaps(Map<String, NonRDFSourceMap> nonrdfSourceMaps) {
+        this.nonrdfSourceMaps = nonrdfSourceMaps;
+    }
 }

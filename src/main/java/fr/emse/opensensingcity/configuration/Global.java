@@ -11,7 +11,7 @@ import org.apache.jena.riot.system.PrefixMap;
  * Created by bakerally on 6/14/17.
  */
 public class Global {
-    static String  baseURI = "http://localhost:8888";
+    static String  baseURI = "http://localhost:8080/marmotta/ldp";
     public static String vocabularyPrefix = "http://opensensingcity.emse.fr/LDPDesignVocabulary/";
 
     public static String getVTerm(String lname){

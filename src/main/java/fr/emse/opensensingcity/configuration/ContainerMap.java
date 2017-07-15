@@ -125,9 +125,13 @@ public class ContainerMap extends RDFSourceMap{
             c = new BasicContainer("");
             c.setRelatedResource(rr);
             c.generateGraph();
+
             c.setRdfSourceMaps(rdfSourceMaps);
+            c.setNonrdfSourceMaps(nonrdfSourceMaps);
             c.setContainerMaps(containerMaps);
+
             c.processRDFSourceMaps();
+
             String uri = IRIGenerator.getSlug(c,getSlugTemplate());
             c.setSlug(uri);
             resources.add(c);

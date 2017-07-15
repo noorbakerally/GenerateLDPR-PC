@@ -179,8 +179,8 @@ public class RDFSourceMap extends SourceMap {
     }
 
     public static HttpPost getResourceRequest(LDPRS ldprs){
-        String baseURI = "http://localhost:8888/";
-        HttpPost httpPost = new HttpPost(baseURI);
+
+        HttpPost httpPost = new HttpPost(Global.baseURI);
 
         httpPost.addHeader("Content-Type","text/turtle");
         httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#Resource>; rel='type'");
