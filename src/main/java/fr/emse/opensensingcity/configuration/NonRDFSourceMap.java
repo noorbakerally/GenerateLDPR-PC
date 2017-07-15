@@ -132,4 +132,17 @@ public class NonRDFSourceMap extends SourceMap {
     public void setRelatedResources(Map<String, RelatedResource> relatedResources) {
         this.relatedResources = relatedResources;
     }
+
+    @Override
+    public SourceMap copy() {
+        NonRDFSourceMap newObject = new NonRDFSourceMap(getIRI());
+
+        newObject.IRI = IRI;
+        newObject.slugTemplate = slugTemplate;
+        newObject.constant = constant;
+        newObject.resourceMaps =resourceMaps;
+        newObject.relatedResources = new HashMap<>();
+        newObject.resources = new ArrayList<>();
+        return newObject;
+    }
 }

@@ -68,13 +68,17 @@ public class Configuration {
 
             for (LDPR container:containerMap.getResources()){
                 ((Container)container).sendRequest();
-                ((Container)container).processRDFSourceMaps();
-                ((Container)container).processNonRDFSourceMaps();
 
-                ((Container)container).sendRequestForRDFSourceMaps();
+                //((Container)container).processRDFSourceMaps();
+                //((Container)container).sendRequestForRDFSourceMaps();
+
+                ((Container)container).processNonRDFSourceMaps();
                 ((Container)container).sendRequestForNonRDFSourceMaps();
 
-                ((Container)container).processContainerMaps();
+
+
+
+                //((Container)container).processContainerMaps();
 
                 //System.out.println("Configuration.java: "+((Container)container).getContainerMaps().entrySet().iterator().next().getValue().getIRI());
 

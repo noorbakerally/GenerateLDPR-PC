@@ -31,6 +31,12 @@ public class RDFSourceMap extends SourceMap {
         super(RDFSourceMapIRI);
     }
 
+    @Override
+    public SourceMap copy() {
+        RDFSourceMap newObject = new RDFSourceMap(getIRI());
+        return newObject;
+    }
+
     public String getIRI() {
         return IRI;
     }

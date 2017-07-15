@@ -18,6 +18,7 @@ public class main {
         //configuration.print();
         configuration.execute();
 
+        System.out.println("test");
 
 
         //LDPRGenerator.sendRequest(configuration);

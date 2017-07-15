@@ -14,9 +14,9 @@ public abstract class SourceMap {
     String slugTemplate;;
     String constant;
     Map<String,ResourceMap> resourceMaps = new HashMap<String, ResourceMap>();
-
     Map <String,RelatedResource> relatedResources = new HashMap<>();
     List<LDPR> resources = new ArrayList<>();
+
 
     public SourceMap(String IRI){
         this.IRI = IRI;
@@ -34,4 +34,6 @@ public abstract class SourceMap {
         resourceMaps.put(iri,newResourceMap);
         return newResourceMap;
     }
+
+    public abstract SourceMap copy();
 }

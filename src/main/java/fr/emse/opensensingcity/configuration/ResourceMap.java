@@ -140,6 +140,9 @@ public class ResourceMap {
                 resourceQuery = resourceQuery.replace("?"+rRef,"<"+iri+">");
             }
 
+            if (container !=null && container.getSlug() != null){
+                System.out.println("ResourceMap.java Container: "+container.getSlug()+"Query:"+resourceQuery);
+            }
 
             //parent bindings will need to be added here
             ResultSet rs = ds.executeResourceQuery(resourceQuery);

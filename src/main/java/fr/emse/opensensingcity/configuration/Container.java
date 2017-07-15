@@ -159,4 +159,10 @@ public class Container extends LDPRS {
     public void setNonrdfSourceMaps(Map<String, NonRDFSourceMap> nonrdfSourceMaps) {
         this.nonrdfSourceMaps = nonrdfSourceMaps;
     }
+
+    public void addNonRDFSourceMap(NonRDFSourceMap nonRDFSourceMap){
+        nonRDFSourceMap.setContainer(this);
+        nonrdfSourceMaps.put(nonRDFSourceMap.getIRI(),nonRDFSourceMap);
+
+    }
 }

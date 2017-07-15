@@ -83,9 +83,6 @@ public class ConfigurationFactory {
         loadRDFSourceMaps(containerMap);
 
 
-
-
-
     }
 
     private static void processContainerType(String containerIRI) {
