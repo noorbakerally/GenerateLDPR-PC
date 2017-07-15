@@ -138,7 +138,6 @@ public class ResourceMap {
                     iri = r.getRelatedResource().getIRI();
                 }
                 resourceQuery = resourceQuery.replace("?"+rRef,"<"+iri+">");
-                System.out.println(resourceQuery);
             }
 
 

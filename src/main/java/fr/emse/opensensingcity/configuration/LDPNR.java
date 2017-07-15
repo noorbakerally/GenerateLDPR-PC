@@ -24,7 +24,6 @@ public class LDPNR extends LDPR {
 
     public HttpPost getResourceRequest(){
         String baseURI = container.getIRI();
-        System.out.println("LDPRS.java baseIRI:"+baseURI);
         HttpPost httpPost = new HttpPost(baseURI);
 
         httpPost.addHeader("Content-Type","text/turtle");
@@ -52,7 +51,6 @@ public class LDPNR extends LDPR {
         response = client.execute(request);
         System.out.println("LDPNR.java Request:"+request+" Reply:"+response);
         String location = response.getHeaders("Location")[0].getValue();
-        System.out.println("LDPNR.java location:"+location);
         setIRI(location);
     }
 }

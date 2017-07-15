@@ -81,7 +81,6 @@ public class Container extends LDPRS {
     }
 
     public void sendRequestForNonRDFSourceMaps() throws IOException {
-        System.out.println("enters here:"+nonrdfSourceMaps.size());
         for (Map.Entry <String,NonRDFSourceMap> nonRdfSourceMapEntry:nonrdfSourceMaps.entrySet()){
             NonRDFSourceMap nonRdfSourceMap = nonRdfSourceMapEntry.getValue();
             for (LDPR ldpnr:nonRdfSourceMap.getResources()){
@@ -137,7 +136,6 @@ public class Container extends LDPRS {
                 }
             } else {
                 //zombie container
-                System.out.println("enters here");
                 Container c = null;
 
                 c = new BasicContainer("");

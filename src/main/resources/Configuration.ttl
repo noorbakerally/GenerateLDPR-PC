@@ -11,7 +11,7 @@ data:CatalogMap a :ContainerMap;
 	:resourceMap data:CatalogResourceMap .
 
 data:CatalogResourceMap a :ResourceMap;
-    :resourceQuery "Select * WHERE { ?x a dcat:Distribution .} LIMIT 2";
+    :resourceQuery "Select * WHERE { ?x a dcat:Distribution .} LIMIT 4";
     :graphTemplate "CONSTRUCT { ?_resource ?p ?o . } WHERE {  ?_resource ?p ?o . FILTER (?p not in (dcat:dataset)) }";;
     :linkToSource foaf:primaryTopic;
     :dataSource data:DataSource1 .
