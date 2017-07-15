@@ -11,13 +11,13 @@ data:CatalogMap a :ContainerMap;
 	:resourceMap data:CatalogResourceMap .
 
 data:CatalogResourceMap a :ResourceMap;
-    :resourceQuery "Select * WHERE { ?x a dcat:Distribution .} LIMIT 4";
+    :resourceQuery "Select * WHERE { ?x a dcat:Distribution .} LIMIT 2";
     :graphTemplate "CONSTRUCT { ?_resource ?p ?o . } WHERE {  ?_resource ?p ?o . FILTER (?p not in (dcat:dataset)) }";;
     :linkToSource foaf:primaryTopic;
     :dataSource data:DataSource1 .
 
 data:distributionMap a :NonRDFSourceMap;
-    :slugTemplate "file";
+    :slugTemplate "{_r.iri.path[4]}";
     :resourceMap data:distributionResourceMap .
 
 data:distributionResourceMap a :ResourceMap;

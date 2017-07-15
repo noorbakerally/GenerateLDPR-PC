@@ -71,6 +71,7 @@ public class NonRDFSourceMap extends SourceMap {
             RelatedResource rr = rrEntry.getValue();
 
 
+
             LDPNR nonRdfSource = null;
 
             nonRdfSource = new LDPNR("temp");
