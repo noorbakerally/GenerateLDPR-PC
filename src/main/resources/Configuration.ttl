@@ -22,7 +22,11 @@ data:ContainerMapDataset a :ContainerMap;
 
 data:ContainerMapDatasets a :ContainerMap;
     :slugTemplate "{_r.iri.path[4]}";
+    :containerMap data:ContainerMapDistribution;
 	:resourceMap data:DataSetResourceMap .
+
+data:ContainerMapDistribution a :ContainerMap;
+    :slugTemplate "distributions" .
 
 data:DataSetResourceMap a :ResourceMap;
     :resourceQuery "Select * WHERE { ?__resource dcat:dataset  ?x . } LIMIT 5";
