@@ -64,9 +64,10 @@ public class Container extends LDPRS {
     public void sendRequestForRDFSourceMaps() throws IOException {
         for (Map.Entry <String,RDFSourceMap> rdfSourceMapEntry:rdfSourceMaps.entrySet()){
             RDFSourceMap rdfSourceMap = rdfSourceMapEntry.getValue();
-            for (LDPRS ldprs:rdfSourceMap.getResources()){
+            for (LDPR ldprs:rdfSourceMap.getResources()){
+                ldprs = (LDPRS)ldprs;
                 ldprs.setContainer(this);
-                ldprs.sendRequest();
+                ((LDPRS)ldprs).sendRequest();
             }
         }
     }
@@ -105,7 +106,7 @@ public class Container extends LDPRS {
 
             if (containerMap.getResourceMaps().size() > 0){
                 containerMap.generateResources();
-                for (LDPRS container:containerMap.getResources()){
+                for (LDPR container:containerMap.getResources()){
                     ((Container)container).setContainer(this);
                     ((Container)container).sendRequest();
                     ((Container)container).processRDFSourceMaps();

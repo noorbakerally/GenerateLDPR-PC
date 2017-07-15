@@ -66,7 +66,7 @@ public class Configuration {
             if (containerMap.getParentContainerMap() !=null) continue;
             containerMap.generateResources();
 
-            for (LDPRS container:containerMap.getResources()){
+            for (LDPR container:containerMap.getResources()){
                 ((Container)container).sendRequest();
                 ((Container)container).processRDFSourceMaps();
                 ((Container)container).sendRequestForRDFSourceMaps();

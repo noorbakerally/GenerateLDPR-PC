@@ -125,6 +125,56 @@ public class ConfigurationFactory {
 
     }
 
+    private static void processContainerNonRDFSourceMaps(String containerIRI) {
+        ContainerMap containerMap = containerMaps.get(containerIRI);
+
+        //get RDFSource Maps
+        String NonRDFSourceMapQuery="SELECT DISTINCT * \n" +
+                "WHERE { " +
+                "<containerMapIRI> :nonRDFSourceMap ?nonrdfSourceMap ." +
+                "}";
+        NonRDFSourceMapQuery = NonRDFSourceMapQuery.replace("containerMapIRI",containerIRI);
+        ResultSet rs = Global.exeQuery(NonRDFSourceMapQuery, model);
+        while (rs.hasNext()){
+            String NonRdfSourceMapIRI = rs.next().get("?nonrdfSourceMap").toString();
+            containerMap.addRDFSourceMap(NonRdfSourceMapIRI);
+        }
+        for (Map.Entry <String,NonRDFSourceMap> nonRDFSourceMap:containerMap.getNonRdfSourceMaps().entrySet()){
+            String nonRdfSourceMapIRI = nonRDFSourceMap.getKey();
+            NonRDFSourceMap currentNonRDFSourceMap = containerMap.getNonRdfSourceMaps().get(nonRdfSourceMapIRI);
+            loadNonRDFSourceMaps(currentNonRDFSourceMap);
+        }
+
+    }
+
+    private static void loadNonRDFSourceMaps(NonRDFSourceMap NonRDFSourceMap) {
+        String nonRdfSourceMapIRI = NonRDFSourceMap.getIRI();
+
+        String nonRdfSourceMapQuery="SELECT DISTINCT * \n" +
+                "WHERE { " +
+                "<nonRdfSourceMapIRI> ?p ?o ." +
+                "}";
+
+        nonRdfSourceMapQuery = nonRdfSourceMapQuery.replace("nonRdfSourceMapIRI",nonRdfSourceMapIRI);
+
+        ResultSet rs = Global.exeQuery(nonRdfSourceMapQuery, model);
+        while (rs.hasNext()){
+            QuerySolution qs = rs.next();
+            String p = qs.get("?p").toString();
+            String o = qs.get("?o").toString();
+
+
+            if (Global.getVTerm("resourceMap").equals(p)){
+                //processResourceMap(NonRDFSourceMap,o);
+            }
+
+            if (Global.getVTerm("slugTemplate").equals(p)) {
+                NonRDFSourceMap.setSlugTemplate(o);
+            }
+        }
+    }
+
+
     private static void loadRDFSourceMaps(RDFSourceMap rdfSourceMap){
         //load all RDFSourceMap
 

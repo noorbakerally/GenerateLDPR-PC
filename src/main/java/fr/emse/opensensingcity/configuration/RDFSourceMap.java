@@ -22,20 +22,13 @@ import java.util.Map;
 /**
  * Created by noor on 26/06/17.
  */
-public class RDFSourceMap {
+public class RDFSourceMap extends SourceMap {
 
 
-    Container container;
-    String IRI;
-    String slugTemplate;;
-    String constant;
-    Map<String,ResourceMap> resourceMaps = new HashMap<String, ResourceMap>();
 
-    Map <String,RelatedResource> relatedResources = new HashMap<>();
-    List<LDPRS> resources = new ArrayList<>();
 
     public RDFSourceMap(String RDFSourceMapIRI) {
-        this.IRI = RDFSourceMapIRI;
+        super(RDFSourceMapIRI);
     }
 
     public String getIRI() {
@@ -179,9 +172,10 @@ public class RDFSourceMap {
     }
 
     public void sendRequest() throws IOException {
-        for (LDPRS ldprs:resources){
+        for (LDPR ldpr:resources){
+
             HttpClient client = HttpClientBuilder.create().build();
-            HttpPost request = getResourceRequest((BasicContainer) ldprs);
+            HttpPost request = getResourceRequest((BasicContainer) ldpr);
             HttpResponse response = null;
             response = client.execute(request);
             System.out.println("RDFSourceMap.java:"+response);
@@ -218,13 +212,6 @@ public class RDFSourceMap {
         this.container = container;
     }
 
-    public List<LDPRS> getResources() {
-        return resources;
-    }
-
-    public void setResources(List<LDPRS> resources) {
-        this.resources = resources;
-    }
 
     public String getSlugTemplate() {
         return slugTemplate;

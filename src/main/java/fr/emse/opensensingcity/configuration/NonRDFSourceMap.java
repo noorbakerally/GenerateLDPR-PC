@@ -10,14 +10,12 @@ import java.util.Map;
 /**
  * Created by noor on 15/07/17.
  */
-public class NonRDFSourceMap {
-    Container container;
-    String IRI;
-    String slugTemplate;;
-    String constant;
-    Map<String,ResourceMap> resourceMaps = new HashMap<String, ResourceMap>();
-    Map <String,RelatedResource> relatedResources = new HashMap<>();
-    List<LDPNR> resources = new ArrayList<>();
+public class NonRDFSourceMap extends SourceMap {
+
+
+    public NonRDFSourceMap(String IRI){
+        super(IRI);
+    }
 
     public ResourceMap addResourceMap(String iri) {
         ResourceMap newResourceMap = new ResourceMap(iri);
@@ -132,13 +130,5 @@ public class NonRDFSourceMap {
 
     public void setRelatedResources(Map<String, RelatedResource> relatedResources) {
         this.relatedResources = relatedResources;
-    }
-
-    public List<LDPNR> getResources() {
-        return resources;
-    }
-
-    public void setResources(List<LDPNR> resources) {
-        this.resources = resources;
     }
 }

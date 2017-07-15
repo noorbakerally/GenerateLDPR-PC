@@ -15,7 +15,7 @@ public class ContainerMap extends RDFSourceMap{
     String insertedContentRelation;
     Global.ContainerType containerType;
     Map<String,RDFSourceMap> rdfSourceMaps = new HashMap<String, RDFSourceMap>();
-    Map<String,RDFSourceMap> nonrdfSourceMaps = new HashMap<String, RDFSourceMap>();
+    Map<String,NonRDFSourceMap> nonrdfSourceMaps = new HashMap<String, NonRDFSourceMap>();
     Map<String,ContainerMap> containerMaps = new HashMap<String, ContainerMap>();
     ContainerMap parentContainerMap;
 
@@ -59,8 +59,15 @@ public class ContainerMap extends RDFSourceMap{
         rdfSourceMaps.put(iri,new RDFSourceMap(iri));
     }
 
+    public void addNonRDFSourceMap(String iri){
+        nonrdfSourceMaps.put(iri,new NonRDFSourceMap(iri));
+    }
+
     public Map<String, RDFSourceMap> getRdfSourceMaps() {
         return rdfSourceMaps;
+    }
+    public Map<String, NonRDFSourceMap> getNonRdfSourceMaps() {
+        return nonrdfSourceMaps;
     }
 
     public void setRdfSourceMaps(Map<String, RDFSourceMap> rdfSourceMaps) {
