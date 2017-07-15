@@ -127,13 +127,11 @@ public class ContainerMap extends RDFSourceMap{
             c.generateGraph();
 
             c.setRdfSourceMaps(rdfSourceMaps);
-
-            //c.setNonrdfSourceMaps(nonrdfSourceMaps);
+            
             for (Map.Entry <String,NonRDFSourceMap> cNonRDFSourceMap:nonrdfSourceMaps.entrySet()){
                 NonRDFSourceMap nonRDFSourceMap = cNonRDFSourceMap.getValue();
                 NonRDFSourceMap newNonRDFSourceMap = (NonRDFSourceMap)nonRDFSourceMap.copy();
                 c.addNonRDFSourceMap(newNonRDFSourceMap);
-                //c.addNonRDFSourceMap(nonRDFSourceMap);
             }
 
             c.setContainerMaps(containerMaps);
