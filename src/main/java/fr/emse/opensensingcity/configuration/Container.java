@@ -21,6 +21,7 @@ public class Container extends LDPRS {
 
     Map<String,RDFSourceMap> rdfSourceMaps = new HashMap<String, RDFSourceMap>();
     Map<String,ContainerMap> containerMaps = new HashMap<String, ContainerMap>();
+    Map<String,RDFSourceMap> nonrdfSourceMaps = new HashMap<String, RDFSourceMap>();
 
     public Container(String containerIRI) {
         super(containerIRI);

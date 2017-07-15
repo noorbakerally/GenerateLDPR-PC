@@ -15,6 +15,7 @@ public class ContainerMap extends RDFSourceMap{
     String insertedContentRelation;
     Global.ContainerType containerType;
     Map<String,RDFSourceMap> rdfSourceMaps = new HashMap<String, RDFSourceMap>();
+    Map<String,RDFSourceMap> nonrdfSourceMaps = new HashMap<String, RDFSourceMap>();
     Map<String,ContainerMap> containerMaps = new HashMap<String, ContainerMap>();
     ContainerMap parentContainerMap;
 
