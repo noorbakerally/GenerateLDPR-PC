@@ -22,9 +22,6 @@ public class Configuration {
     public Map<String,ContainerMap> containerMaps = new HashMap<String, ContainerMap>();
     public Map<String,DataSource> dataSources = new HashMap<String, DataSource>();
 
-
-   public List <Container> topContainers = new ArrayList<>();
-
     public Configuration(){
         containerMaps = new HashMap<String, ContainerMap>();
     }
@@ -69,18 +66,13 @@ public class Configuration {
             for (LDPR container:containerMap.getResources()){
                 ((Container)container).sendRequest();
 
-                //((Container)container).processRDFSourceMaps();
-                //((Container)container).sendRequestForRDFSourceMaps();
+                ((Container)container).processRDFSourceMaps();
+                ((Container)container).sendRequestForRDFSourceMaps();
 
                 ((Container)container).processNonRDFSourceMaps();
                 ((Container)container).sendRequestForNonRDFSourceMaps();
 
-
-
-
-                //((Container)container).processContainerMaps();
-
-                //System.out.println("Configuration.java: "+((Container)container).getContainerMaps().entrySet().iterator().next().getValue().getIRI());
+                ((Container)container).processContainerMaps();
 
             }
         }

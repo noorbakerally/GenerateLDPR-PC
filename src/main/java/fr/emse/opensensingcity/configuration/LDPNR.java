@@ -1,17 +1,19 @@
 package fr.emse.opensensingcity.configuration;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URI;
 
 /**
  * Created by noor on 28/06/17.
@@ -26,21 +28,44 @@ public class LDPNR extends LDPR {
         String baseURI = container.getIRI();
         HttpPost httpPost = new HttpPost(baseURI);
 
-        httpPost.addHeader("Content-Type","text/turtle");
+        URI fileURL = URI.create(getRelatedResource().getIRI());
+
+
+        HttpURLConnection connection = null;
+        String contentType = null;
+        try {
+            connection = (HttpURLConnection)  fileURL.toURL().openConnection();
+            connection.setRequestMethod("HEAD");
+            connection.connect();
+            contentType = connection.getContentType();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
+        httpPost.addHeader("Content-Type",contentType);
         httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#Resource>; rel=\"type\"");
 
 
+        File file = new File("DownloadedFile");
 
-        httpPost.addHeader("Slug",getSlug());
-        Model model = ModelFactory.createDefaultModel();
-        StringWriter out = new StringWriter();
-        model.write(out, "TTL");
         try {
-            httpPost.setEntity(new StringEntity(out.toString()));
-            //System.out.println(out.toString());
-        } catch (UnsupportedEncodingException e) {
+            FileUtils.copyURLToFile(fileURL.toURL(),file);
+        } catch (IOException e) {
             e.printStackTrace();
         }
+
+        byte[] data = new byte[0];
+        try {
+            data = FileUtils.readFileToByteArray(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        httpPost.addHeader("Slug",getSlug());
+        httpPost.setEntity(new ByteArrayEntity(data));
+
         return httpPost;
     }
     public void sendRequest() throws IOException {
