@@ -142,8 +142,10 @@ public class Container extends LDPRS {
                 String uri = IRIGenerator.getSlug(c,containerMap.getSlugTemplate());
                 c.setSlug(uri);
                 c.setContainer(this);
+
                 c.setRdfSourceMaps(containerMap.getRdfSourceMaps());
                 c.setContainerMaps(containerMap.getContainerMaps());
+
                 c.sendRequest();
                 c.processContainerMaps();
                 c.processRDFSourceMaps();

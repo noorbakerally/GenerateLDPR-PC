@@ -19,6 +19,7 @@ import java.util.Map;
 public class Configuration {
     //private static final Logger logger = LoggerFactory.getLogger(Configuration.class);
     String baseURI;
+
     public Map<String,ContainerMap> containerMaps = new HashMap<String, ContainerMap>();
     public Map<String,DataSource> dataSources = new HashMap<String, DataSource>();
 
