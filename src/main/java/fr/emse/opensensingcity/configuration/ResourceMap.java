@@ -110,90 +110,66 @@ public class ResourceMap {
         dataSources.put(dataSource.getIRI(),dataSource);
     }
 
-
-    public List<String> getResources(Container container){
-        List<String> resources = new ArrayList<>();
+    String processRawQuery(SourceMap sourceMap, String resourceQuery){
         String finalQuery = resourceQuery;
+        Container container = sourceMap.getContainer();
+        Pattern p = Pattern.compile("_+resource");
+        Matcher m = p.matcher (resourceQuery);
+        while (m.find()){
+            String rRef = m.group();
+            String iri = null;
+            int numUnderScore = rRef.lastIndexOf("_")+1;
 
+            if (numUnderScore == 1){
+                iri = container.getRelatedResource().getIRI();
+            } else if (numUnderScore > 1) {
+                Container r = container;
+                while (numUnderScore > 1){
+                    r = r.getContainer();
+                    numUnderScore--;
+                }
+                iri = r.getRelatedResource().getIRI();
+            }
+            finalQuery = resourceQuery.replace("?"+rRef,"<"+iri+">");
+        }
+        return finalQuery;
+    }
 
-
+    public Map <String,List<Model>> getResources(SourceMap sourceMap){
+        Map <String,List<Model>> resources = new HashMap<String,List<Model>>();
+        String finalQuery = processRawQuery(sourceMap,resourceQuery);
 
         //iterating through all the datasoure and execute the resourceQuery
         //to get all the resources for which the corresponding LDPR has to be created
         for (Map.Entry <String,DataSource> dataSourceEntry:dataSources.entrySet()){
             DataSource ds = dataSourceEntry.getValue();
 
-            Pattern p = Pattern.compile("_+resource");
-            Matcher m = p.matcher (resourceQuery);
-            while (m.find()){
-                String rRef = m.group();
-                String iri = null;
-                int numUnderScore = rRef.lastIndexOf("_")+1;
-
-                if (numUnderScore == 1){
-                    iri = container.getRelatedResource().getIRI();
-                } else if (numUnderScore > 1) {
-                    Container r = container;
-                    while (numUnderScore > 1){
-                        r = r.getContainer();
-                        numUnderScore--;
-                    }
-                    iri = r.getRelatedResource().getIRI();
-                }
-
-
-                finalQuery = resourceQuery.replace("?"+rRef,"<"+iri+">");
-            }
-
-            /*if (container !=null && container.getSlug() != null){
-                System.out.println("==> ResourceMap.java Container: "+container.getRelatedResource().getIRI()+" Query:"+finalQuery);
-            }*/
-
             //parent bindings will need to be added here
             ResultSet rs = ds.executeResourceQuery(finalQuery);
-
             //iterating through all the solutions and
             //get the resourse
             while (rs.hasNext()){
+                List <Model> models;
                 QuerySolution qs = rs.next();
+                String resourceIRI = qs.get("?resource").toString();
 
-                //verify the number of variables obtained
-                //if more than one then error
-                Iterator<String> vars = qs.varNames();
-                String varName = "";
-                int numVariables = 0;
-                while (vars.hasNext()){
-                    varName = vars.next();
-                    numVariables++;
-                }
-                if (numVariables > 1){
-                    //throw exception here
-                    try {
-                        throw new VariableException("More than one variable Error");
-                    } catch (VariableException e) {
-                        e.printStackTrace();
-                    }
+                if (!resources.keySet().contains(resourceIRI)){
+                    models = new ArrayList<Model>();
+                    resources.put(resourceIRI,models);
+                } else {
+                    models = resources.get(resourceIRI);
                 }
 
-                String resourceIRI = qs.get(varName).toString();
-
-                if (!resources.contains(resourceIRI)){
-                    resources.add(resourceIRI);
-                }
+                //get the resource graph from that specific datasource
+                String resourceGraphQuery = getResourceGraphQuery(resourceIRI);
+                Model currentResourceModel = ds.executeGraphQuery(resourceGraphQuery);
+                models.add(currentResourceModel);
             }
         }
         return resources;
     }
 
-    public Model getResourceGraph(String resourceIRI) {
-        Model model = ModelFactory.createDefaultModel();
-        for (Map.Entry <String,DataSource> dataSourceEntry:dataSources.entrySet()){
-            DataSource ds = dataSourceEntry.getValue();
-            String resourceGraphQuery = getResourceGraphQuery(resourceIRI);
-            model.add(ds.executeGraphQuery(resourceGraphQuery));
-        }
-        return model;
-    }
+
 
     public String getResourceGraphQuery(String resourceIRI){
 
