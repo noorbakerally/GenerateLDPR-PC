@@ -47,11 +47,9 @@ public class LDPResourceRequestGenerator {
             baseIRI = container.getIRI();
         }
         HttpPost httpPost = new HttpPost(baseIRI);
-        httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#Resource>; rel=\"type\"");
         if (resource instanceof RDFSource){
 
             httpPost.addHeader("Content-Type","text/turtle");
-            httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#RDFSource>; rel=\"type\"");
 
             //generate Graph for RDFSource
             Model model = ((RDFSource)resource).getGraph();
@@ -66,7 +64,10 @@ public class LDPResourceRequestGenerator {
 
         }
         if (resource instanceof Container){
+            System.out.println("RequestGenerator.java enters here");
             httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"");
+        } else if (resource instanceof RDFSource){
+            httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#RDFSource>; rel=\"type\"");
         }
         httpPost.addHeader("Slug",resource.getSlug());
         return httpPost;

@@ -5,13 +5,13 @@
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 
 data:CatalogMap a :ContainerMap;
-    :slugTemplate "paris-{_r.iri.path[2]}";
+    :slugTemplate "paris-{_r.iri.path[4]}";
     :containerType ldp:BasicContainer;
     :resourceMap data:CatalogResourceMap .
 
 data:CatalogResourceMap a :ResourceMap;
-    :resourceQuery "Select * WHERE { ?resource a dcat:Catalog .}";
-    :graphTemplate "CONSTRUCT { ?_r ?p ?o . } WHERE {  ?_r ?p ?o . FILTER (?p not in (dcat:dataset)) }";;
+    :resourceQuery "Select * WHERE { ?resource a dcat:Dataset .} LIMIT 3";
+    :graphTemplate "CONSTRUCT { ?_r ?p ?o . } WHERE {  ?_r ?p ?o . FILTER (?p not in (dcat:distribution)) }";;
     :linkToSource foaf:primaryTopic;
     :dataSource data:DataSource1 .
 
