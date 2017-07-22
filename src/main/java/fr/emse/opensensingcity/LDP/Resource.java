@@ -1,21 +1,17 @@
-package fr.emse.opensensingcity.configuration;
+package fr.emse.opensensingcity.LDP;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.HttpClientBuilder;
 
-import java.io.IOException;
+import fr.emse.opensensingcity.configuration.RelatedResource;
 
 /**
  * Created by noor on 28/06/17.
  */
-public abstract class LDPR extends Resource {
+public abstract class Resource extends fr.emse.opensensingcity.RDF.Resource {
     String relatedResourceIRI;
     String slug;
     Container container;
     RelatedResource relatedResource;
-    public LDPR(String iri) {
+    public Resource(String iri) {
         super(iri);
     }
 
@@ -41,11 +37,6 @@ public abstract class LDPR extends Resource {
 
     public void setContainer(Container container) {
         this.container = container;
-    }
-
-    @Override
-    public String getIRI(){
-        return iri;
     }
 
     public RelatedResource getRelatedResource() {

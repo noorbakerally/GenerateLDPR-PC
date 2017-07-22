@@ -1,5 +1,8 @@
 package fr.emse.opensensingcity.configuration;
 
+import fr.emse.opensensingcity.LDP.Container;
+import fr.emse.opensensingcity.LDP.RDFSource;
+import fr.emse.opensensingcity.LDP.Resource;
 import fr.emse.opensensingcity.slugtemplate.IRIGenerator;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
@@ -13,9 +16,6 @@ import org.apache.jena.rdf.model.Model;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -160,9 +160,9 @@ public class RDFSourceMap extends SourceMap {
 
 
 
-            LDPRS rdfSource = null;
+            RDFSource rdfSource = null;
 
-            rdfSource = new LDPRS("temp");
+            rdfSource = new RDFSource("temp");
             rdfSource.setRelatedResource(rr);
             rdfSource.generateGraph();
 
@@ -174,7 +174,7 @@ public class RDFSourceMap extends SourceMap {
     }
 
     public void sendRequest() throws IOException {
-        for (LDPR ldpr:resources){
+        for (Resource ldpr:resources){
 
             HttpClient client = HttpClientBuilder.create().build();
             HttpPost request = getResourceRequest((BasicContainer) ldpr);
@@ -184,7 +184,7 @@ public class RDFSourceMap extends SourceMap {
         }
     }
 
-    public static HttpPost getResourceRequest(LDPRS ldprs){
+    public static HttpPost getResourceRequest(RDFSource ldprs){
 
         HttpPost httpPost = new HttpPost(Global.baseURI);
 

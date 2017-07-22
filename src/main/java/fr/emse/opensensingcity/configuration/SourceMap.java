@@ -1,5 +1,8 @@
 package fr.emse.opensensingcity.configuration;
 
+import fr.emse.opensensingcity.LDP.Container;
+import fr.emse.opensensingcity.LDP.Resource;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,17 +18,17 @@ public abstract class SourceMap {
     String constant;
     Map<String,ResourceMap> resourceMaps = new HashMap<String, ResourceMap>();
     Map <String,RelatedResource> relatedResources = new HashMap<>();
-    List<LDPR> resources = new ArrayList<>();
+    List<Resource> resources = new ArrayList<>();
 
 
     public SourceMap(String IRI){
         this.IRI = IRI;
     }
-    public List<LDPR> getResources() {
+    public List<Resource> getResources() {
         return resources;
     }
 
-    public void setResources(List<LDPR> resources) {
+    public void setResources(List<Resource> resources) {
         this.resources = resources;
     }
 

@@ -1,5 +1,6 @@
-package fr.emse.opensensingcity.configuration;
+package fr.emse.opensensingcity.LDP;
 
+import fr.emse.opensensingcity.configuration.*;
 import fr.emse.opensensingcity.slugtemplate.IRIGenerator;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -9,15 +10,13 @@ import org.apache.jena.rdf.model.ModelFactory;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
  * Created by bakerally on 5/29/17.
  */
-public class Container extends LDPRS {
+public class Container extends RDFSource {
 
     Map<String,RDFSourceMap> rdfSourceMaps = new HashMap<String, RDFSourceMap>();
     Map<String,ContainerMap> containerMaps = new HashMap<String, ContainerMap>();
@@ -72,10 +71,10 @@ public class Container extends LDPRS {
     public void sendRequestForRDFSourceMaps() throws IOException {
         for (Map.Entry <String,RDFSourceMap> rdfSourceMapEntry:rdfSourceMaps.entrySet()){
             RDFSourceMap rdfSourceMap = rdfSourceMapEntry.getValue();
-            for (LDPR ldprs:rdfSourceMap.getResources()){
-                ldprs = (LDPRS)ldprs;
+            for (Resource ldprs:rdfSourceMap.getResources()){
+                ldprs = (RDFSource)ldprs;
                 ldprs.setContainer(this);
-                ((LDPRS)ldprs).sendRequest();
+                ((RDFSource)ldprs).sendRequest();
             }
         }
     }
@@ -83,10 +82,10 @@ public class Container extends LDPRS {
     public void sendRequestForNonRDFSourceMaps() throws IOException {
         for (Map.Entry <String,NonRDFSourceMap> nonRdfSourceMapEntry:nonrdfSourceMaps.entrySet()){
             NonRDFSourceMap nonRdfSourceMap = nonRdfSourceMapEntry.getValue();
-            for (LDPR ldpnr:nonRdfSourceMap.getResources()){
-                ldpnr = (LDPNR)ldpnr;
+            for (Resource ldpnr:nonRdfSourceMap.getResources()){
+                ldpnr = (NonRDFSource)ldpnr;
                 ldpnr.setContainer(this);
-                ((LDPNR)ldpnr).sendRequest();
+                ((NonRDFSource)ldpnr).sendRequest();
             }
         }
     }
@@ -125,7 +124,7 @@ public class Container extends LDPRS {
 
             if (containerMap.getResourceMaps().size() > 0){
                 containerMap.generateResources();
-                for (LDPR container:containerMap.getResources()){
+                for (Resource container:containerMap.getResources()){
                     ((Container)container).setContainer(this);
                     ((Container)container).sendRequest();
                     ((Container)container).processRDFSourceMaps();

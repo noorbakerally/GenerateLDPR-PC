@@ -14,9 +14,9 @@ public class main {
         ClassLoader classLoader = main.class.getClassLoader();
         File file = new File(classLoader.getResource("Configuration.ttl").getFile());
 
-        Configuration configuration = ConfigurationFactory.createConfiguration(file.getAbsolutePath());
+        //Configuration configuration = ConfigurationFactory.createConfiguration(file.getAbsolutePath());
         //configuration.print();
-        configuration.execute();
+        //configuration.execute();
 
         System.out.println("test");
 

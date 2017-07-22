@@ -1,7 +1,7 @@
 package fr.emse.opensensingcity.ldprgenerator;
 
 import fr.emse.opensensingcity.configuration.BasicContainer;
-import fr.emse.opensensingcity.configuration.Container;
+import fr.emse.opensensingcity.LDP.Container;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by noor on 15/06/17.

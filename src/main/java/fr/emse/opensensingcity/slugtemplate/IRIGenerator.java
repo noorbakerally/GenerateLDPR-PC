@@ -1,9 +1,9 @@
 package fr.emse.opensensingcity.slugtemplate;
 import ca.uqac.lif.bullwinkle.BnfParser;
 import ca.uqac.lif.bullwinkle.ParseNode;
+import fr.emse.opensensingcity.LDP.Resource;
 import fr.emse.opensensingcity.configuration.ConfigurationFactory;
 import fr.emse.opensensingcity.configuration.Global;
-import fr.emse.opensensingcity.configuration.LDPR;
 import fr.emse.opensensingcity.configuration.RelatedResource;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
@@ -27,10 +27,10 @@ import java.net.URL;
  * Created by noor on 28/06/17.
  */
 public class IRIGenerator {
-    static LDPR r;
+    static Resource r;
     static int level = 0;
 
-    public static String getSlug(LDPR r, String slugTemplate){
+    public static String getSlug(Resource r, String slugTemplate){
         IRIGenerator.r = r;
         int i=0;
         while (i<slugTemplate.length()){
@@ -51,7 +51,7 @@ public class IRIGenerator {
         return slugTemplate;
     }
 
-    private static String processVarTemplate(String varTemplate, LDPR r) {
+    private static String processVarTemplate(String varTemplate, Resource r) {
         String result = null;
         URL bnfURL = IRIGenerator.class.getResource("/SlugTemplate.bnf");
         File bnffile = null;

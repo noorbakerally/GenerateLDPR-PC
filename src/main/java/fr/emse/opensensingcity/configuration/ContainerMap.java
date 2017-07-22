@@ -1,5 +1,6 @@
 package fr.emse.opensensingcity.configuration;
 
+import fr.emse.opensensingcity.LDP.Container;
 import fr.emse.opensensingcity.slugtemplate.IRIGenerator;
 import org.apache.commons.lang3.StringUtils;
 

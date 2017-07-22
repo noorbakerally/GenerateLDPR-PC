@@ -1,5 +1,6 @@
 package fr.emse.opensensingcity.configuration;
 
+import fr.emse.opensensingcity.RDF.Resource;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 
@@ -9,7 +10,7 @@ import java.util.Map;
 /**
  * Created by noor on 28/06/17.
  */
-public class RelatedResource extends Resource{
+public class RelatedResource extends Resource {
 
     Model model;
     public RelatedResource(String iri){

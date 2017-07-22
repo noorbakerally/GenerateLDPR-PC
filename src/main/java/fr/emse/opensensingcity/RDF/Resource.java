@@ -1,4 +1,4 @@
-package fr.emse.opensensingcity.configuration;
+package fr.emse.opensensingcity.RDF;
 
 import java.util.HashMap;
 import java.util.Map;

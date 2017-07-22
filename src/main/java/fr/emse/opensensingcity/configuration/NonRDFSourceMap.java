@@ -1,10 +1,11 @@
 package fr.emse.opensensingcity.configuration;
 
+import fr.emse.opensensingcity.LDP.Container;
+import fr.emse.opensensingcity.LDP.NonRDFSource;
 import fr.emse.opensensingcity.slugtemplate.IRIGenerator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -72,9 +73,9 @@ public class NonRDFSourceMap extends SourceMap {
 
 
 
-            LDPNR nonRdfSource = null;
+            NonRDFSource nonRdfSource = null;
 
-            nonRdfSource = new LDPNR("temp");
+            nonRdfSource = new NonRDFSource("temp");
             nonRdfSource.setRelatedResource(rr);
 
 

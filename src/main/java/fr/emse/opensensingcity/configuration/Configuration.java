@@ -1,16 +1,10 @@
 package fr.emse.opensensingcity.configuration;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import fr.emse.opensensingcity.LDP.Container;
+import fr.emse.opensensingcity.LDP.Resource;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -64,7 +58,7 @@ public class Configuration {
             if (containerMap.getParentContainerMap() !=null) continue;
             containerMap.generateResources();
 
-            for (LDPR container:containerMap.getResources()){
+            for (Resource container:containerMap.getResources()){
                 ((Container)container).sendRequest();
 
                 ((Container)container).processRDFSourceMaps();

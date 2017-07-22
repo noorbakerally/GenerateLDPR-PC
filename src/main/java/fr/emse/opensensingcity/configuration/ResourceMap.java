@@ -1,14 +1,13 @@
 package fr.emse.opensensingcity.configuration;
 
 import fr.emse.opensensingcity.Exceptions.VariableException;
+import fr.emse.opensensingcity.LDP.Container;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 
-import javax.xml.crypto.Data;
-import java.beans.ExceptionListener;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

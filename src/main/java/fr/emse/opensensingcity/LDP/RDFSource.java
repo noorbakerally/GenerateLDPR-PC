@@ -1,5 +1,6 @@
-package fr.emse.opensensingcity.configuration;
+package fr.emse.opensensingcity.LDP;
 
+import fr.emse.opensensingcity.configuration.RelatedResource;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
@@ -15,12 +16,12 @@ import java.io.UnsupportedEncodingException;
 /**
  * Created by bakerally on 5/29/17.
  */
-public class LDPRS extends LDPR {
+public class RDFSource extends Resource {
 
     Model graph;
 
 
-    public LDPRS(String iri) {
+    public RDFSource(String iri) {
         super(iri);
         setSlug(iri);
         graph = ModelFactory.createDefaultModel();

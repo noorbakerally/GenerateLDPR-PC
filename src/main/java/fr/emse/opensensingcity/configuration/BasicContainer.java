@@ -1,14 +1,11 @@
 package fr.emse.opensensingcity.configuration;
 
 import org.apache.jena.rdf.model.*;
-import org.apache.jena.rdf.model.Resource;
-import org.apache.jena.sparql.vocabulary.FOAF;
-import org.apache.jena.vocabulary.RDF;
 
 /**
  * Created by bakerally on 5/29/17.
  */
-public class BasicContainer extends Container {
+public class BasicContainer extends fr.emse.opensensingcity.LDP.Container {
 
     public BasicContainer(String containerIRI) {
         super(containerIRI);

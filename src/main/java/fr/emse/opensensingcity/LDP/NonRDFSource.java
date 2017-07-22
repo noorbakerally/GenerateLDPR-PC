@@ -1,4 +1,4 @@
-package fr.emse.opensensingcity.configuration;
+package fr.emse.opensensingcity.LDP;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.http.Header;
@@ -18,9 +18,9 @@ import java.net.URI;
 /**
  * Created by noor on 28/06/17.
  */
-public class LDPNR extends LDPR {
+public class NonRDFSource extends Resource {
 
-    public LDPNR(String iri) {
+    public NonRDFSource(String iri) {
         super(iri);
     }
 

@@ -2,8 +2,8 @@ package fr.emse.opensensingcity.tests;
 
 import ca.uqac.lif.bullwinkle.BnfParser;
 import ca.uqac.lif.bullwinkle.ParseNode;
-import fr.emse.opensensingcity.configuration.Container;
-import fr.emse.opensensingcity.configuration.LDPRS;
+import fr.emse.opensensingcity.LDP.Container;
+import fr.emse.opensensingcity.LDP.RDFSource;
 import fr.emse.opensensingcity.configuration.RelatedResource;
 import fr.emse.opensensingcity.slugtemplate.IRIGenerator;
 
@@ -20,7 +20,7 @@ public class TestSlug {
     public static void test1(){
         String slugTemplate = "{_r.iri.scheme}-ans";
         String iri = "https://opendata.paris.fr/api/v2/catalog/exports/ttl";
-        LDPRS ldprs = new LDPRS("");
+        RDFSource ldprs = new RDFSource("");
         ldprs.setRelatedResource(new RelatedResource(iri));
         String slug = IRIGenerator.getSlug(ldprs,slugTemplate);
         System.out.println(slug);
@@ -40,7 +40,7 @@ public class TestSlug {
         c2.setContainer(c1);
 
         iri = "https://opendata.paris.fr/api/v2/catalog/datasets/adresse_paris-csv";
-        LDPRS ldprs = new LDPRS("");
+        RDFSource ldprs = new RDFSource("");
         ldprs.setRelatedResource(new RelatedResource(iri));
         ldprs.setContainer(c2);
 
@@ -91,7 +91,7 @@ public class TestSlug {
         c2.setContainer(c1);
 
         iri = "https://opendata.paris.fr/api/v2/catalog3/datasets/adresse_paris-csv";
-        LDPRS ldprs = new LDPRS("");
+        RDFSource ldprs = new RDFSource("");
         ldprs.setRelatedResource(new RelatedResource(iri));
         ldprs.setContainer(c2);
 
