@@ -1,4 +1,4 @@
-package fr.emse.opensensingcity.configuration;
+package fr.emse.opensensingcity.LDP;
 
 import org.apache.jena.rdf.model.*;
 
