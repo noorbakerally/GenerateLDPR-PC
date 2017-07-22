@@ -149,9 +149,11 @@ public class ResourceMap {
             //iterating through all the solutions and
             //get the resourse
             while (rs.hasNext()){
-                List <Model> models;
                 QuerySolution qs = rs.next();
                 String resourceIRI = qs.get("?resource").toString();
+
+                //the list of models for the current resource from the datasets
+                List <Model> models;
 
                 if (!resources.keySet().contains(resourceIRI)){
                     models = new ArrayList<Model>();
