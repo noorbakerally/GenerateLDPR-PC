@@ -1,6 +1,7 @@
 package fr.emse.opensensingcity;
 
 import fr.emse.opensensingcity.configuration.*;
+import fr.emse.opensensingcity.ldprgenerator.LDPResourceRequestGenerator;
 import fr.emse.opensensingcity.slugtemplate.IRIGenerator;
 import fr.emse.opensensingcity.tests.TestSlug;
 
@@ -14,9 +15,12 @@ public class main {
         ClassLoader classLoader = main.class.getClassLoader();
         File file = new File(classLoader.getResource("Configuration.ttl").getFile());
 
-        //Configuration configuration = ConfigurationFactory.createConfiguration(file.getAbsolutePath());
+        Configuration configuration = ConfigurationFactory.createConfiguration(file.getAbsolutePath());
         //configuration.print();
-        //configuration.execute();
+        configuration.execute();
+
+        LDPResourceRequestGenerator rg = new LDPResourceRequestGenerator();
+        rg.sendRequests(configuration);
 
         System.out.println("test");
 

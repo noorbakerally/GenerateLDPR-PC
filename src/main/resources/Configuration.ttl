@@ -11,7 +11,7 @@ data:CatalogMap a :ContainerMap;
 
 data:CatalogResourceMap a :ResourceMap;
     :resourceQuery "Select * WHERE { ?resource a dcat:Catalog .}";
-    :graphTemplate "CONSTRUCT { ?_r ?p ?o . } WHERE {  ?_resource ?p ?o . FILTER (?p not in (dcat:dataset)) }";;
+    :graphTemplate "CONSTRUCT { ?_r ?p ?o . } WHERE {  ?_r ?p ?o . FILTER (?p not in (dcat:dataset)) }";;
     :linkToSource foaf:primaryTopic;
     :dataSource data:DataSource1 .
 

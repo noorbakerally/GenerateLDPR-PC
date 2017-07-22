@@ -3,6 +3,8 @@ package fr.emse.opensensingcity.ldprgenerator;
 import fr.emse.opensensingcity.LDP.RDFSource;
 import fr.emse.opensensingcity.LDP.Resource;
 import fr.emse.opensensingcity.LDP.Container;
+import fr.emse.opensensingcity.configuration.Configuration;
+import fr.emse.opensensingcity.configuration.ContainerMap;
 import fr.emse.opensensingcity.configuration.Global;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -15,18 +17,15 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by noor on 15/06/17.
  */
-public class LDPRGenerator {
-    static String baseURI = "http://localhost:8080/";
-
+public class LDPResourceRequestGenerator {
     public void sendRequest(Resource resource) throws IOException {
 
         HttpClient client = HttpClientBuilder.create().build();
-
-        resource = (RDFSource)resource;
         HttpPost request = null;
         if (resource instanceof RDFSource){
             request = getResourceRequest((RDFSource)resource);
@@ -35,8 +34,8 @@ public class LDPRGenerator {
         }
 
         HttpResponse response = null;
+        System.out.println("LDPResourceRequestGenerator.java "+"Request:"+request);
         response = client.execute(request);
-        System.out.println("LDPRS.java Request:"+request+" Reply:"+response);
         String location = response.getHeaders("Location")[0].getValue();
         resource.setIRI(location);
     }
@@ -47,9 +46,10 @@ public class LDPRGenerator {
         if (container != null){
             baseIRI = container.getIRI();
         }
-        HttpPost httpPost = new HttpPost(baseURI);
+        HttpPost httpPost = new HttpPost(baseIRI);
         httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#Resource>; rel=\"type\"");
         if (resource instanceof RDFSource){
+
             httpPost.addHeader("Content-Type","text/turtle");
             httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#RDFSource>; rel=\"type\"");
 
@@ -57,6 +57,7 @@ public class LDPRGenerator {
             Model model = ((RDFSource)resource).getGraph();
             StringWriter out = new StringWriter();
             model.write(out, "TTL");
+            /*model.write(System.out, "TTL");*/
             try {
                 httpPost.setEntity(new StringEntity(out.toString()));
             } catch (UnsupportedEncodingException e) {
@@ -69,5 +70,16 @@ public class LDPRGenerator {
         }
         httpPost.addHeader("Slug",resource.getSlug());
         return httpPost;
+    }
+
+    public void sendRequests(Configuration configuration) throws IOException {
+        Map<String, ContainerMap> containerMaps = configuration.getContainerMap();
+        for (Map.Entry<String, ContainerMap> entry : containerMaps.entrySet()) {
+            ContainerMap containerMap = entry.getValue();
+            if (containerMap.getParentContainerMap() !=null) continue;
+            for (Resource resource:containerMap.getResources()){
+                sendRequest(resource);
+            }
+        }
     }
 }

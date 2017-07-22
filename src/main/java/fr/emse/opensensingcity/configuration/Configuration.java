@@ -11,14 +11,22 @@ import java.util.Map;
  * Created by bakerally on 5/29/17.
  */
 public class Configuration {
-    //private static final Logger logger = LoggerFactory.getLogger(Configuration.class);
+
+    /*Attributes*/
     String baseURI;
+    public Map<String,ContainerMap> containerMaps = new HashMap<String, ContainerMap>();
+    public Map<String,DataSource> dataSources = new HashMap<String, DataSource>();
+    public Configuration(){
+        containerMaps = new HashMap<String, ContainerMap>();
+    }
+    //private static final Logger logger = LoggerFactory.getLogger(Configuration.class);
 
-
+    /*Core Methods*/
     public void execute() throws IOException {
         for (Map.Entry <String,ContainerMap> entry :containerMaps.entrySet()){
             ContainerMap containerMap = entry.getValue();
             if (containerMap.getParentContainerMap() !=null) continue;
+
             containerMap.generateResources();
             for (Resource container:containerMap.getResources()){
                 ((Container)container).processRDFSourceMaps();
@@ -27,11 +35,6 @@ public class Configuration {
     }
 
     /*General Methods*/
-    public Map<String,ContainerMap> containerMaps = new HashMap<String, ContainerMap>();
-    public Map<String,DataSource> dataSources = new HashMap<String, DataSource>();
-    public Configuration(){
-        containerMaps = new HashMap<String, ContainerMap>();
-    }
     public String getBaseURI() {
         return baseURI;
     }

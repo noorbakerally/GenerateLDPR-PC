@@ -110,10 +110,10 @@ public class ResourceMap {
         dataSources.put(dataSource.getIRI(),dataSource);
     }
 
-    String processRawQuery(SourceMap sourceMap, String resourceQuery){
+    String processRawQuery(SourceMap sourceMap, String resourceQuery, String rIRI){
         String finalQuery = resourceQuery;
         Container container = sourceMap.getContainer();
-        Pattern p = Pattern.compile("_+resource");
+        Pattern p = Pattern.compile("_+r");
         Matcher m = p.matcher (resourceQuery);
         while (m.find()){
             String rRef = m.group();
@@ -121,7 +121,12 @@ public class ResourceMap {
             int numUnderScore = rRef.lastIndexOf("_")+1;
 
             if (numUnderScore == 1){
-                iri = container.getRelatedResource().getIRI();
+
+                if (rIRI!=null){
+                    iri = rIRI;
+                } else {
+                    iri = container.getRelatedResource().getIRI();
+                }
             } else if (numUnderScore > 1) {
                 Container r = container;
                 while (numUnderScore > 1){
@@ -137,7 +142,7 @@ public class ResourceMap {
 
     public Map <String,List<Model>> getResources(SourceMap sourceMap){
         Map <String,List<Model>> resources = new HashMap<String,List<Model>>();
-        String finalQuery = processRawQuery(sourceMap,resourceQuery);
+        String finalQuery = processRawQuery(sourceMap,resourceQuery,null);
 
         //iterating through all the datasoure and execute the resourceQuery
         //to get all the resources for which the corresponding LDPR has to be created
@@ -164,6 +169,8 @@ public class ResourceMap {
 
                 //get the resource graph from that specific datasource
                 String resourceGraphQuery = getResourceGraphQuery(resourceIRI);
+                resourceGraphQuery = processRawQuery(sourceMap,resourceGraphQuery,resourceIRI);
+                System.out.println("ResourceMap.java"+resourceGraphQuery);
                 Model currentResourceModel = ds.executeGraphQuery(resourceGraphQuery);
                 models.add(currentResourceModel);
             }
