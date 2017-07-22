@@ -25,6 +25,7 @@ public class NonRDFSourceMap extends SourceMap {
     }
 
     public void generateListOfRelatedResources(){
+        /*
         //iterate through all resource maps
         //and generate the resources for each resource maps
         for (Map.Entry <String,ResourceMap> resourceMap:resourceMaps.entrySet()){
@@ -34,7 +35,7 @@ public class NonRDFSourceMap extends SourceMap {
 
             //get the related resource from the ResourceMap
             //add it to the relatedResources for the RDFSourceMap
-            for (String relatedResource:cResourceMap.getResources(container)){
+            for (String relatedResource:cResourceMap.getResources(this)){
 
                 //if relatedResources already contain the relatedResource
                 //check if the relatedResource has a link to the cResourceMap
@@ -57,7 +58,7 @@ public class NonRDFSourceMap extends SourceMap {
                 }
             }
         }
-        //System.out.println("Class:RDFSourceMap RelatedResources:"+relatedResources);
+        */
     }
 
     public void generate(){
@@ -86,50 +87,40 @@ public class NonRDFSourceMap extends SourceMap {
         }
     }
 
+    /*General Methods*/
     public Container getContainer() {
         return container;
     }
-
     public void setContainer(Container container) {
         this.container = container;
     }
-
     public String getIRI() {
         return IRI;
     }
-
     public void setIRI(String IRI) {
         this.IRI = IRI;
     }
-
     public String getSlugTemplate() {
         return slugTemplate;
     }
-
     public void setSlugTemplate(String slugTemplate) {
         this.slugTemplate = slugTemplate;
     }
-
     public String getConstant() {
         return constant;
     }
-
     public void setConstant(String constant) {
         this.constant = constant;
     }
-
     public Map<String, ResourceMap> getResourceMaps() {
         return resourceMaps;
     }
-
     public void setResourceMaps(Map<String, ResourceMap> resourceMaps) {
         this.resourceMaps = resourceMaps;
     }
-
     public Map<String, RelatedResource> getRelatedResources() {
         return relatedResources;
     }
-
     public void setRelatedResources(Map<String, RelatedResource> relatedResources) {
         this.relatedResources = relatedResources;
     }

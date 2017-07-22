@@ -4,7 +4,9 @@ import fr.emse.opensensingcity.RDF.Resource;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -13,39 +15,42 @@ import java.util.Map;
 public class RelatedResource extends Resource {
 
     Model model;
+    List<Model> models = new ArrayList<Model>();
     public RelatedResource(String iri){
         super(iri);
 
     }
-
     Map<String,ResourceMap> resourceMaps = new HashMap<>();
-
     public Map<String, ResourceMap> getResourceMaps() {
         return resourceMaps;
     }
-
     public void setResourceMaps(Map<String, ResourceMap> resourceMaps) {
         this.resourceMaps = resourceMaps;
     }
-
     public void addResourceMap(ResourceMap rs){
         resourceMaps.put(rs.getIRI(),rs);
     }
 
-    public Model getFinalGraph(){
-        if (model == null){
-            loadGraph();
+    public List<Model> getModels() {
+        return models;
+    }
+
+    public void setModels(List<Model> models) {
+        this.models = models;
+    }
+
+    public void generateModel() {
+        model = ModelFactory.createDefaultModel();
+        for (Model cModel:models){
+            model.add(cModel);
         }
+    }
+
+    public Model getGraph() {
         return model;
     }
 
-    public Model loadGraph(){
-        model = ModelFactory.createDefaultModel();
-        for (Map.Entry <String,ResourceMap>resourceMapEntry:resourceMaps.entrySet()){
-            ResourceMap cResourceMap = resourceMapEntry.getValue();
-            Model newModel = cResourceMap.getResourceGraph(getIRI());
-            model.add(newModel);
-        }
-        return model;
+    public void setModel(Model model) {
+        this.model = model;
     }
 }

@@ -20,74 +20,100 @@ public class ContainerMap extends RDFSourceMap{
     Map<String,ContainerMap> containerMaps = new HashMap<String, ContainerMap>();
     ContainerMap parentContainerMap;
 
-    public ContainerMap(String containerMapIRI) {
-        super(containerMapIRI);
+
+    /*Core Methods*/
+
+    //generate containers for the container maps
+    @Override
+    public void generateResources(){
+
+
+        super.generateRelatedResources();
+
+        //if no resource maps
+        //Create Zombie Container
+        //it's a dummy container
+        if (getResourceMaps().size() == 0){
+            Container container = new Container("temp");
+            container.setSourceMaps(this);
+            resources.add(container);
+            return;
+        }
+
+        for (Map.Entry <String,RelatedResource> rrEntry:getRelatedResources().entrySet()){
+            RelatedResource rr = rrEntry.getValue();
+            Container c = new BasicContainer("");
+            c.setRelatedResource(rr);
+            c.setGraph(rr.getGraph());
+            String uri = IRIGenerator.getSlug(c,getSlugTemplate());
+            c.setSlug(uri);
+            c.setSourceMaps(this);
+            c.processSourceMaps();
+            resources.add(c);
+        }
+
+
     }
 
-    public String getMembershipResource() {
-        return membershipResource;
+    /*General Methods*/
+    public void addChildContainerMap(ContainerMap containerMap){
+        containerMaps.put(containerMap.getIRI(),containerMap);
+        containerMap.setParentContainerMap(this);
     }
-
-    public void setMembershipResource(String membershipResource) {
-        this.membershipResource = membershipResource;
-    }
-
-    public String getMemberRelation() {
-        return memberRelation;
-    }
-
-    public void setMemberRelation(String memberRelation) {
-        this.memberRelation = memberRelation;
-    }
-
-    public String getInsertedContentRelation() {
-        return insertedContentRelation;
-    }
-
     public void setInsertedContentRelation(String insertedContentRelation) {
         this.insertedContentRelation = insertedContentRelation;
     }
-
+    public ContainerMap(String containerMapIRI) {
+        super(containerMapIRI);
+    }
+    public String getMembershipResource() {
+        return membershipResource;
+    }
+    public void setMembershipResource(String membershipResource) {
+        this.membershipResource = membershipResource;
+    }
+    public String getMemberRelation() {
+        return memberRelation;
+    }
+    public void setMemberRelation(String memberRelation) {
+        this.memberRelation = memberRelation;
+    }
+    public String getInsertedContentRelation() {
+        return insertedContentRelation;
+    }
     public Global.ContainerType getContainerType() {
         return containerType;
     }
-
     public void setContainerType(Global.ContainerType containerType) {
         this.containerType = containerType;
     }
-
     public void addRDFSourceMap(String iri){
         rdfSourceMaps.put(iri,new RDFSourceMap(iri));
     }
-
     public void addNonRDFSourceMap(String iri){
         nonrdfSourceMaps.put(iri,new NonRDFSourceMap(iri));
     }
-
     public Map<String, RDFSourceMap> getRdfSourceMaps() {
         return rdfSourceMaps;
     }
     public Map<String, NonRDFSourceMap> getNonRdfSourceMaps() {
         return nonrdfSourceMaps;
     }
-
     public void setRdfSourceMaps(Map<String, RDFSourceMap> rdfSourceMaps) {
         this.rdfSourceMaps = rdfSourceMaps;
     }
-
-    public void addChildContainerMap(ContainerMap containerMap){
-        containerMaps.put(containerMap.getIRI(),containerMap);
-        containerMap.setParentContainerMap(this);
-    }
-
     public void setParentContainerMap(ContainerMap parentContainerMap) {
         this.parentContainerMap = parentContainerMap;
     }
-
     public ContainerMap getParentContainerMap() {
         return parentContainerMap;
     }
-
+    public Map<String, ContainerMap> getContainerMaps() {
+        return containerMaps;
+    }
+    public void setContainerMaps(Map<String, ContainerMap> containerMaps) {
+        this.containerMaps = containerMaps;
+    }
     public String toString(int level){
         String str = "";
         String tab= StringUtils.repeat("\t", level);
@@ -106,52 +132,5 @@ public class ContainerMap extends RDFSourceMap{
             }
         }
         return str;
-    }
-
-    @Override
-    public void generate(){
-        super.generate();
-    }
-
-    public void generateResources(){
-        //generate containers for the container maps
-        //for each container
-            //associate with it all the RDFSourceMaps and ContainerMaps for the current ContainerMap
-
-        generate();
-        for (Map.Entry <String,RelatedResource> rrEntry:getRelatedResources().entrySet()){
-            RelatedResource rr = rrEntry.getValue();
-
-            Container c = null;
-            c = new BasicContainer("");
-            c.setRelatedResource(rr);
-            c.generateGraph();
-
-            c.setRdfSourceMaps(rdfSourceMaps);
-            c.setContainerMaps(containerMaps);
-            c.processRDFSourceMaps();
-
-            //adding nonRDFSourceMaps
-            for (Map.Entry <String,NonRDFSourceMap> cNonRDFSourceMap:nonrdfSourceMaps.entrySet()){
-                NonRDFSourceMap nonRDFSourceMap = cNonRDFSourceMap.getValue();
-                NonRDFSourceMap newNonRDFSourceMap = (NonRDFSourceMap)nonRDFSourceMap.copy();
-                c.addNonRDFSourceMap(newNonRDFSourceMap);
-            }
-
-
-
-
-            String uri = IRIGenerator.getSlug(c,getSlugTemplate());
-            c.setSlug(uri);
-            resources.add(c);
-        }
-    }
-
-    public Map<String, ContainerMap> getContainerMaps() {
-        return containerMaps;
-    }
-
-    public void setContainerMaps(Map<String, ContainerMap> containerMaps) {
-        this.containerMaps = containerMaps;
     }
 }

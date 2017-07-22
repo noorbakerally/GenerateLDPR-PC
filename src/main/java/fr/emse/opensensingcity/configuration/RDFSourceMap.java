@@ -16,6 +16,8 @@ import org.apache.jena.rdf.model.Model;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 
@@ -23,9 +25,6 @@ import java.util.Map;
  * Created by noor on 26/06/17.
  */
 public class RDFSourceMap extends SourceMap {
-
-
-
 
     public RDFSourceMap(String RDFSourceMapIRI) {
         super(RDFSourceMapIRI);
@@ -37,189 +36,104 @@ public class RDFSourceMap extends SourceMap {
         return newObject;
     }
 
-    public String getIRI() {
-        return IRI;
+    //generate all the list of related resources
+    //together with their graphs
+    public void generateRelatedResources(){
+
+        //iterate through all resource maps
+        //and generate the resources for each resource maps
+        for (Map.Entry <String,ResourceMap> resourceMap:resourceMaps.entrySet()) {
+            String resourceMapIRI = resourceMap.getKey();
+            ResourceMap cResourceMap = resourceMap.getValue();
+            //get the related resource from the ResourceMap
+            //add it to the relatedResources for the RDFSourceMap
+            Map<String, List<Model>> relatedResourcesMap = cResourceMap.getResources(this);
+            for (String relatedResource : relatedResourcesMap.keySet()) {
+                //if relatedResources already contain the relatedResource
+                //check if the relatedResource has a link to the cResourceMap
+                //if not add it
+                RelatedResource rr1;
+                if (!relatedResources.containsKey(relatedResource)) {
+                    //create the relatedResource
+                    //add it to the relatedResources of the RDFSourceMap
+                    rr1 = new RelatedResource(relatedResource);
+                    rr1.addResourceMap(cResourceMap);
+                    relatedResources.put(relatedResource, rr1);
+                } else {
+                    rr1 = relatedResources.get(relatedResource);
+                }
+
+                //merge RelatedResources Graphs
+                rr1.getModels().addAll(relatedResourcesMap.get(relatedResource));
+            }
+        }
+        //merge all RelatedResource Model
+        for (String relatedResource:relatedResources.keySet()){
+            relatedResources.get(relatedResource).generateModel();
+        }
     }
 
-    public void setIRI(String iri) {
-        this.IRI = iri;
+    //create resources RDFSourceMap generates
+    public void generateResources(){
+        generateRelatedResources();
+        for (Map.Entry <String,RelatedResource> rrEntry:getRelatedResources().entrySet()){
+            RelatedResource rr = rrEntry.getValue();
+            RDFSource rdfSource = null;
+            rdfSource = new RDFSource("temp");
+            rdfSource.setRelatedResource(rr);
+            rdfSource.setGraph(rr.getGraph());
+            String slug = IRIGenerator.getSlug(rdfSource, getSlugTemplate());
+            rdfSource.setSlug(slug);
+            resources.add(rdfSource);
+        }
     }
 
+    /*General Methods*/
+    public Map<String, ResourceMap> getResourceMaps() {
+        return resourceMaps;
+    }
+    public void setResourceMaps(Map<String, ResourceMap> resourceMaps) {
+        this.resourceMaps = resourceMaps;
+    }
+    public Map<String, RelatedResource> getRelatedResources() {
+        return relatedResources;
+    }
+    public void setRelatedResources(Map<String, RelatedResource> relatedResources) {
+        this.relatedResources = relatedResources;
+    }
+    public Container getContainer() {
+        return container;
+    }
+    public void setContainer(Container container) {
+        this.container = container;
+    }
+    public String getSlugTemplate() {
+        return slugTemplate;
+    }
+    public void setSlugTemplate(String slugTemplate) {
+        this.slugTemplate = slugTemplate;
+    }
+    public String toString(int level) {
+        String str = "";
+        String tab= StringUtils.repeat("\t", level);
+        String title = "RDFSourceMap:";
+        if (this instanceof ContainerMap){
+            title = "ContainerMap:";
+        }
+        String titleUnderline = StringUtils.repeat("", title.length());
+        str = tab+title + "\n";
+        str += tab+"\t\tIRI: "+getIRI()+"\n";
+        for (Map.Entry <String,ResourceMap> resourceMapEntry:resourceMaps.entrySet()){
+            str = str + "\n"+resourceMapEntry.getValue().toString(level+2);
+        }
+        return str;
+    }
     public String getConstant() {
         return constant;
     }
-
     public void setConstant(String constant) {
         this.constant = constant;
     }
 
 
-
-    public String toString(int level) {
-
-        String str = "";
-
-        String tab= StringUtils.repeat("\t", level);
-
-        String title = "RDFSourceMap:";
-
-        if (this instanceof ContainerMap){
-            title = "ContainerMap:";
-        }
-        String titleUnderline = StringUtils.repeat("", title.length());
-
-        str = tab+title + "\n";
-
-        str += tab+"\t\tIRI: "+getIRI()+"\n";
-
-        for (Map.Entry <String,ResourceMap> resourceMapEntry:resourceMaps.entrySet()){
-            str = str + "\n"+resourceMapEntry.getValue().toString(level+2);
-        }
-
-        return str;
-    }
-
-    public void generateListOfRelatedResources(){
-        //iterate through all resource maps
-        //and generate the resources for each resource maps
-        for (Map.Entry <String,ResourceMap> resourceMap:resourceMaps.entrySet()){
-            String resourceMapIRI = resourceMap.getKey();
-
-            ResourceMap cResourceMap = resourceMap.getValue();
-
-            //get the related resource from the ResourceMap
-            //add it to the relatedResources for the RDFSourceMap
-            for (String relatedResource:cResourceMap.getResources(container)){
-
-                //if relatedResources already contain the relatedResource
-                //check if the relatedResource has a link to the cResourceMap
-                //if not add it
-
-                if (relatedResources.containsKey(relatedResource)){
-                    Map <String, ResourceMap> rResouceMaps = relatedResources.get(relatedResource).getResourceMaps();
-                    if (!rResouceMaps.containsKey(cResourceMap.getIRI())){
-                        relatedResources.get(relatedResource).addResourceMap(cResourceMap);
-                    }
-                } else {
-                    //create the relatedResource
-                    //add it to the relatedResources of the RDFSourceMap
-                    RelatedResource rr1 = new RelatedResource(relatedResource);
-
-
-
-                    rr1.addResourceMap(cResourceMap);
-                    relatedResources.put(relatedResource,rr1);
-                }
-            }
-        }
-        //System.out.println("Class:RDFSourceMap RelatedResources:"+relatedResources);
-    }
-
-    public void generateRelatedResourcesGraph(){
-        for (Map.Entry<String,RelatedResource> relatedResourceEntry:relatedResources.entrySet()){
-            RelatedResource cRelatedResource = relatedResourceEntry.getValue();
-            cRelatedResource.getFinalGraph();
-        }
-    }
-
-    public void generate(){
-
-        //generate all the list of related resources
-        generateListOfRelatedResources();
-        //System.out.println("Class:RDFSourceMap:"+relatedResources);
-
-
-        //generate graph of all related resources
-        generateRelatedResourcesGraph();
-    }
-
-
-
-
-    public Map<String, ResourceMap> getResourceMaps() {
-        return resourceMaps;
-    }
-
-    public void setResourceMaps(Map<String, ResourceMap> resourceMaps) {
-        this.resourceMaps = resourceMaps;
-    }
-
-    public Map<String, RelatedResource> getRelatedResources() {
-        return relatedResources;
-    }
-
-    public void setRelatedResources(Map<String, RelatedResource> relatedResources) {
-        this.relatedResources = relatedResources;
-    }
-
-    public void generateResources(){
-        generate();
-
-        for (Map.Entry <String,RelatedResource> rrEntry:getRelatedResources().entrySet()){
-            RelatedResource rr = rrEntry.getValue();
-
-
-
-            RDFSource rdfSource = null;
-
-            rdfSource = new RDFSource("temp");
-            rdfSource.setRelatedResource(rr);
-            rdfSource.generateGraph();
-
-            String slug = IRIGenerator.getSlug(rdfSource, getSlugTemplate());
-            rdfSource.setSlug(slug);
-
-            resources.add(rdfSource);
-        }
-    }
-
-    public void sendRequest() throws IOException {
-        for (Resource ldpr:resources){
-
-            HttpClient client = HttpClientBuilder.create().build();
-            HttpPost request = getResourceRequest((BasicContainer) ldpr);
-            HttpResponse response = null;
-            response = client.execute(request);
-            System.out.println("RDFSourceMap.java:"+response);
-        }
-    }
-
-    public static HttpPost getResourceRequest(RDFSource ldprs){
-
-        HttpPost httpPost = new HttpPost(Global.baseURI);
-
-        httpPost.addHeader("Content-Type","text/turtle");
-        httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#Resource>; rel='type'");
-        httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#RDFSource>; rel='type'");
-
-        httpPost.addHeader("Slug",ldprs.getIRI());
-
-        Model model = ldprs.generateGraph();
-        StringWriter out = new StringWriter();
-        model.write(out, "TTL");
-        try {
-            httpPost.setEntity(new StringEntity(out.toString()));
-            //System.out.println(out.toString());
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return httpPost;
-    }
-
-    public Container getContainer() {
-        return container;
-    }
-
-    public void setContainer(Container container) {
-        this.container = container;
-    }
-
-
-    public String getSlugTemplate() {
-        return slugTemplate;
-    }
-
-    public void setSlugTemplate(String slugTemplate) {
-        this.slugTemplate = slugTemplate;
-    }
 }

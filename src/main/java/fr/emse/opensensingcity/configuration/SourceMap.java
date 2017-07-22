@@ -47,4 +47,12 @@ public abstract class SourceMap {
     public void setContainer(Container container) {
         this.container = container;
     }
+    public String getIRI() {
+        return IRI;
+    }
+
+    public void setIRI(String iri) {
+        this.IRI = iri;
+    }
+
 }

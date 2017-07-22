@@ -31,10 +31,6 @@ public class Container extends RDFSource {
         rdfSourceMaps.put(rdfSourceMap.getIRI(),rdfSourceMap);
     }
 
-    @Override
-    public Model generateGraph() {
-        return super.generateGraph();
-    }
 
     public Map<String, RDFSourceMap> getRdfSourceMaps() {
         return rdfSourceMaps;
@@ -68,53 +64,6 @@ public class Container extends RDFSource {
         }
     }
 
-    public void sendRequestForRDFSourceMaps() throws IOException {
-        for (Map.Entry <String,RDFSourceMap> rdfSourceMapEntry:rdfSourceMaps.entrySet()){
-            RDFSourceMap rdfSourceMap = rdfSourceMapEntry.getValue();
-            for (Resource ldprs:rdfSourceMap.getResources()){
-                ldprs = (RDFSource)ldprs;
-                ldprs.setContainer(this);
-                ((RDFSource)ldprs).sendRequest();
-            }
-        }
-    }
-
-    public void sendRequestForNonRDFSourceMaps() throws IOException {
-        for (Map.Entry <String,NonRDFSourceMap> nonRdfSourceMapEntry:nonrdfSourceMaps.entrySet()){
-            NonRDFSourceMap nonRdfSourceMap = nonRdfSourceMapEntry.getValue();
-            for (Resource ldpnr:nonRdfSourceMap.getResources()){
-                ldpnr = (NonRDFSource)ldpnr;
-                ldpnr.setContainer(this);
-                ((NonRDFSource)ldpnr).sendRequest();
-            }
-        }
-    }
-
-    public HttpPost getResourceRequest(){
-        String baseIRI = Global.baseURI;
-        if (container != null){
-            baseIRI = container.getIRI();
-        }
-        HttpPost httpPost = new HttpPost(baseIRI);
-
-        httpPost.addHeader("Content-Type","text/turtle");
-
-        httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"");
-
-        httpPost.addHeader("Slug",getSlug());
-
-        Model model = generateGraph();
-        StringWriter out = new StringWriter();
-        model.write(out,"TTL");
-        try {
-            httpPost.setEntity(new StringEntity(out.toString()));
-            //System.out.println(out.toString());
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return httpPost;
-    }
-
 
     public void processContainerMaps() throws IOException {
 
@@ -126,11 +75,10 @@ public class Container extends RDFSource {
                 containerMap.generateResources();
                 for (Resource container:containerMap.getResources()){
                     ((Container)container).setContainer(this);
-                    ((Container)container).sendRequest();
+
                     ((Container)container).processRDFSourceMaps();
                     ((Container)container).processNonRDFSourceMaps();
-                    ((Container)container).sendRequestForRDFSourceMaps();
-                    ((Container)container).sendRequestForNonRDFSourceMaps();
+
                     ((Container)container).processContainerMaps();
                 }
             } else {
@@ -145,7 +93,6 @@ public class Container extends RDFSource {
                 c.setRdfSourceMaps(containerMap.getRdfSourceMaps());
                 c.setContainerMaps(containerMap.getContainerMaps());
 
-                c.sendRequest();
                 c.processContainerMaps();
                 c.processRDFSourceMaps();
 
@@ -167,4 +114,28 @@ public class Container extends RDFSource {
     }
 
 
+    public void setSourceMaps(ContainerMap sourceMaps) {
+
+        this.setRdfSourceMaps(sourceMaps.getRdfSourceMaps());
+
+        //this.setContainerMaps(sourceMaps.getContainerMaps());
+        //this.setNonrdfSourceMaps(sourceMaps.getNonRdfSourceMaps());
+
+        /*c.setRdfSourceMaps(rdfSourceMaps);
+        c.setContainerMaps(containerMaps);
+        c.processRDFSourceMaps();
+
+        //adding nonRDFSourceMaps
+        for (Map.Entry <String,NonRDFSourceMap> cNonRDFSourceMap:nonrdfSourceMaps.entrySet()){
+            NonRDFSourceMap nonRDFSourceMap = cNonRDFSourceMap.getValue();
+            NonRDFSourceMap newNonRDFSourceMap = (NonRDFSourceMap)nonRDFSourceMap.copy();
+            c.addNonRDFSourceMap(newNonRDFSourceMap);
+        }*/
+
+
+    }
+
+    public void processSourceMaps() {
+        processRDFSourceMaps();
+    }
 }

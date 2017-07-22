@@ -236,7 +236,7 @@ public class IRIGenerator {
                 query.setQueryPattern(tp);
                 query.setQueryResultStar(true);
 
-                ResultSet rs = Global.exeQuery(query.serialize(), r.getRelatedResource().getFinalGraph());
+                ResultSet rs = Global.exeQuery(query.serialize(), r.getRelatedResource().getGraph());
                 while (rs.hasNext()){
                     String varResult = rs.next().get("?result").toString();
                     return varResult;
