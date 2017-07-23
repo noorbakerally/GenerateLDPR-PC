@@ -1,5 +1,6 @@
 package fr.emse.opensensingcity.ldprgenerator;
 
+import fr.emse.opensensingcity.LDP.NonRDFSource;
 import fr.emse.opensensingcity.LDP.RDFSource;
 import fr.emse.opensensingcity.LDP.Resource;
 import fr.emse.opensensingcity.LDP.Container;
@@ -10,6 +11,7 @@ import fr.emse.opensensingcity.configuration.RDFSourceMap;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.jena.rdf.model.Model;
@@ -77,13 +79,16 @@ public class LDPResourceRequestGenerator {
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
-
         }
         if (resource instanceof Container){
             httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"");
         } else if (resource instanceof RDFSource){
             httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#Resource>; rel=\"type\"");
             httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#RDFSource>; rel=\"type\"");
+        } else if (resource instanceof NonRDFSource){
+            NonRDFSource nonRDFSource = (NonRDFSource)resource;
+            httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#Resource>; rel=\"type\"");
+            httpPost.setEntity(new ByteArrayEntity(nonRDFSource.getBinary()) );
         }
         httpPost.addHeader("Slug",resource.getSlug());
         return httpPost;
@@ -105,6 +110,13 @@ public class LDPResourceRequestGenerator {
             for (String  rdfSourceMapIRI:container.getRdfSourceMaps().keySet()){
                 for (Resource rdfSource:container.getRdfSourceMaps().get(rdfSourceMapIRI).getResources()){
                     sendRequests(rdfSource);
+                }
+            }
+
+            //sending request for NonRDFSources
+            for (String  nonRDFSourceMapIRI:container.getNonrdfSourceMaps().keySet()){
+                for (Resource nonRDFSource:container.getNonrdfSourceMaps().get(nonRDFSourceMapIRI).getResources()){
+                    sendRequests(nonRDFSource);
                 }
             }
 

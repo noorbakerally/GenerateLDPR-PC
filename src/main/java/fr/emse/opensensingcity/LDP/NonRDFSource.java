@@ -19,7 +19,7 @@ import java.net.URI;
  * Created by noor on 28/06/17.
  */
 public class NonRDFSource extends Resource {
-
+    byte[] binary;
     public NonRDFSource(String iri) {
         super(iri);
     }
@@ -77,5 +77,13 @@ public class NonRDFSource extends Resource {
         System.out.println("LDPNR.java Request:"+request+" Reply:"+response);
         String location = response.getHeaders("Location")[0].getValue();
         setIRI(location);
+    }
+
+    public byte[] getBinary() {
+        return binary;
+    }
+
+    public void setBinary(byte[] binary) {
+        this.binary = binary;
     }
 }

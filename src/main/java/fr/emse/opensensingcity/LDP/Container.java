@@ -36,7 +36,6 @@ public class Container extends RDFSource {
     public void processNonRDFSourceMaps() {
         for (Map.Entry <String,NonRDFSourceMap> nonRdfSourceMapEntry:nonrdfSourceMaps.entrySet()){
             NonRDFSourceMap nonRdfSourceMap = nonRdfSourceMapEntry.getValue();
-            nonRdfSourceMap.setContainer(this);
             nonRdfSourceMap.generateResources();
         }
     }
@@ -57,12 +56,11 @@ public class Container extends RDFSource {
             this.addRDFSourceMap(newRDFSourceMap);
         }
 
-        /*//adding nonRDFSourceMaps
-        for (Map.Entry <String,NonRDFSourceMap> cNonRDFSourceMap:nonrdfSourceMaps.entrySet()){
-            NonRDFSourceMap nonRDFSourceMap = cNonRDFSourceMap.getValue();
-            NonRDFSourceMap newNonRDFSourceMap = (NonRDFSourceMap)nonRDFSourceMap.copy();
-            c.addNonRDFSourceMap(newNonRDFSourceMap);
-        }*/
+        //copy NonRDFSourceMaps of sourceMaps
+        for (Map.Entry <String,NonRDFSourceMap> cNonRDFSourceMapEntry:sourceMaps.getNonRdfSourceMaps().entrySet()){
+            NonRDFSourceMap newNonRDFSourceMap = (NonRDFSourceMap)cNonRDFSourceMapEntry.getValue().copy();
+            this.addNonRDFSourceMap(newNonRDFSourceMap);
+        }
     }
 
     private void addRDFSourceMap(RDFSourceMap newRDFSourceMap) {
@@ -78,7 +76,7 @@ public class Container extends RDFSource {
     public void processSourceMaps() throws IOException {
         processContainerMaps();
         processRDFSourceMaps();
-        //processNonRDFSourceMaps();
+        processNonRDFSourceMaps();
 
     }
 

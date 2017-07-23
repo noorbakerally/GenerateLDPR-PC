@@ -2,10 +2,17 @@ package fr.emse.opensensingcity.configuration;
 
 import fr.emse.opensensingcity.LDP.Container;
 import fr.emse.opensensingcity.LDP.NonRDFSource;
+import fr.emse.opensensingcity.LDP.RDFSource;
 import fr.emse.opensensingcity.slugtemplate.IRIGenerator;
+import org.apache.commons.io.FileUtils;
+import org.apache.jena.rdf.model.Model;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,72 +24,61 @@ public class NonRDFSourceMap extends SourceMap {
     public NonRDFSourceMap(String IRI){
         super(IRI);
     }
-
     public ResourceMap addResourceMap(String iri) {
         ResourceMap newResourceMap = new ResourceMap(iri);
         resourceMaps.put(iri,newResourceMap);
         return newResourceMap;
     }
 
-    public void generateListOfRelatedResources(){
-        /*
+    //generate all the list of related resources
+    //together with their graphs
+    public void generateRelatedResources(){
         //iterate through all resource maps
         //and generate the resources for each resource maps
-        for (Map.Entry <String,ResourceMap> resourceMap:resourceMaps.entrySet()){
+        for (Map.Entry <String,ResourceMap> resourceMap:resourceMaps.entrySet()) {
             String resourceMapIRI = resourceMap.getKey();
-
             ResourceMap cResourceMap = resourceMap.getValue();
-
             //get the related resource from the ResourceMap
             //add it to the relatedResources for the RDFSourceMap
-            for (String relatedResource:cResourceMap.getResources(this)){
-
+            Map<String, List<Model>> relatedResourcesMap = cResourceMap.getResources(this);
+            for (String relatedResource : relatedResourcesMap.keySet()) {
                 //if relatedResources already contain the relatedResource
                 //check if the relatedResource has a link to the cResourceMap
                 //if not add it
-
-                if (relatedResources.containsKey(relatedResource)){
-                    Map <String, ResourceMap> rResouceMaps = relatedResources.get(relatedResource).getResourceMaps();
-                    if (!rResouceMaps.containsKey(cResourceMap.getIRI())){
-                        relatedResources.get(relatedResource).addResourceMap(cResourceMap);
-                    }
-                } else {
+                RelatedResource rr1;
+                if (!relatedResources.containsKey(relatedResource)) {
                     //create the relatedResource
                     //add it to the relatedResources of the RDFSourceMap
-                    RelatedResource rr1 = new RelatedResource(relatedResource);
-
-
-
-                    rr1.addResourceMap(cResourceMap);
-                    relatedResources.put(relatedResource,rr1);
+                    rr1 = new RelatedResource(relatedResource);
+                    relatedResources.put(relatedResource, rr1);
+                } else {
+                    rr1 = relatedResources.get(relatedResource);
                 }
             }
         }
-        */
-    }
 
-    public void generate(){
-        //generate all the list of related resources
-        generateListOfRelatedResources();
     }
 
     public void generateResources(){
-        generate();
-
+        generateRelatedResources();
         for (Map.Entry <String,RelatedResource> rrEntry:getRelatedResources().entrySet()){
             RelatedResource rr = rrEntry.getValue();
-
-
-
             NonRDFSource nonRdfSource = null;
-
             nonRdfSource = new NonRDFSource("temp");
             nonRdfSource.setRelatedResource(rr);
-
-
             String slug = IRIGenerator.getSlug(nonRdfSource, getSlugTemplate());
             nonRdfSource.setSlug(slug);
+            nonRdfSource.setContainer(this.getContainer());
 
+            //get binary content of file
+            File file = new File("DownloadedFile");
+            try {
+                FileUtils.copyURLToFile(URI.create(rr.getIRI()).toURL(),file);
+                byte [] binary = FileUtils.readFileToByteArray(file);
+                nonRdfSource.setBinary(binary);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             resources.add(nonRdfSource);
         }
     }

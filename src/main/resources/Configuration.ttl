@@ -1,21 +1,19 @@
 @base <http://localhost:8888/> .
-@prefix ldp:     <http://www.w3.org/ns/ldp#>.
+@prefix ldp:     <http://www.w3.org/ns/ldp#> .
 @prefix :     <http://opensensingcity.emse.fr/LDPDesignVocabulary/> .
 @prefix data:     <http://opensensingcity.emse.fr/LDPDesign/data/> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 
-data:DatasetsMap a :ContainerMap;
-     :rdfSourceMap data:DatasetMap;
-     :slugTemplate "datasets" .
+data:DatasetMap a :ContainerMap;
+    :nonRDFSourceMap data:distributionSourceMap;
+    :slugTemplate "distributions" .
 
-data:DatasetMap a :RDFSourceMap;
-    :slugTemplate "{_r.iri.path[4]}";
-    :resourceMap data:DatasetResourceMap .
+data:distributionSourceMap a :NonRDFSourceMap;
+    :slugTemplate "non-{_r.iri.path[4]}";
+    :resourceMap data:DistributionResourceMap .
 
-data:DatasetResourceMap a :ResourceMap;
-    :resourceQuery "Select * WHERE { ?resource a dcat:Dataset .} LIMIT 3";
-    :graphTemplate "CONSTRUCT { ?_r ?p ?o . } WHERE {  ?_r ?p ?o . FILTER (?p not in (dcat:distribution)) }";;
-    :linkToSource foaf:primaryTopic;
+data:DistributionResourceMap a :ResourceMap;
+    :resourceQuery "Select * WHERE { ?x dcat:accessURL ?resource . } LIMIT 3";
     :dataSource data:DataSource1 .
 
 data:DataSource1 a :DataSource;
