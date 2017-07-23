@@ -39,18 +39,15 @@ public abstract class SourceMap {
     }
 
     public abstract SourceMap copy();
-
     public Container getContainer() {
         return container;
     }
-
     public void setContainer(Container container) {
         this.container = container;
     }
     public String getIRI() {
         return IRI;
     }
-
     public void setIRI(String iri) {
         this.IRI = iri;
     }

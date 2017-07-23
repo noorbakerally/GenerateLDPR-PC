@@ -23,11 +23,10 @@ public class Container extends RDFSource {
     public void processContainerMaps() throws IOException {
         for (Map.Entry <String,ContainerMap> containerMapEntry:containerMaps.entrySet()){
             ContainerMap containerMap = containerMapEntry.getValue();
-            containerMap.setContainer(this);
-            containerMap.getResources();
+            containerMap.generateResources();
         }
     }
-    public void processRDFSourceMaps() {
+    public void processRDFSourceMaps() throws IOException {
         for (Map.Entry <String,RDFSourceMap> rdfSourceMapEntry:rdfSourceMaps.entrySet()){
             RDFSourceMap rdfSourceMap = rdfSourceMapEntry.getValue();
             rdfSourceMap.setContainer(this);
@@ -46,10 +45,13 @@ public class Container extends RDFSource {
     //assign parent ContainerMap SourceMaps to Container
     // generated from the current ContainerMap
     public void setSourceMaps(ContainerMap sourceMaps) {
+        //copy ContainerMaps
+        for (Map.Entry <String,ContainerMap> containerMapEntry:sourceMaps.getContainerMaps().entrySet()){
+            ContainerMap newContainerMap = (ContainerMap) containerMapEntry.getValue().copy();
+            this.addContainerMap(newContainerMap);
+        }
 
-        this.setRdfSourceMaps(sourceMaps.getRdfSourceMaps());
-
-        //this.setContainerMaps(sourceMaps.getContainerMaps());
+        //this.setRdfSourceMaps(sourceMaps.getRdfSourceMaps());
         //this.setNonrdfSourceMaps(sourceMaps.getNonRdfSourceMaps());
 
         /*c.setRdfSourceMaps(rdfSourceMaps);
@@ -64,10 +66,16 @@ public class Container extends RDFSource {
         }*/
     }
 
-    public void processSourceMaps() {
-        processRDFSourceMaps();
+    private void addContainerMap(ContainerMap newContainerMap) {
+        newContainerMap.setContainer(this);
+        containerMaps.put(newContainerMap.getIRI(),newContainerMap);
+    }
+
+    public void processSourceMaps() throws IOException {
+        processContainerMaps();
+        //processRDFSourceMaps();
         //processNonRDFSourceMaps();
-        //processContainerMaps();
+
     }
 
 

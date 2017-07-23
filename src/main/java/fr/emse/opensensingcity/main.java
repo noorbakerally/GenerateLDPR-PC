@@ -19,10 +19,9 @@ public class main {
         //configuration.print();
         configuration.execute();
 
-        LDPResourceRequestGenerator rg = new LDPResourceRequestGenerator();
-        rg.sendRequests(configuration);
+        LDPResourceRequestGenerator rg = new LDPResourceRequestGenerator(configuration);
 
-        System.out.println("test");
+        //System.out.println("test");
 
 
         //LDPRGenerator.sendRequest(configuration);

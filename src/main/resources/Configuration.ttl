@@ -5,9 +5,13 @@
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 
 data:CatalogMap a :ContainerMap;
-    :slugTemplate "paris-{_r.iri.path[4]}";
+    :slugTemplate "{_r.iri.path[4]}";
     :containerType ldp:BasicContainer;
+    :containerMap data:ContainerMapDataset;
     :resourceMap data:CatalogResourceMap .
+
+data:ContainerMapDataset a :ContainerMap;
+    :slugTemplate "distributions" .
 
 data:CatalogResourceMap a :ResourceMap;
     :resourceQuery "Select * WHERE { ?resource a dcat:Dataset .} LIMIT 3";

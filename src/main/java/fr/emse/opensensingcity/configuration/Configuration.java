@@ -26,11 +26,7 @@ public class Configuration {
         for (Map.Entry <String,ContainerMap> entry :containerMaps.entrySet()){
             ContainerMap containerMap = entry.getValue();
             if (containerMap.getParentContainerMap() !=null) continue;
-
             containerMap.generateResources();
-            for (Resource container:containerMap.getResources()){
-                ((Container)container).processRDFSourceMaps();
-            }
         }
     }
 

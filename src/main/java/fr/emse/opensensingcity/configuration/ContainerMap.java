@@ -5,6 +5,8 @@ import fr.emse.opensensingcity.LDP.Container;
 import fr.emse.opensensingcity.slugtemplate.IRIGenerator;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,7 +28,7 @@ public class ContainerMap extends RDFSourceMap{
 
     //generate containers for the container maps
     @Override
-    public void generateResources(){
+    public void generateResources() throws IOException {
 
 
         super.generateRelatedResources();
@@ -35,8 +37,11 @@ public class ContainerMap extends RDFSourceMap{
         //Create Zombie Container
         //it's a dummy container
         if (getResourceMaps().size() == 0){
-            Container container = new Container("temp");
+            Container container = new BasicContainer("temp");
             container.setSourceMaps(this);
+            container.setContainer(this.getContainer());
+            String uri = IRIGenerator.getSlug(container,getSlugTemplate());
+            container.setSlug(uri);
             resources.add(container);
             return;
         }
@@ -133,5 +138,23 @@ public class ContainerMap extends RDFSourceMap{
             }
         }
         return str;
+    }
+
+    @Override
+    public SourceMap copy() {
+        ContainerMap newObject = new ContainerMap(getIRI());
+        newObject.IRI = IRI;
+        newObject.slugTemplate = slugTemplate;
+        newObject.constant = constant;
+        newObject.resourceMaps =resourceMaps;
+        newObject.relatedResources = new HashMap<>();
+        newObject.resources = new ArrayList<>();
+
+        //copy RDFSourceMap
+        for (Map.Entry <String,RDFSourceMap> rdfSourceMapEntry:rdfSourceMaps.entrySet()){
+
+        }
+
+        return newObject;
     }
 }

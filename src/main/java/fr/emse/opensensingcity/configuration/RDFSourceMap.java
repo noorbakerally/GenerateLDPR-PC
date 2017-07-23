@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +33,13 @@ public class RDFSourceMap extends SourceMap {
 
     @Override
     public SourceMap copy() {
-        RDFSourceMap newObject = new RDFSourceMap(getIRI());
+        SourceMap newObject = new RDFSourceMap(getIRI());
+        newObject.IRI = IRI;
+        newObject.slugTemplate = slugTemplate;
+        newObject.constant = constant;
+        newObject.resourceMaps =resourceMaps;
+        newObject.relatedResources = new HashMap<>();
+        newObject.resources = new ArrayList<>();
         return newObject;
     }
 
@@ -74,7 +81,7 @@ public class RDFSourceMap extends SourceMap {
     }
 
     //create resources RDFSourceMap generates
-    public void generateResources(){
+    public void generateResources() throws IOException {
         generateRelatedResources();
         for (Map.Entry <String,RelatedResource> rrEntry:getRelatedResources().entrySet()){
             RelatedResource rr = rrEntry.getValue();
