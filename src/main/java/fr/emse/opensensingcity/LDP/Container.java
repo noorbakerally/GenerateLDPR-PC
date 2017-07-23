@@ -29,7 +29,6 @@ public class Container extends RDFSource {
     public void processRDFSourceMaps() throws IOException {
         for (Map.Entry <String,RDFSourceMap> rdfSourceMapEntry:rdfSourceMaps.entrySet()){
             RDFSourceMap rdfSourceMap = rdfSourceMapEntry.getValue();
-            rdfSourceMap.setContainer(this);
             rdfSourceMap.generateResources();
         }
     }
@@ -45,25 +44,30 @@ public class Container extends RDFSource {
     //assign parent ContainerMap SourceMaps to Container
     // generated from the current ContainerMap
     public void setSourceMaps(ContainerMap sourceMaps) {
-        //copy ContainerMaps
+
+        //copy ContainerMaps of sourceMaps
         for (Map.Entry <String,ContainerMap> containerMapEntry:sourceMaps.getContainerMaps().entrySet()){
             ContainerMap newContainerMap = (ContainerMap) containerMapEntry.getValue().copy();
             this.addContainerMap(newContainerMap);
         }
 
-        //this.setRdfSourceMaps(sourceMaps.getRdfSourceMaps());
-        //this.setNonrdfSourceMaps(sourceMaps.getNonRdfSourceMaps());
+        //copy RDFSourceMaps of sourceMaps
+        for (Map.Entry <String,RDFSourceMap> rdfSourceMapEntry:sourceMaps.getRdfSourceMaps().entrySet()){
+            RDFSourceMap newRDFSourceMap = (RDFSourceMap) rdfSourceMapEntry.getValue().copy();
+            this.addRDFSourceMap(newRDFSourceMap);
+        }
 
-        /*c.setRdfSourceMaps(rdfSourceMaps);
-        c.setContainerMaps(containerMaps);
-        c.processRDFSourceMaps();
-
-        //adding nonRDFSourceMaps
+        /*//adding nonRDFSourceMaps
         for (Map.Entry <String,NonRDFSourceMap> cNonRDFSourceMap:nonrdfSourceMaps.entrySet()){
             NonRDFSourceMap nonRDFSourceMap = cNonRDFSourceMap.getValue();
             NonRDFSourceMap newNonRDFSourceMap = (NonRDFSourceMap)nonRDFSourceMap.copy();
             c.addNonRDFSourceMap(newNonRDFSourceMap);
         }*/
+    }
+
+    private void addRDFSourceMap(RDFSourceMap newRDFSourceMap) {
+        newRDFSourceMap.setContainer(this);
+        rdfSourceMaps.put(newRDFSourceMap.getIRI(),newRDFSourceMap);
     }
 
     private void addContainerMap(ContainerMap newContainerMap) {
@@ -73,7 +77,7 @@ public class Container extends RDFSource {
 
     public void processSourceMaps() throws IOException {
         processContainerMaps();
-        //processRDFSourceMaps();
+        processRDFSourceMaps();
         //processNonRDFSourceMaps();
 
     }

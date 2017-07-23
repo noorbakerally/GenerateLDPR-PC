@@ -4,19 +4,13 @@
 @prefix data:     <http://opensensingcity.emse.fr/LDPDesign/data/> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 
-
 data:DatasetsMap a :ContainerMap;
-     :containerMap data:DatasetMap;
+     :rdfSourceMap data:DatasetMap;
      :slugTemplate "datasets" .
 
-data:DatasetMap a :ContainerMap;
+data:DatasetMap a :RDFSourceMap;
     :slugTemplate "{_r.iri.path[4]}";
-    :containerType ldp:BasicContainer;
-    :containerMap data:ContainerMapDataset;
     :resourceMap data:DatasetResourceMap .
-
-data:ContainerMapDataset a :ContainerMap;
-    :slugTemplate "distributions" .
 
 data:DatasetResourceMap a :ResourceMap;
     :resourceQuery "Select * WHERE { ?resource a dcat:Dataset .} LIMIT 3";

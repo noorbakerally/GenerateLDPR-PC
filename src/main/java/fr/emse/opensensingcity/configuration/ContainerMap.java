@@ -29,8 +29,6 @@ public class ContainerMap extends RDFSourceMap{
     //generate containers for the container maps
     @Override
     public void generateResources() throws IOException {
-
-
         super.generateRelatedResources();
 
         //if no resource maps
@@ -59,8 +57,6 @@ public class ContainerMap extends RDFSourceMap{
             c.processSourceMaps();
             resources.add(c);
         }
-
-
     }
 
     /*General Methods*/

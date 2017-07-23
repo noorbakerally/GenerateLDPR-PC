@@ -49,8 +49,8 @@ public class LDPResourceRequestGenerator {
         }
 
         HttpResponse response = null;
-        System.out.println("LDPResourceRequestGenerator.java "+"Request:"+request);
         response = client.execute(request);
+        System.out.println("LDPResourceRequestGenerator.java "+"Request:"+request + "Response:"+response);
         String location = response.getHeaders("Location")[0].getValue();
         resource.setIRI(location);
     }
@@ -61,6 +61,7 @@ public class LDPResourceRequestGenerator {
         if (container != null){
             baseIRI = container.getIRI();
         }
+        System.out.println("BaseIRI:"+baseIRI);
         HttpPost httpPost = new HttpPost(baseIRI);
         if (resource instanceof RDFSource){
 
@@ -81,6 +82,7 @@ public class LDPResourceRequestGenerator {
         if (resource instanceof Container){
             httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"");
         } else if (resource instanceof RDFSource){
+            httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#Resource>; rel=\"type\"");
             httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#RDFSource>; rel=\"type\"");
         }
         httpPost.addHeader("Slug",resource.getSlug());
@@ -95,19 +97,16 @@ public class LDPResourceRequestGenerator {
             //sending request for Containers
             for (String  containerMapIRI:container.getContainerMaps().keySet()){
                 for (Resource childContainer:container.getContainerMaps().get(containerMapIRI).getResources()){
-                    System.out.println("Sending Child Container Requests:"+childContainer.getSlug()+" "+
-                    childContainer.getContainer());
                     sendRequests(childContainer);
                 }
             }
 
-
-            /*//sending request for RDFSources
+            //sending request for RDFSources
             for (String  rdfSourceMapIRI:container.getRdfSourceMaps().keySet()){
                 for (Resource rdfSource:container.getRdfSourceMaps().get(rdfSourceMapIRI).getResources()){
                     sendRequests(rdfSource);
                 }
-            }*/
+            }
 
 
         }
