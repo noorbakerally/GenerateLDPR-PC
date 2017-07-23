@@ -82,15 +82,13 @@ public class ResourceMap {
                     models = resources.get(resourceIRI);
                 }
 
-                
-                //get the resource graph from that specific datasource
-                String resourceGraphQuery = getResourceGraphQuery(resourceIRI);
-                resourceGraphQuery = processRawQuery(sourceMap,resourceGraphQuery,resourceIRI);
-                /*System.out.println("ResourceMap.java"+resourceGraphQuery);*/
-                Model currentResourceModel = ds.executeGraphQuery(resourceGraphQuery);
-                models.add(currentResourceModel);
-
-
+                if (!(sourceMap instanceof NonRDFSourceMap)){
+                    //get the resource graph from that specific datasource
+                    String resourceGraphQuery = getResourceGraphQuery(resourceIRI);
+                    resourceGraphQuery = processRawQuery(sourceMap,resourceGraphQuery,resourceIRI);
+                    Model currentResourceModel = ds.executeGraphQuery(resourceGraphQuery);
+                    models.add(currentResourceModel);
+                }
             }
         }
         return resources;
