@@ -96,7 +96,7 @@ public class LDPResourceRequestGenerator {
             for (String  containerMapIRI:container.getContainerMaps().keySet()){
                 for (Resource childContainer:container.getContainerMaps().get(containerMapIRI).getResources()){
                     System.out.println("Sending Child Container Requests:"+childContainer.getSlug()+" "+
-                    childContainer.getContainer().getSlug());
+                    childContainer.getContainer());
                     sendRequests(childContainer);
                 }
             }

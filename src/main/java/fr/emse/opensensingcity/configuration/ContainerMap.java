@@ -38,10 +38,11 @@ public class ContainerMap extends RDFSourceMap{
         //it's a dummy container
         if (getResourceMaps().size() == 0){
             Container container = new BasicContainer("temp");
-            container.setSourceMaps(this);
             container.setContainer(this.getContainer());
             String uri = IRIGenerator.getSlug(container,getSlugTemplate());
             container.setSlug(uri);
+            container.setSourceMaps(this);
+            container.processSourceMaps();
             resources.add(container);
             return;
         }
@@ -49,6 +50,7 @@ public class ContainerMap extends RDFSourceMap{
         for (Map.Entry <String,RelatedResource> rrEntry:getRelatedResources().entrySet()){
             RelatedResource rr = rrEntry.getValue();
             Container c = new BasicContainer("");
+            c.setContainer(this.getContainer());
             c.setRelatedResource(rr);
             c.setGraph(rr.getGraph());
             String uri = IRIGenerator.getSlug(c,getSlugTemplate());
@@ -150,11 +152,12 @@ public class ContainerMap extends RDFSourceMap{
         newObject.relatedResources = new HashMap<>();
         newObject.resources = new ArrayList<>();
 
-        //copy RDFSourceMap
-        for (Map.Entry <String,RDFSourceMap> rdfSourceMapEntry:rdfSourceMaps.entrySet()){
-
+        //copy ContainerMaps
+        for (Map.Entry <String,ContainerMap> containerMapEntry:containerMaps.entrySet()){
+            String containerMapIRI = containerMapEntry.getKey();
+            ContainerMap newContainerMap = (ContainerMap) containerMapEntry.getValue().copy();
+            newObject.containerMaps.put(containerMapIRI,newContainerMap);
         }
-
         return newObject;
     }
 }
