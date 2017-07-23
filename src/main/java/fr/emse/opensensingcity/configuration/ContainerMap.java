@@ -2,6 +2,7 @@ package fr.emse.opensensingcity.configuration;
 
 import fr.emse.opensensingcity.LDP.BasicContainer;
 import fr.emse.opensensingcity.LDP.Container;
+import fr.emse.opensensingcity.LDP.NonRDFSource;
 import fr.emse.opensensingcity.slugtemplate.IRIGenerator;
 import org.apache.commons.lang3.StringUtils;
 
@@ -39,6 +40,9 @@ public class ContainerMap extends RDFSourceMap{
             container.setContainer(this.getContainer());
             String uri = IRIGenerator.getSlug(container,getSlugTemplate());
             container.setSlug(uri);
+            if (uri.equals("distributions")){
+                System.out.println();
+            }
             container.setSourceMaps(this);
             container.processSourceMaps();
             resources.add(container);
@@ -154,6 +158,22 @@ public class ContainerMap extends RDFSourceMap{
             ContainerMap newContainerMap = (ContainerMap) containerMapEntry.getValue().copy();
             newObject.containerMaps.put(containerMapIRI,newContainerMap);
         }
+
+        //copy RDFSourceMaps
+        for (Map.Entry <String,RDFSourceMap> rdfSourceMapEntry:rdfSourceMaps.entrySet()){
+            String rdfSourceMapIRI = rdfSourceMapEntry.getKey();
+            RDFSourceMap rdfSourceMap = (RDFSourceMap) rdfSourceMapEntry.getValue().copy();
+            newObject.rdfSourceMaps.put(rdfSourceMapIRI,rdfSourceMap);
+        }
+
+        //copy RDFSourceMaps
+        for (Map.Entry <String,NonRDFSourceMap> nonRDFSourceEntry:nonrdfSourceMaps.entrySet()){
+            String nonRDFSourceMapIRI = nonRDFSourceEntry.getKey();
+            NonRDFSourceMap nonRDFSourceMap = (NonRDFSourceMap) nonRDFSourceEntry.getValue().copy();
+            newObject.nonrdfSourceMaps.put(nonRDFSourceMapIRI,nonRDFSourceMap);
+        }
+
+
         return newObject;
     }
 }

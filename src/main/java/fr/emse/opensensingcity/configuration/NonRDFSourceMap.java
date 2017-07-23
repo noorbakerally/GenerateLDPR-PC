@@ -60,6 +60,7 @@ public class NonRDFSourceMap extends SourceMap {
     }
 
     public void generateResources(){
+        System.out.println("NonRDFSourceMap.java enters here");
         generateRelatedResources();
         for (Map.Entry <String,RelatedResource> rrEntry:getRelatedResources().entrySet()){
             RelatedResource rr = rrEntry.getValue();

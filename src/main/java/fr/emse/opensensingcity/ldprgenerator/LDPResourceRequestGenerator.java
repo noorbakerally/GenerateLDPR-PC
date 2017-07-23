@@ -65,7 +65,6 @@ public class LDPResourceRequestGenerator {
         if (container != null){
             baseIRI = container.getIRI();
         }
-        System.out.println("BaseIRI:"+baseIRI);
         HttpPost httpPost = new HttpPost(baseIRI);
         if (resource instanceof RDFSource){
 

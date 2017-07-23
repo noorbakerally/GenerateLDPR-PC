@@ -46,7 +46,11 @@ public class Container extends RDFSource {
 
         //copy ContainerMaps of sourceMaps
         for (Map.Entry <String,ContainerMap> containerMapEntry:sourceMaps.getContainerMaps().entrySet()){
-            ContainerMap newContainerMap = (ContainerMap) containerMapEntry.getValue().copy();
+            ContainerMap oldContainerMap =  containerMapEntry.getValue();
+            ContainerMap newContainerMap = (ContainerMap) oldContainerMap.copy();
+            if (sourceMaps.getIRI().equals("http://opensensingcity.emse.fr/LDPDesign/data/distributionsContainerMap")){
+                System.out.println("test");
+            }
             this.addContainerMap(newContainerMap);
         }
 
