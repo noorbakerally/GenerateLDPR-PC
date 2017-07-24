@@ -43,22 +43,22 @@ data:distributionNonRDFSourceMap a :NonRDFSourceMap;
     :resourceMap data:distributionFileResourceMap .
 
 data:distributionFileResourceMap a :ResourceMap;
-    :resourceQuery "Select * WHERE { ?_r dcat:accessURL ?resource . }";
+    :resourceQuery "{ ?_r dcat:accessURL ?resource . }";
     :dataSource data:DataSource1 .
 
 data:distributionResourceMap a :ResourceMap;
-    :resourceQuery "Select * WHERE { ?__r dcat:distribution ?resource . } LIMIT 3";
+    :resourceQuery "{ ?__r dcat:distribution ?resource . } LIMIT 3";
     :graphTemplate :SubjectObjectGraph;
     :dataSource data:DataSource1 .
 
 data:datasetResourceMap a :ResourceMap;
-    :resourceQuery "Select * WHERE { ?__r dcat:dataset  ?resource . } LIMIT 5";
+    :resourceQuery "{ ?__r dcat:dataset  ?resource . } LIMIT 5";
     :graphTemplate "CONSTRUCT { ?_r ?p ?o . } WHERE {  ?_r ?p ?o . FILTER (?p not in (dcat:distribution)) }";
     :linkToSource foaf:primaryTopic;
     :dataSource data:DataSource1 .
 
 data:catalogResourceMap a :ResourceMap;
-    :resourceQuery "Select * WHERE { ?resource a dcat:Catalog .}";
+    :resourceQuery "{ ?resource a dcat:Catalog .}";
     :graphTemplate "CONSTRUCT { ?_r ?p ?o . } WHERE {  ?_r ?p ?o . FILTER (?p not in (dcat:dataset)) }";;
     :linkToSource foaf:primaryTopic;
     :dataSource data:DataSource1 .

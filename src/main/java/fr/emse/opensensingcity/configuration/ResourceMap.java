@@ -59,7 +59,7 @@ public class ResourceMap {
     public Map <String,List<Model>> getResources(SourceMap sourceMap){
         Map <String,List<Model>> resources = new HashMap<String,List<Model>>();
         String finalQuery = processRawQuery(sourceMap,resourceQuery,null);
-
+        finalQuery = "Select * WHERE "+finalQuery;
 
         //iterating through all the datasoure and execute the resourceQuery
         //to get all the resources for which the corresponding LDPR has to be created
