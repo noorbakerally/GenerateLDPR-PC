@@ -18,6 +18,7 @@ import java.util.regex.Pattern;
 public class ResourceMap {
     String resourceQuery;
     String graphTemplate;
+    String graphQuery;
     String linkToSource;
     String linkFromSource;
     String constant;
@@ -99,29 +100,31 @@ public class ResourceMap {
 
     public String getResourceGraphQuery(String resourceIRI){
         String query = "";
-        if (graphTemplate.equals(Global.getVTerm("SubjectObjectGraph"))){
-            query = "CONSTRUCT {\n" +
-                    "  <resourceIRI> ?p ?o.\n" +
-                    "  ?s ?p1 <resourceIRI>\n" +
-                    "} WHERE {\n" +
-                    "  {<resourceIRI> ?p ?o.} UNION \n" +
-                    "  {?s ?p1 <resourceIRI> .}\n" +
-                    "} ";
-            query = query.replace("resourceIRI",resourceIRI);
+        if (graphTemplate != null) {
+            if (graphTemplate.equals(Global.getVTerm("SubjectObjectGraph"))){
+                query = "CONSTRUCT {\n" +
+                        "  <resourceIRI> ?p ?o.\n" +
+                        "  ?s ?p1 <resourceIRI>\n" +
+                        "} WHERE {\n" +
+                        "  {<resourceIRI> ?p ?o.} UNION \n" +
+                        "  {?s ?p1 <resourceIRI> .}\n" +
+                        "} ";
+                query = query.replace("resourceIRI",resourceIRI);
 
-        } else if (graphTemplate.equals(Global.getVTerm("SubjectGraph"))){
-            query = "CONSTRUCT {\n" +
-                    "  <resourceIRI> ?p ?o.\n" +
-                    "} WHERE {<resourceIRI> ?p ?o. } ";
-            query = query.replace("resourceIRI",resourceIRI);
+            } else if (graphTemplate.equals(Global.getVTerm("SubjectGraph"))){
+                query = "CONSTRUCT {\n" +
+                        "  <resourceIRI> ?p ?o.\n" +
+                        "} WHERE {<resourceIRI> ?p ?o. } ";
+                query = query.replace("resourceIRI",resourceIRI);
 
-        } else if (graphTemplate.equals(Global.getVTerm("ObjectGraph"))){
-            query = "CONSTRUCT {\n" +
-                    "  ?s ?p1 <resourceIRI>\n" +
-                    "} WHERE { ?s ?p1 <resourceIRI> .} ";
-            query = query.replace("resourceIRI",resourceIRI);
+            } else if (graphTemplate.equals(Global.getVTerm("ObjectGraph"))){
+                query = "CONSTRUCT {\n" +
+                        "  ?s ?p1 <resourceIRI>\n" +
+                        "} WHERE { ?s ?p1 <resourceIRI> .} ";
+                query = query.replace("resourceIRI",resourceIRI);
+            }
         } else {
-            query = graphTemplate;
+            query = graphQuery;
             query = query.replace("?_resource","<"+resourceIRI+">");
         }
         //System.out.println("ResourceMap.java"+query);
@@ -196,5 +199,13 @@ public class ResourceMap {
     }
     public void addDataSource(DataSource dataSource) {
         dataSources.put(dataSource.getIRI(),dataSource);
+    }
+
+    public String getGraphQuery() {
+        return graphQuery;
+    }
+
+    public void setGraphQuery(String graphQuery) {
+        this.graphQuery = graphQuery;
     }
 }

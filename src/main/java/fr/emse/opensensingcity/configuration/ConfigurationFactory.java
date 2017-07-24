@@ -228,6 +228,9 @@ public class ConfigurationFactory {
             if (Global.getVTerm("graphTemplate").equals(p)) {
                 resourceMap.setGraphTemplate(o);
             }
+            if (Global.getVTerm("graphQuery").equals(p)) {
+                resourceMap.setGraphQuery(o);
+            }
 
             if (Global.getVTerm("linkToSource").equals(p)) {
                 resourceMap.setLinkToSource(o);

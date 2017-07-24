@@ -53,13 +53,13 @@ data:distributionResourceMap a :ResourceMap;
 
 data:datasetResourceMap a :ResourceMap;
     :resourceQuery "{ ?__r dcat:dataset  ?resource . } LIMIT 5";
-    :graphTemplate "CONSTRUCT { ?_r ?p ?o . } WHERE {  ?_r ?p ?o . FILTER (?p not in (dcat:distribution)) }";
+    :graphQuery "CONSTRUCT { ?_r ?p ?o . } WHERE {  ?_r ?p ?o . FILTER (?p not in (dcat:distribution)) }";
     :linkToSource foaf:primaryTopic;
     :dataSource data:DataSource1 .
 
 data:catalogResourceMap a :ResourceMap;
     :resourceQuery "{ ?resource a dcat:Catalog .}";
-    :graphTemplate "CONSTRUCT { ?_r ?p ?o . } WHERE {  ?_r ?p ?o . FILTER (?p not in (dcat:dataset)) }";;
+    :graphQuery "CONSTRUCT { ?_r ?p ?o . } WHERE {  ?_r ?p ?o . FILTER (?p not in (dcat:dataset)) }";;
     :linkToSource foaf:primaryTopic;
     :dataSource data:DataSource1 .
 
