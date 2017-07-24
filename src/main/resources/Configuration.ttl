@@ -38,6 +38,7 @@ data:distributionRDFSourceMap a :ContainerMap;
 
 data:distributionNonRDFSourceMap a :NonRDFSourceMap;
     :slugTemplate "file";
+    :contentType "text/csv";
     :resourceMap data:distributionFileResourceMap .
 
 data:distributionFileResourceMap a :ResourceMap;

@@ -20,7 +20,7 @@ import java.util.Map;
  */
 public class NonRDFSourceMap extends SourceMap {
 
-
+    String contentType;
     public NonRDFSourceMap(String IRI){
         super(IRI);
     }
@@ -60,7 +60,6 @@ public class NonRDFSourceMap extends SourceMap {
     }
 
     public void generateResources(){
-        System.out.println("NonRDFSourceMap.java enters here");
         generateRelatedResources();
         for (Map.Entry <String,RelatedResource> rrEntry:getRelatedResources().entrySet()){
             RelatedResource rr = rrEntry.getValue();
@@ -70,6 +69,7 @@ public class NonRDFSourceMap extends SourceMap {
             String slug = IRIGenerator.getSlug(nonRdfSource, getSlugTemplate());
             nonRdfSource.setSlug(slug);
             nonRdfSource.setContainer(this.getContainer());
+            nonRdfSource.setContentType(contentType);
 
             //get binary content of file
             File file = new File("DownloadedFile");
@@ -83,6 +83,20 @@ public class NonRDFSourceMap extends SourceMap {
             nonRdfSource.setBinary(binary);
             resources.add(nonRdfSource);
         }
+    }
+
+    @Override
+    public SourceMap copy() {
+        NonRDFSourceMap newObject = new NonRDFSourceMap(getIRI());
+
+        newObject.IRI = IRI;
+        newObject.slugTemplate = slugTemplate;
+        newObject.constant = constant;
+        newObject.resourceMaps =resourceMaps;
+        newObject.relatedResources = new HashMap<>();
+        newObject.resources = new ArrayList<>();
+        newObject.contentType = contentType;
+        return newObject;
     }
 
     /*General Methods*/
@@ -123,16 +137,11 @@ public class NonRDFSourceMap extends SourceMap {
         this.relatedResources = relatedResources;
     }
 
-    @Override
-    public SourceMap copy() {
-        NonRDFSourceMap newObject = new NonRDFSourceMap(getIRI());
+    public String getContentType() {
+        return contentType;
+    }
 
-        newObject.IRI = IRI;
-        newObject.slugTemplate = slugTemplate;
-        newObject.constant = constant;
-        newObject.resourceMaps =resourceMaps;
-        newObject.relatedResources = new HashMap<>();
-        newObject.resources = new ArrayList<>();
-        return newObject;
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
     }
 }

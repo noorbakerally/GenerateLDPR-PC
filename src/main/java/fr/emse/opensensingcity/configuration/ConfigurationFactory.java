@@ -173,6 +173,9 @@ public class ConfigurationFactory {
             if (Global.getVTerm("slugTemplate").equals(p)) {
                 NonRDFSourceMap.setSlugTemplate(o);
             }
+            if (Global.getVTerm("contentType").equals(p)) {
+                NonRDFSourceMap.setContentType(o);
+            }
         }
     }
 

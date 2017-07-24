@@ -20,70 +20,20 @@ import java.net.URI;
  */
 public class NonRDFSource extends Resource {
     byte[] binary;
+    String contentType;
     public NonRDFSource(String iri) {
         super(iri);
     }
-
-    public HttpPost getResourceRequest(){
-        String baseURI = container.getIRI();
-        HttpPost httpPost = new HttpPost(baseURI);
-
-        URI fileURL = URI.create(getRelatedResource().getIRI());
-
-
-        HttpURLConnection connection = null;
-        String contentType = null;
-        try {
-            connection = (HttpURLConnection)  fileURL.toURL().openConnection();
-            connection.setRequestMethod("HEAD");
-            connection.connect();
-            contentType = connection.getContentType();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-
-        httpPost.addHeader("Content-Type",contentType);
-        httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#Resource>; rel=\"type\"");
-
-
-        File file = new File("DownloadedFile");
-
-        try {
-            FileUtils.copyURLToFile(fileURL.toURL(),file);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        byte[] data = new byte[0];
-        try {
-            data = FileUtils.readFileToByteArray(file);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        httpPost.addHeader("Slug",getSlug());
-        httpPost.setEntity(new ByteArrayEntity(data));
-
-        return httpPost;
-    }
-    public void sendRequest() throws IOException {
-
-        HttpClient client = HttpClientBuilder.create().build();
-        HttpPost request = getResourceRequest();
-        HttpResponse response = null;
-        response = client.execute(request);
-        System.out.println("LDPNR.java Request:"+request+" Reply:"+response);
-        String location = response.getHeaders("Location")[0].getValue();
-        setIRI(location);
-    }
-
-    public byte[] getBinary() {
-        return binary;
-    }
-
+    public byte[] getBinary() {return binary;}
     public void setBinary(byte[] binary) {
         this.binary = binary;
+    }
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
     }
 }

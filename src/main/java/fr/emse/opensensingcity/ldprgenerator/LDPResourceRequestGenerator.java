@@ -87,8 +87,8 @@ public class LDPResourceRequestGenerator {
             httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#Resource>; rel=\"type\"");
             httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#RDFSource>; rel=\"type\"");
         } else if (resource instanceof NonRDFSource){
-            httpPost.addHeader("Content-Type","application/json");
             NonRDFSource nonRDFSource = (NonRDFSource)resource;
+            httpPost.addHeader("Content-Type",nonRDFSource.getContentType());
             httpPost.addHeader("Link","<http://www.w3.org/ns/ldp#Resource>; rel=\"type\"");
             httpPost.setEntity(new ByteArrayEntity(nonRDFSource.getBinary()) );
         }
