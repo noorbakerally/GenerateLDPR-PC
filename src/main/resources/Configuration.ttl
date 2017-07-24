@@ -33,7 +33,16 @@ data:distributionsContainerMap a :ContainerMap;
 
 data:distributionRDFSourceMap a :ContainerMap;
     :slugTemplate "{_r.iri.path[4]}";
+    :nonRDFSourceMap data:distributionNonRDFSourceMap;
     :resourceMap data:distributionResourceMap .
+
+data:distributionNonRDFSourceMap a :NonRDFSourceMap;
+    :slugTemplate "file";
+    :resourceMap data:distributionFileResourceMap .
+
+data:distributionFileResourceMap a :ResourceMap;
+    :resourceQuery "Select * WHERE { ?_r dcat:accessURL ?resource . }";
+    :dataSource data:DataSource1 .
 
 data:distributionResourceMap a :ResourceMap;
     :resourceQuery "Select * WHERE { ?__r dcat:distribution ?resource . } LIMIT 3";

@@ -73,13 +73,14 @@ public class NonRDFSourceMap extends SourceMap {
 
             //get binary content of file
             File file = new File("DownloadedFile");
+            byte [] binary = new byte[0];
             try {
                 FileUtils.copyURLToFile(URI.create(rr.getIRI()).toURL(),file);
-                byte [] binary = FileUtils.readFileToByteArray(file);
-                nonRdfSource.setBinary(binary);
-            } catch (IOException e) {
+                binary = FileUtils.readFileToByteArray(file);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
+            nonRdfSource.setBinary(binary);
             resources.add(nonRdfSource);
         }
     }
