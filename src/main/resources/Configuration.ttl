@@ -3,6 +3,7 @@
 @prefix :     <http://opensensingcity.emse.fr/LDPDesignVocabulary/> .
 @prefix data:     <http://opensensingcity.emse.fr/LDPDesign/data/> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
 
 data:catalogsContainerMap a :ContainerMap;
     :slugTemplate "catalogs";
@@ -38,7 +39,7 @@ data:distributionRDFSourceMap a :ContainerMap;
 
 data:distributionNonRDFSourceMap a :NonRDFSourceMap;
     :slugTemplate "file";
-    :contentType "text/csv";
+    :contentType "{__r.ppath('dcat:mediaType')}";
     :resourceMap data:distributionFileResourceMap .
 
 data:distributionFileResourceMap a :ResourceMap;

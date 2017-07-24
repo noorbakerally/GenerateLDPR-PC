@@ -221,7 +221,7 @@ public class IRIGenerator {
 
             if (node.getToken().equals("ppath")){
 
-                String ppath = nodes.getChildren().get(2).getChildren().get(0).getToken();
+                String ppath = nodes.getChildren().get(3).getChildren().get(0).getToken();
                 ppath = ppath.substring(1,ppath.length()-1);
 
                 Path p = PathParser.parse(ppath, ConfigurationFactory.prefixMap);
@@ -423,7 +423,7 @@ public class IRIGenerator {
     static String getHostPart(String host, int num){
         String hostParts[] = host.split("\\.");
         String result = hostParts[hostParts.length - 1 - num];
-        return result;  
+        return result;
     }
 
 

@@ -1,5 +1,6 @@
 package fr.emse.opensensingcity.LDP;
 
+import fr.emse.opensensingcity.slugtemplate.IRIGenerator;
 import org.apache.commons.io.FileUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
@@ -30,7 +31,11 @@ public class NonRDFSource extends Resource {
     }
 
     public String getContentType() {
-        return contentType;
+        String processedContentType = contentType;
+        if (contentType.contains("{")){
+            processedContentType = IRIGenerator.getSlug(this,contentType);
+        }
+        return processedContentType;
     }
 
     public void setContentType(String contentType) {
