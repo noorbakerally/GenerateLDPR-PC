@@ -16,7 +16,7 @@ public class main {
         File file = new File(classLoader.getResource("Configuration.ttl").getFile());
 
         Configuration configuration = ConfigurationFactory.createConfiguration(file.getAbsolutePath());
-        configuration.print();
+        //configuration.print();
         configuration.execute();
         LDPResourceRequestGenerator rg = new LDPResourceRequestGenerator(configuration);
 

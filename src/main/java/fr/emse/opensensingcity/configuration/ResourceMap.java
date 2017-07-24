@@ -60,9 +60,6 @@ public class ResourceMap {
         Map <String,List<Model>> resources = new HashMap<String,List<Model>>();
         String finalQuery = processRawQuery(sourceMap,resourceQuery,null);
 
-        if ((sourceMap instanceof RDFSourceMap) && !(sourceMap instanceof ContainerMap)){
-            System.out.println("ResourceMap.java SourceMapIRI:"+sourceMap.getIRI());
-        }
 
         //iterating through all the datasoure and execute the resourceQuery
         //to get all the resources for which the corresponding LDPR has to be created
